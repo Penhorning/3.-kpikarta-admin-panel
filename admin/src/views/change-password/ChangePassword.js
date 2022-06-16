@@ -72,8 +72,8 @@ const ChangePassword = () => {
                         <Label>Confirm Password</Label>
                         <InputGroup>
                             <Input 
-                                invalid={password.length && password!=repassword} 
-                                valid={password.length && password==repassword} 
+                                invalid={password.length && password!==repassword} 
+                                valid={password.length && password===repassword} 
                                 value={repassword} 
                                 type="password" 
                                 onChange={(e)=>updateRepassword(e.target.value)}
@@ -86,7 +86,7 @@ const ChangePassword = () => {
                         </InputGroup>
                     </FormGroup>
                     <div className="pt-3 mt-3">
-                        <Button disabled={password.length<8 || password!=repassword}
+                        <Button disabled={password.length<8 || password!==repassword}
                         type="submit" className="btn btn-success mr-2">Change Password</Button>
                     </div>
                     <br/>

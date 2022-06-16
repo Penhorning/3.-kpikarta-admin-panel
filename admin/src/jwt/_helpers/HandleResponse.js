@@ -6,7 +6,7 @@ export function HandleResponse(response) {
     if (!response.ok) {
       if ([401, 403].indexOf(response.status) !== -1) {
         // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
-        if(data.error && data.error.code=='LOGIN_FAILED'){
+        if(data.error && data.error.code==='LOGIN_FAILED'){
           // ignore reload if trying to login
         } else {
           AuthenticationService.logout();

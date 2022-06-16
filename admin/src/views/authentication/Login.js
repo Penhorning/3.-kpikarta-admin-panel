@@ -1,18 +1,5 @@
 import React from "react";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  CustomInput,
-  FormGroup,
-  Row,
-  Col,
-  UncontrolledTooltip,
-  Button,
-} from "reactstrap";
 import logoImg from "../../assets/images/kpi-karta-logo.png";
-import loginCss from "../../assets/scss/login.css"
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { AuthenticationService } from "../../jwt/_services";
@@ -23,7 +10,7 @@ const Login = (props) => {
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-6">
-            <div class="logo"> <a href=""><img src={logoImg}  width="280" height="65" alt=""/></a> </div>
+            <div class="logo"> <a href="#!"><img src={logoImg}  width="280" height="65" alt=""/></a> </div>
           </div>
           <div class="col-md-6">
             <div class="mng_col">
@@ -107,7 +94,7 @@ const Login = (props) => {
                   ></Formik>
                 <div class="cre_fog"> <a href="#!" class="for_pass">Forgot Password</a> </div>
                 <div class="bot_link">
-                  <p><a href="#!">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="">Contact Us</a></p>
+                  <p><a href="#!">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="#!">Contact Us</a></p>
                 </div>
               </div>
             </div>
