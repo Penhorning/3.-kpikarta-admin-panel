@@ -116,3 +116,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+.DS_Store
+admin/development.zip
+admin/development
+admin/qa
+admin/qa.zip
