@@ -18,7 +18,7 @@ const Login = (props) => {
                 <h2 class="text-white text-center pb-4">Login</h2>
                 <Formik
                   initialValues={{
-                    email: "test@test.com",
+                    email: "test@testjenkins.com",
                     password: "test",
                   }}
                   validationSchema={Yup.object().shape({
