@@ -1,25 +1,28 @@
 import React from "react";
 import logoImg from "../../assets/images/kpi-karta-logo.png";
+import loginCss from "../../assets/scss/login.css"
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { AuthenticationService } from "../../jwt/_services";
+import {Alert} from 'reactstrap';
 
 const Login = (props) => {
 
   return (<section id="common_sec">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="logo"> <a href="#!"><img src={logoImg}  width="280" height="65" alt=""/></a> </div>
+      <link rel="stylesheet" href={loginCss}/>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-md-6">
+            <div className="logo"> <a href="#!"><img src={logoImg}  width="280" height="65" alt=""/></a> </div>
           </div>
-          <div class="col-md-6">
-            <div class="mng_col">
-              <div class="login_form">
-                <h2 class="text-white text-center pb-4">Login</h2>
+          <div className="col-md-6">
+            <div className="mng_col">
+              <div className="login_form">
+                <h2 className="text-white text-center pb-4">Login</h2>
                 <Formik
                   initialValues={{
-                    email: "test@testjenkins.com",
-                    password: "test",
+                    email: "taj@yopmail.com",
+                    password: "1234",
                   }}
                   validationSchema={Yup.object().shape({
                     email: Yup.string().required("Email is required"),
@@ -39,14 +42,17 @@ const Login = (props) => {
                       },
                       (error) => {
                         setSubmitting(false);
-                        setStatus(error);
+                        setStatus('Enetered email or password is incorrect, please try again with correct credentials.');
+                        window.alertTimeout(()=>{
+                          setStatus('');
+                        })
                       }
                     );
                   }}
                   render={({ errors, status, touched, handleSubmit, isSubmitting }) => (
                     <Form onSubmit={handleSubmit} id="loginform">
-                      <div class="form-group">
-                        <label for="email">Email / Username :</label>
+                      <div className="form-group">
+                        <label htmlFor="email">Email / Username :</label>
                         <Field
                           name="email"
                           type="email"
@@ -63,9 +69,9 @@ const Login = (props) => {
                           component="div"
                           className="invalid-feedback"
                         />
-                        {/* <input type="email" class="form-control form-control1" id="email"/> */}
+                        {/* <input type="email" className="form-control form-control1" id="email"/> */}
                       </div>
-                      <div class="form-group">
+                      <div className="form-group">
                         <label for="pwd">Password:</label>
                         <Field
                           name="password"
@@ -84,16 +90,18 @@ const Login = (props) => {
                           className="invalid-feedback"
                         />
                       </div>
-                      <button type="submit" disabled={isSubmitting} className="btn btn-light btn_default">Submit</button>
+                      <button type="submit" disabled={isSubmitting} className="btn btn-light btn_default">SUBMIT</button>
                       <div/>
-                      {status && (
-                        <div className={"alert alert-danger"}>{status}</div>
+                      {status && (<>
+                        <br/>
+                        <Alert color={"danger"}>{status}</Alert>
+                      </>
                       )}
                     </Form>
                   )}
                   ></Formik>
-                <div class="cre_fog"> <a href="#!" class="for_pass">Forgot Password</a> </div>
-                <div class="bot_link">
+                <div className="cre_fog"> <a href="/authentication/forgot-password" className="for_pass">Forgot Password</a> </div>
+                <div className="bot_link">
                   <p><a href="#!">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="#!">Contact Us</a></p>
                 </div>
               </div>

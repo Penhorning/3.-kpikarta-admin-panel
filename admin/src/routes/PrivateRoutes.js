@@ -7,7 +7,8 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
     {...rest}
     render={(props) => {
       const currentUser = AuthenticationService.currentUserValue;
-      if (!currentUser) {
+      const isPublicRoute = props.location.pathname.startsWith('/authentication/forgot-password');
+      if (!currentUser && !isPublicRoute) {
         // not logged in so redirect to login page with the return url
         return (
           <Redirect

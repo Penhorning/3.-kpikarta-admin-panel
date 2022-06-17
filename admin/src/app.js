@@ -29,4 +29,8 @@ const App = () => {
   );
 };
 
+window.alertTimeout = function(cb){
+  setTimeout(cb,3000);
+}
+
 export default App;

@@ -10,6 +10,7 @@ export const AuthenticationService = {
   login,
   logout,
   changePassword,
+  requestForgotPassword,
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() {
     return currentUserSubject.value;
@@ -48,6 +49,19 @@ function changePassword(newPassword) {
     .then((user) => {
       return user;
     });
+}
+
+function requestForgotPassword(email) {
+  const requestOptions = {
+    method: "POST",
+    headers: { 
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email }),
+  };
+
+  return fetch(Constants.BASE_URL+`/api/users/reset`, requestOptions)
+  .then(HandleResponse)
 }
 
 function logout() {
