@@ -34,17 +34,17 @@ function login(email, password) {
     });
 }
 
-function changePassword(newPassword) {
+function changePassword(oldPassword,newPassword) {
   const requestOptions = {
     method: "POST",
     headers: { 
       "Content-Type": "application/json",
       "Authorization":JSON.parse(localStorage.getItem("currentUser")).id 
     },
-    body: JSON.stringify({ newPassword }),
+    body: JSON.stringify({ oldPassword,newPassword }),
   };
 
-  return fetch(Constants.BASE_URL+`/api/users/reset-password`, requestOptions)
+  return fetch(Constants.BASE_URL+`/api/users/change-password`, requestOptions)
     .then(HandleResponse)
     .then((user) => {
       return user;

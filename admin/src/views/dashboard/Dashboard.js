@@ -10,7 +10,6 @@ import {
 } from 'reactstrap';
 
 const Dashboard = () => {
-    console.log(process.env);
     return (
         <Card>
             <div className="p-3">

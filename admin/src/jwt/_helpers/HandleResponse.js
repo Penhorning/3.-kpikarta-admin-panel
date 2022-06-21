@@ -14,7 +14,7 @@ export function HandleResponse(response) {
         }
       }
 
-      const error = (data && data.message) || response.statusText;
+      const error = (data && data.message) || data.error || response.statusText;
       return Promise.reject(error);
     }
 
