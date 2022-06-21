@@ -15,9 +15,9 @@ const INIT_STATE = {
     activeThemeLayout: "vertical",
     activeTheme: "light",
     activeSidebarType: "full",
-    activeLogoBg: "skin1",
-    activeNavbarBg: "skin1",
-    activeSidebarBg: "skin6",
+    activeLogoBg: "skin6",
+    activeNavbarBg: "skin6",
+    activeSidebarBg: "skin1",
     activeSidebarPos: "fixed",
     activeHeaderPos: "fixed",
     activeLayout: "full"

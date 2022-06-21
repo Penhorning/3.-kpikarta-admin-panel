@@ -24,6 +24,16 @@ const ChangePassword = () => {
     const [responseMessage,setResponseMessage] = useState({success:null,message:''});
     const changePassword=(e)=>{
         e.preventDefault();
+        if(oldPassword==password){
+            setResponseMessage({success:false,message:"Old password and new password can not be same"});
+            updatePassword('');
+            updateRepassword('');
+            updateOldPassword('');
+            setTimeout(()=>{
+                setResponseMessage({success:null,message:""});
+            },2000)
+        return;
+        }
         AuthenticationService.changePassword(oldPassword, password).then(
             (user) => {
                 setResponseMessage({success:true,message:"Password changed successfully"});

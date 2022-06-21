@@ -21,8 +21,8 @@ const Login = (props) => {
                 <h2 className="text-white text-center pb-4">Login</h2>
                 <Formik
                   initialValues={{
-                    email: "taj@yopmail.com",
-                    password: "3edc#EDC",
+                    email: "",
+                    password: "",
                   }}
                   validationSchema={Yup.object().shape({
                     email: Yup.string().required("Email is required"),
