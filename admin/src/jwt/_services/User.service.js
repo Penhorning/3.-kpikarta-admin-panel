@@ -1,4 +1,4 @@
-import { AuthHeader, HandleResponse } from "../_helpers";
+import { AuthHeader, HandleResponse,Constants } from "../_helpers";
 
 export const UserService = {
   getAll,
@@ -6,5 +6,5 @@ export const UserService = {
 
 function getAll() {
   const requestOptions = { method: "GET", headers: AuthHeader() };
-  return fetch(`/users`, requestOptions).then(HandleResponse);
+  return fetch(Constants.BASE_URL+`/api/users`, requestOptions).then(HandleResponse);
 }
