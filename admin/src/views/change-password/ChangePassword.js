@@ -73,6 +73,7 @@ const ChangePassword = () => {
                                 type="password" 
                                 placeholder="Old Password"
                                 onChange={(e)=>updateOldPassword(e.target.value)}
+                                style={{color:'black'}}
                             />
                             <InputGroupAddon addonType="append">
                                 <InputGroupText>
@@ -91,6 +92,7 @@ const ChangePassword = () => {
                                 type="password" 
                                 placeholder="Password"
                                 onChange={(e)=>updatePassword(e.target.value)}
+                                style={{color:'black'}}
                             />
                             <InputGroupAddon addonType="append">
                                 <InputGroupText>
@@ -108,6 +110,7 @@ const ChangePassword = () => {
                                 value={repassword} 
                                 type="password" 
                                 onChange={(e)=>updateRepassword(e.target.value)}
+                                style={{color:'black'}}
                                 placeholder="Confirm Password" />
                             <InputGroupAddon addonType="append">
                                 <InputGroupText>

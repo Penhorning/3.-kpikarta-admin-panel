@@ -52,7 +52,7 @@ const ForgotPassword = (props) => {
           render={({ errors, status, touched, handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit} id="forgotform">
               <div className="form-group">
-                <label htmlFor="email">Email / Username :</label>
+                <label htmlFor="email">Email</label>
                 <Field
                   name="email"
                   type="email"
