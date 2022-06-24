@@ -42,7 +42,7 @@ const Login = (props) => {
                       },
                       (error) => {
                         setSubmitting(false);
-                        setStatus('Enetered email or password is incorrect, please try again with correct credentials.');
+                        setStatus('Entered email or password is incorrect, please try again with correct credentials.');
                         window.alertTimeout(()=>{
                           setStatus('');
                         })

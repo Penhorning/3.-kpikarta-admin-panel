@@ -1,5 +1,6 @@
 import { lazy } from "react";
 const Dashboard = lazy(() => import("../views/dashboard/Dashboard"));
+const Users = lazy(() => import("../views/users/Users"));
 const ChangePassword = lazy(() => import("../views/change-password/ChangePassword"));
 
 var ThemeRoutes = [
@@ -8,6 +9,12 @@ var ThemeRoutes = [
     name: "Dashboard",
     icon: "mdi mdi-gauge",
     component: Dashboard,
+  },
+  {
+    path: "/users",
+    name: "Users",
+    icon: "mdi mdi-account-multiple",
+    component: Users,
   },
   {
     path: "/settings",
