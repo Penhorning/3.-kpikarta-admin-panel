@@ -1,19 +1,39 @@
 import React,{ useState,useEffect} from "react";
 import {
-    Button,
     Row,
     Col,
     Card,
+    Badge,
     CardBody,
-    CardTitle,
-    CardHeader,
 } from 'reactstrap';
-import ReactTable from "react-table";
-import "react-table/react-table.css";
+import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import { UserService } from "../../jwt/_services";
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 
 const Users = () => {
     const [users,setUsers] = useState([]);
+    const onAfterDeleteRow = function (rowKeys) {
+      alert("The rowkey you drop: " + rowKeys);
+    }
+    const afterSearch = function (searchText, result) {
+      console.log("Your search text is " + searchText);
+      console.log("Result is:");
+      for (let i = 0; i < result.length; i++) {
+        console.log(
+          "Fruit: " + result[i].id + ", " + result[i].name + ", " + result[i].price
+        );
+      }
+    }
+    const options = {
+      afterDeleteRow: onAfterDeleteRow,
+      afterSearch: afterSearch,
+    };
+
+    function filterVerified(verified){
+      return verified?<Badge color="success" pill>VERIFIED</Badge>:<Badge color="success" pill>VERIFIED</Badge>
+    }
+
+
     function getAllUsers(){
         UserService.getAll().then(allUsers => {
             setUsers(allUsers.map(u=>{
@@ -21,105 +41,56 @@ const Users = () => {
                     id: u.id,
                     fullName: u.fullName,
                     email: u.email,
-                    emailVerified: u.emailVerified?'VERIFIED':'UNVERIFIED',
-                    createdAt: u.createdAt,
-                    updatedAt: u.updatedAt,
-                    actions: (
-                      // we've added some custom button actions
-                      <div className="text-center">
-                        {/* use this button to add a edit kind of action */}
-                        <Button
-                          onClick={() => {
-                          //   let obj = data2.find((o) => o.id === key);
-                          //   setModal(!modal);
-                          //   setObj(obj);
-                          }}
-                          color="success"
-                          size="sm"
-                          round="true"
-                          icon="true"
-                        >
-                        <i className="fa-lg mdi mdi-pencil" />
-                        </Button>
-                        {/* use this button to remove the data row */}
-                        {/* <Button
-                            onClick={() => {
-                              let newdata = data2;
-                              newdata.find((o, i) => {
-                                if (o.id === key) {
-                                  newdata.splice(i, 1);
-                                  console.log(newdata);
-                                  return true;
-                                }
-                                return false;
-                              });
-                              this.setState({ jsonData: newdata });
-                            }}
-                            className="ml-1"
-                            color="danger"
-                            size="sm"
-                            round="true"
-                            icon="true"
-                          >
-                            <i className="fa fa-times" />
-                          </Button> */}
-                      </div>
-                    )}
+                    emailVerified: function(){
+                      return u.emailVerified?'VERIFIED':'UNVERIFIED';
+                    }(),
+                    createdAt: new Date(u.createdAt).toDateString(),
+                    updatedAt: new Date(u.updatedAt).toDateString()
+                    }
             }));
         })
     }
     useEffect(()=>{
-        if (document.readyState === "complete") {
-            getAllUsers();
-        }
+      getAllUsers();
     },[])
+
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle><i className="mdi mdi-folder-account mr-2" style={{fontSize:22}}></i>USERS</CardTitle>
-            </CardHeader>
-            <CardBody>
-                <Row>
-                    <Col md="12">
-                    <ReactTable
-            columns={[
-              {
-                Header: "Full Name",
-                accessor: "fullName",
-              },
-              {
-                Header: "Email",
-                accessor: "email",
-              },
-              {
-                Header: "Email Verified",
-                accessor: "emailVerified",
-              },
-              {
-                Header: "Created At",
-                accessor: "createdAt",
-              },
-              {
-                Header: "Updated At",
-                accessor: "updatedAt",
-              },
-              {
-                Header: "Actions",
-                accessor: "actions",
-                sortable: false,
-                filterable: false,
-              },
-            ]}
-            defaultPageSize={10}
-            showPaginationBottom={true}
-            className="-striped -highlight"
-            data={users}
-            filterable
-          />
-                    </Col>
-                </Row>
-            </CardBody>
-        </Card >
+      <div>
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardBody>
+                <BootstrapTable
+                  striped
+                  hover
+                  search={true}
+                  data={users}
+                  pagination
+                  options={options}
+                  // cellEdit={cellEditProp}
+                  tableHeaderClass="mb-0"
+                >
+                  <TableHeaderColumn width="100" dataField="fullName">
+                    Full Name
+                  </TableHeaderColumn>
+                  <TableHeaderColumn width="100" dataField="email" isKey>
+                    Email
+                  </TableHeaderColumn>
+                  <TableHeaderColumn width="100" dataField="emailVerified">
+                    Verified
+                  </TableHeaderColumn>
+                  <TableHeaderColumn width="100" dataField="createdAt">
+                    Created At
+                  </TableHeaderColumn>
+                  <TableHeaderColumn width="100" dataField="updatedAt">
+                    Updated At
+                  </TableHeaderColumn>
+                </BootstrapTable>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     );
 }
 
