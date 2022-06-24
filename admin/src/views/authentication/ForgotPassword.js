@@ -42,7 +42,7 @@ const ForgotPassword = (props) => {
               },
               (error) => {
                 setSubmitting(false);
-                setStatus(error);
+                setStatus(error && error.message);
                 window.alertTimeout(()=>{
                   setStatus('');
                 })
