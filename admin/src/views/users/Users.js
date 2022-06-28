@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import { UserService } from "../../jwt/_services";
+import '../../assets/scss/login.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 
 const Users = () => {
@@ -16,13 +17,6 @@ const Users = () => {
       alert("The rowkey you drop: " + rowKeys);
     }
     const afterSearch = function (searchText, result) {
-      console.log("Your search text is " + searchText);
-      console.log("Result is:");
-      for (let i = 0; i < result.length; i++) {
-        console.log(
-          "Fruit: " + result[i].id + ", " + result[i].name + ", " + result[i].price
-        );
-      }
     }
     const options = {
       afterDeleteRow: onAfterDeleteRow,
@@ -44,8 +38,8 @@ const Users = () => {
                     emailVerified: function(){
                       return u.emailVerified?'VERIFIED':'UNVERIFIED';
                     }(),
-                    createdAt: new Date(u.createdAt).toDateString(),
-                    updatedAt: new Date(u.updatedAt).toDateString()
+                    createdAt: new Date(u.createdAt).toLocaleDateString(),
+                    updatedAt: new Date(u.updatedAt).toLocaleDateString()
                     }
             }));
         })
@@ -56,16 +50,17 @@ const Users = () => {
 
     return (
       <div>
-        <Row>
+        <Row style={{paddingBottom:60}}>
           <Col md="12">
             <Card>
               <CardBody>
                 <BootstrapTable
+                  version='4'
                   striped
                   hover
                   search={true}
                   data={users}
-                  pagination
+                  pagination={true}
                   options={options}
                   // cellEdit={cellEditProp}
                   tableHeaderClass="mb-0"
@@ -77,7 +72,7 @@ const Users = () => {
                     Email
                   </TableHeaderColumn>
                   <TableHeaderColumn width="100" dataField="emailVerified">
-                    Verified
+                    Status
                   </TableHeaderColumn>
                   <TableHeaderColumn width="100" dataField="createdAt">
                     Created At

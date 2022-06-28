@@ -7,7 +7,7 @@ export const UserService = {
 
 function getAll() {
   const requestOptions = { method: "GET", headers: AuthHeader() };
-  return fetch(Constants.BASE_URL+`/api/users`, requestOptions).then(HandleResponse);
+  return fetch(Constants.BASE_URL+`/api/users/all`, requestOptions).then(HandleResponse);
 }
 function getUserCount() {
   const requestOptions = { method: "GET", headers: AuthHeader() };

@@ -127,3 +127,6 @@ a.for_pass {
   color: #fff;
   font-size: 14px;
 }
+.react-bs-table-search-form .form-control {
+    color: #67757c !important;
+}
