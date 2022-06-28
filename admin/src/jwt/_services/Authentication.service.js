@@ -60,7 +60,7 @@ function requestForgotPassword(email) {
     body: JSON.stringify({ email }),
   };
 
-  return fetch(Constants.BASE_URL+`/api/users/reset`, requestOptions)
+  return fetch(Constants.BASE_URL+`/api/users/reset/admin`, requestOptions)
   .then(HandleResponse)
 }
 

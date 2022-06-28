@@ -34,8 +34,9 @@ const ForgotPassword = (props) => {
           ) => {
             setStatus();
             AuthenticationService.requestForgotPassword(email).then(
-              () => {
-                setStatus("An email with verification link sent to your registered email address, please follow the instructions in order to reset your password.")
+              (res) => {
+               setSubmitting(false);
+                setStatus(res.message ? res.message : "An email with verification link sent to your registered email address, please follow the instructions in order to reset your password.")
                 window.alertTimeout(()=>{
                   setStatus('');
                 })
