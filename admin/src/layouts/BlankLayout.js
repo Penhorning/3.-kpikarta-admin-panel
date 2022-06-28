@@ -7,6 +7,9 @@ const Blanklayout = () => {
     <div className="authentications">
       <Switch>
         {AuthRoutes.map((prop, key) => {
+          if(localStorage.getItem("currentUser")){
+            return <Redirect to='/dashboard' />
+          }
           if (prop.redirect)
             return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
           return (
