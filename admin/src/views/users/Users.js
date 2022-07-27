@@ -34,6 +34,12 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import moment from "moment";
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import Alert from '@mui/material/Alert';
+import CustomizedSnackbars from '../toaster/muiToaster';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 function createData(name, calories, fat, carbs, protein) {
 
@@ -98,12 +104,6 @@ const headCells = [
     disablePadding: false,
     label: 'Created',
   },
-  // {
-  //   id: 'updatedAt',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'Updated',
-  // },
   {
     id: 'action',
     numeric: true,
@@ -122,6 +122,7 @@ function EnhancedTableHead(props) {
       <TableRow>
         <TableCell
         >
+
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -169,7 +170,9 @@ export default function EnhancedTable() {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [value, setValue] = React.useState(new Date());
+  const [value, setValue] = useState(new Date());
+  const [unBlocktost, setunBlocktost] = useState(false);
+  const [blocktost, setBlocktost] = useState(false);
 
 
   useEffect(() => {
@@ -178,10 +181,48 @@ export default function EnhancedTable() {
   }, [page, rowsPerPage]);
 
 
+  const unblockToast = () => {
+    setunBlocktost(true);
+  };
+  const blockToast = () => {
+    setBlocktost(true);
+  };
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setBlocktost(false);
+    setunBlocktost(false);
+  };
+
+  const block = (userId, page, rowsPerPage) => {
+    console.log("Block Id", userId)
+    UserService.blockUser(userId, page, rowsPerPage).then((res) => {
+      if (res.status = true) {
+        fetchData('paginationChange');
+        unblockToast(true)
+        console.log("res", res)
+      }
+
+    })
+  }
+
+  const unblock = (userId, page, rowsPerPage) => {
+    console.log("Un Block Id", userId)
+    UserService.unBlockUser(userId, page, rowsPerPage).then((res) => {
+      if (res.status = true) {
+        console.log("res", res.status)
+        fetchData('paginationChange');
+        blockToast(true)
+      
+      }
+
+    })
+   
+  }
 
   const fetchData = (param) => {
-
     let data = {
       page: page + 1,
       limit: rowsPerPage,
@@ -190,9 +231,6 @@ export default function EnhancedTable() {
     if (param == "cancel") {
       data.search = '';
     }
-
-
-
     UserService.getAll(data).then((apiResponse) => {
       setUsers(apiResponse.users[0].data);
       if (apiResponse.users[0].metadata.length > 0) {
@@ -287,7 +325,7 @@ export default function EnhancedTable() {
           >
             Users
           </Typography>
-          <Typography
+          {/* <Typography
             component='div'
             sx={{ flex: '1 1 20%' }}
             variant="h6"
@@ -326,7 +364,7 @@ export default function EnhancedTable() {
                 />
               </Stack>
             </LocalizationProvider>
-          </Typography>
+          </Typography> */}
           <Typography
             sx={{ flex: '1 1 20%' }}
             component="div"
@@ -440,20 +478,11 @@ export default function EnhancedTable() {
                             : ''
                           }
                         </div>
-
                       </TableCell>
-                      {/* <TableCell align="left" >
-                        {user.mobileVerified === true
-                          ? <span style={{ color: 'green'}}>Verified</span>
-                          : user.mobileVerified === false ? <span className="text-danger">Unverified</span>
-                            : <span className="text-warning">Pending</span>}
-                      </TableCell> */}
+
                       <TableCell align="right">
                         {moment(user.createdAt).format("YYYY-MM-DD")}
                       </TableCell>
-                      {/* <TableCell align="right">
-                        {moment(user.updatedAt).format("YYYY-MM-DD")}
-                      </TableCell> */}
                       <TableCell align="right" style={{
                         paddingTop: '15px',
                         paddingRight: '15px',
@@ -469,26 +498,26 @@ export default function EnhancedTable() {
 
                         </Tooltip>
                         }
-                        {<Tooltip title="Block" className='MuiIconButton-root'>
 
-                          <BlockIcon
-                            style={{ color: 'red' }}
-                          />
-
-                        </Tooltip>
-                        }</TableCell>
+                        {user.active === true ?
+                          <Tooltip title="Unblock" className='MuiIconButton-root'>
+                            <LockOpenIcon
+                              style={{ color: 'green' }}
+                              onClick={(e) => block(user._id)}
+                            />
+                          </Tooltip>
+                          :
+                          <Tooltip title="Block" className='MuiIconButton-root'>
+                            <BlockIcon
+                              style={{ color: 'red' }}
+                              onClick={(e) => unblock(user._id)}
+                            />
+                          </Tooltip>
+                        }
+                      </TableCell>
                     </TableRow>
                   );
                 })}
-              {/* {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
             </TableBody>
           </Table>
         </TableContainer>
@@ -503,7 +532,28 @@ export default function EnhancedTable() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+
       </Paper>
+      <Snackbar open={unBlocktost} autoHideDuration={3000} onClose={handleClose}>
+        <Alert
+         onClose={handleClose}
+          severity="success"
+          variant="filled" 
+           sx={{ width: '100%' }}
+           >
+          You have blocked user successfully!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={blocktost} autoHideDuration={3000} onClose={handleClose}>
+        <Alert
+         onClose={handleClose}
+          severity="success"
+          variant="filled" 
+           sx={{ width: '100%' }}
+           >
+          You have UnBlocked user successfully!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
