@@ -5,11 +5,15 @@ export const UserService = {
   getUserCount,
 };
 
-function getAll() {
-  const requestOptions = { method: "GET", headers: AuthHeader() };
-  return fetch(Constants.BASE_URL+`/api/users/all`, requestOptions).then(HandleResponse);
+function getAll(data) {
+  const requestOptions = { method: "POST", headers: AuthHeader(),body:JSON.stringify({
+    page: data.page,
+    limit: data.limit,
+    search_query: data.search
+}) };
+  return fetch(Constants.BASE_URL+`/api/users/get-all`, requestOptions).then(HandleResponse);
 }
 function getUserCount() {
-  const requestOptions = { method: "GET", headers: AuthHeader() };
+  const requestOptions = { method: "POST", headers: AuthHeader() };
   return fetch(Constants.BASE_URL+`/api/users/count`, requestOptions).then(HandleResponse);
 }

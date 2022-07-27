@@ -1,6 +1,5 @@
 import { BehaviorSubject } from "rxjs";
-
-import { HandleResponse,Constants } from "../_helpers";
+import { HandleResponse,Constants,AuthHeader } from "../_helpers";
 
 const currentUserSubject = new BehaviorSubject(
   JSON.parse(localStorage.getItem("currentUser"))
@@ -37,10 +36,7 @@ function login(email, password) {
 function changePassword(oldPassword,newPassword) {
   const requestOptions = {
     method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization":JSON.parse(localStorage.getItem("currentUser")).id 
-    },
+    headers: AuthHeader(),
     body: JSON.stringify({ oldPassword,newPassword }),
   };
 

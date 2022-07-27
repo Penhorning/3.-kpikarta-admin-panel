@@ -72,7 +72,7 @@ const Login = (props) => {
                         {/* <input type="email" className="form-control form-control1" id="email"/> */}
                       </div>
                       <div className="form-group">
-                        <label for="pwd">Password:</label>
+                        <label htmlFor="pwd">Password:</label>
                         <Field
                           name="password"
                           type="password"
@@ -102,7 +102,7 @@ const Login = (props) => {
                   ></Formik>
                 <div className="cre_fog"> <a href="/authentication/forgot-password" className="for_pass">Forgot Password</a> </div>
                 <div className="bot_link">
-                  <p><a href="#!">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="#!">Contact Us</a></p>
+                  <p><a href="https://www.kpikarta.com/terms-of">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://www.kpikarta.com/contact">Contact Us</a></p>
                 </div>
               </div>
             </div>
