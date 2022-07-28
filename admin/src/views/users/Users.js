@@ -28,21 +28,13 @@ import Divider from '@mui/material/Divider';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import moment from "moment";
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Alert from '@mui/material/Alert';
-import CustomizedSnackbars from '../toaster/muiToaster';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 
 
 function createData(name, calories, fat, carbs, protein) {
-
   return {
     name,
     calories,
@@ -120,9 +112,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell
-        >
-
+        <TableCell>
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -138,11 +128,11 @@ function EnhancedTableHead(props) {
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
+              {orderBy === headCell.id 
+              ? (<Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
+                </Box>) 
+              : null}
             </TableSortLabel>
           </TableCell>
         ))}
@@ -177,7 +167,6 @@ export default function EnhancedTable() {
 
   useEffect(() => {
     fetchData('paginationChange');
-    // setUsers(users);
   }, [page, rowsPerPage]);
 
 
@@ -197,29 +186,21 @@ export default function EnhancedTable() {
   };
 
   const block = (userId, page, rowsPerPage) => {
-    console.log("Block Id", userId)
     UserService.blockUser(userId, page, rowsPerPage).then((res) => {
       if (res.status = true) {
         fetchData('paginationChange');
         unblockToast(true)
-        console.log("res", res)
       }
-
     })
   }
 
   const unblock = (userId, page, rowsPerPage) => {
-    console.log("Un Block Id", userId)
     UserService.unBlockUser(userId, page, rowsPerPage).then((res) => {
       if (res.status = true) {
-        console.log("res", res.status)
         fetchData('paginationChange');
         blockToast(true)
-      
       }
-
     })
-   
   }
 
   const fetchData = (param) => {
@@ -257,7 +238,6 @@ export default function EnhancedTable() {
     setSearch("");
     fetchData("cancel");
   };
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -318,69 +298,22 @@ export default function EnhancedTable() {
       <Paper sx={{ width: '100%', mb: 2 }}>
         <Toolbar>
           <Typography
-            sx={{ flex: '1 1 20%' }}
+            sx={{ flex: '1 1 60%' }}
             variant="h6"
             id="tableTitle"
             component="div"
           >
             Users
           </Typography>
-          {/* <Typography
-            component='div'
-            sx={{ flex: '1 1 20%' }}
-            variant="h6"
-          >
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <Stack spacing={3}>
-                <DesktopDatePicker
-                  label="For desktop"
-                  value={value}
-                  minDate={new Date('2017-01-01')}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </Stack>
-            </LocalizationProvider>
-          </Typography>
-          <Typography
-            component='div'
-            sx={{ flex: '1 1 20%' }}
-            variant="h6"
-          
-          >
-            <LocalizationProvider  style={{ height: '8px'}} dateAdapter={AdapterDateFns}>
-              <Stack spacing={3}>
-                <DesktopDatePicker
-                  label="For desktop"
-                  value={value}
-                  minDate={new Date('2017-01-01')}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                 
-                />
-              </Stack>
-            </LocalizationProvider>
-          </Typography> */}
           <Typography
             sx={{ flex: '1 1 20%' }}
-            component="div"
-          >
-            <Box
-              component="form"
-              sx={{
-                '& > :not(style)': { m: 1 },
-              }}
+            component="div">
+            <Box component="form"
+              sx={{ '& > :not(style)': { m: 1 } }}
               noValidate
-              autoComplete="off"
-            >
-              <Paper
-                component="div"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 250 }}
-              >
+              autoComplete="off" >
+              <Paper component="div"
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 250 }}>
                 <InputBase
                   value={search}
                   onInput={(e) => setSearch(e.target.value)}
@@ -428,7 +361,6 @@ export default function EnhancedTable() {
             />
             <TableBody>
               {users && stableSort(users, getComparator(order, orderBy))
-                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((user, index) => {
                   const isItemSelected = isSelected(user._id);
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -450,36 +382,40 @@ export default function EnhancedTable() {
                       >
                         {user.fullName}
                       </TableCell>
-                      <TableCell align="left" ><div style={{ display: 'flex' }}>{user.email}{user.emailVerified
-                        ? <span className="status_icon" style={{ color: 'green' }}>
-                          <Tooltip title="Verified">
-                            <CheckCircleIcon />
-                          </Tooltip>
-                        </span>
-                        : <span className="status_icon text-danger" >
-                          <Tooltip title="Unverified">
-                            <CancelIcon />
-                          </Tooltip>
-                        </span>}</div></TableCell>
-                      <TableCell align="right">
+                      <TableCell align="left" >
                         <div style={{ display: 'flex' }}>
-                          {user.mobile.e164Number}
-                          {user.mobile.e164Number ? user.mobileVerified === true
+                          {user.email}{user.emailVerified
                             ? <span className="status_icon" style={{ color: 'green' }}>
                               <Tooltip title="Verified">
                                 <CheckCircleIcon />
                               </Tooltip>
                             </span>
-                            : <span className="status_icon text-danger">
+                            : <span className="status_icon text-danger" >
                               <Tooltip title="Unverified">
                                 <CancelIcon />
                               </Tooltip>
-                            </span>
+                            </span>}
+                        </div>
+                      </TableCell>
+                      <TableCell align="right">
+                        <div style={{ display: 'flex' }}>
+                          {user.mobile.e164Number}
+                          {user.mobile.e164Number
+                            ? user.mobileVerified === true
+                              ? <span className="status_icon" style={{ color: 'green' }}>
+                                <Tooltip title="Verified">
+                                  <CheckCircleIcon />
+                                </Tooltip>
+                              </span>
+                              : <span className="status_icon text-danger">
+                                <Tooltip title="Unverified">
+                                  <CancelIcon />
+                                </Tooltip>
+                              </span>
                             : ''
                           }
                         </div>
                       </TableCell>
-
                       <TableCell align="right">
                         {moment(user.createdAt).format("YYYY-MM-DD")}
                       </TableCell>
@@ -487,31 +423,24 @@ export default function EnhancedTable() {
                         paddingTop: '15px',
                         paddingRight: '15px',
                         paddingBottom: '15px',
-                        paddingLeft: '15px',
+                        paddingLeft: '15px'
                       }}
                       >
                         {<Tooltip title="Edit / Update" className='MuiIconButton-root'>
-
-                          <EditIcon
-                            style={{ color: '#0c85d0' }}
-                          />
-
+                          <EditIcon style={{ color: '#0c85d0' }} />
                         </Tooltip>
                         }
-
-                        {user.active === true ?
-                          <Tooltip title="Unblock" className='MuiIconButton-root'>
+                        {user.active === true
+                          ? <Tooltip title="Unblock" className='MuiIconButton-root'>
                             <LockOpenIcon
                               style={{ color: 'green' }}
-                              onClick={(e) => block(user._id)}
-                            />
+                              onClick={(e) => block(user._id)} />
                           </Tooltip>
                           :
                           <Tooltip title="Block" className='MuiIconButton-root'>
                             <BlockIcon
                               style={{ color: 'red' }}
-                              onClick={(e) => unblock(user._id)}
-                            />
+                              onClick={(e) => unblock(user._id)} />
                           </Tooltip>
                         }
                       </TableCell>
@@ -532,26 +461,25 @@ export default function EnhancedTable() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-
       </Paper>
       <Snackbar open={unBlocktost} autoHideDuration={3000} onClose={handleClose}>
         <Alert
-         onClose={handleClose}
+          onClose={handleClose}
           severity="success"
-          variant="filled" 
-           sx={{ width: '100%' }}
-           >
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
           You have blocked user successfully!
         </Alert>
       </Snackbar>
       <Snackbar open={blocktost} autoHideDuration={3000} onClose={handleClose}>
         <Alert
-         onClose={handleClose}
+          onClose={handleClose}
           severity="success"
-          variant="filled" 
-           sx={{ width: '100%' }}
-           >
-          You have UnBlocked user successfully!
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          You have Unblocked user successfully!
         </Alert>
       </Snackbar>
     </Box>

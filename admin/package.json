@@ -5,7 +5,7 @@
   "description": "material-pro react admin for KPI Karta",
   "main": "index.js",
   "scripts": {
-    "start": "env-cmd -f .env.local react-scripts start",
+    "start": "env-cmd -f .env.qa react-scripts start",
     "start:dev": "env-cmd -f .env.development react-scripts start",
     "build": "react-scripts build",
     "build:dev": "env-cmd -f .env.development react-scripts build && mv build development",
@@ -33,6 +33,7 @@
     "@material-ui/icons": "^4.11.3",
     "@material-ui/pickers": "^3.3.10",
     "@mui/icons-material": "^5.8.4",
+    "@mui/lab": "^5.0.0-alpha.92",
     "@mui/material": "^5.9.0",
     "@mui/system": "^5.9.1",
     "@mui/utils": "^5.9.0",
