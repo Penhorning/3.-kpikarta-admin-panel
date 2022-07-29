@@ -11,7 +11,9 @@ function getAll(data) {
   const requestOptions = { method: "POST", headers: AuthHeader(),body:JSON.stringify({
     page: data.page,
     limit: data.limit,
-    search_query: data.search
+    search_query: data.search,
+    start: data.start,
+    end: data.end
 }) };
   return fetch(Constants.BASE_URL+`/api/users/get-all`, requestOptions).then(HandleResponse);
 }
