@@ -18,7 +18,17 @@ const getSuggestion = (data) => {
   return fetch(Constants.BASE_URL+`/api/suggestion-by-phase`, requestOptions).then(HandleResponse);
 }
 
+const updateSuggestion = (suggestionId, data) => {
+  let requestOptions = {
+    method: "PATCH",
+    headers: AuthHeader(),
+    body: JSON.stringify(data)
+  };
+  return fetch(Constants.BASE_URL+`/api/suggestions/${suggestionId}`, requestOptions).then(HandleResponse);
+}
+
 export const SuggestionService = {
   getPhases,
   getSuggestion,
+  updateSuggestion
 };
