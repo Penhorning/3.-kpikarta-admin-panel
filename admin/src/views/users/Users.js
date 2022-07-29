@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { UserService } from "../../jwt/_services";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -32,6 +32,8 @@ import moment from "moment";
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import DatePicker from "react-modern-calendar-datepicker";
 
 
 function createData(name, calories, fat, carbs, protein) {
@@ -128,11 +130,11 @@ function EnhancedTableHead(props) {
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id 
-              ? (<Box component="span" sx={visuallyHidden}>
+              {orderBy === headCell.id
+                ? (<Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>) 
-              : null}
+                </Box>)
+                : null}
             </TableSortLabel>
           </TableCell>
         ))}
@@ -150,6 +152,10 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
+const initialValue = {
+  from: "",
+  to: "",
+};
 export default function EnhancedTable() {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -163,6 +169,18 @@ export default function EnhancedTable() {
   const [value, setValue] = useState(new Date());
   const [unBlocktost, setunBlocktost] = useState(false);
   const [blocktost, setBlocktost] = useState(false);
+  // const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
+  const [dateRange, setDateRange] = useState(initialValue);
+  const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
+  const [isShown, setIsShown] = useState(false)
+
+ 
+
+  useEffect(() => {
+    if (dateRange.from && dateRange.to) {
+      fetchData();
+    }
+  }, [dateRange.to]);
 
 
   useEffect(() => {
@@ -204,13 +222,20 @@ export default function EnhancedTable() {
   }
 
   const fetchData = (param) => {
+    console.log("inheritance",dateRange)
     let data = {
       page: page + 1,
       limit: rowsPerPage,
-      search: search
+      search: search,
+      start: dateRange.from,
+      end: dateRange.to,
+
     }
     if (param == "cancel") {
       data.search = '';
+      data.start = '';
+      data.end = '';
+
     }
     UserService.getAll(data).then((apiResponse) => {
       setUsers(apiResponse.users[0].data);
@@ -238,6 +263,35 @@ export default function EnhancedTable() {
     setSearch("");
     fetchData("cancel");
   };
+
+
+
+  // DATE CODES  
+  const handleDateChange = async (event) => {
+    setSelectedDayRange(event);
+    setIsShown(true)
+    if (event.to) {
+      setDateRange({
+        from: moment({ ...event.from, month: event.from.month - 1 }).format("YYYY-MM-DD"),
+        to: moment({ ...event.to, month: event.to.month - 1 }).format("YYYY-MM-DD"),
+      });
+    }
+  };
+
+  const fetchOnDateReset = () => {
+    fetchData("cancel");
+    setSelectedDayRange(initialValue);
+    setDateRange(initialValue);
+    dateRange.from = dateRange.to = '';
+  }
+  
+
+
+  //  const {from, to} = dateRange
+  // const start={dateRange}
+  console.log("Selected Date", dateRange)
+  console.log(" selectedDayRange", selectedDayRange)
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -298,7 +352,7 @@ export default function EnhancedTable() {
       <Paper sx={{ width: '100%', mb: 2 }}>
         <Toolbar>
           <Typography
-            sx={{ flex: '1 1 60%' }}
+            sx={{ flex: '1 1 30%' }}
             variant="h6"
             id="tableTitle"
             component="div"
@@ -306,7 +360,49 @@ export default function EnhancedTable() {
             Users
           </Typography>
           <Typography
-            sx={{ flex: '1 1 20%' }}
+            sx={{ flex: '1 1 5%' }}
+            component="div">
+            <Box component="form"
+              sx={{ '& > :not(style)': { m: 1 } }}
+              noValidate
+              autoComplete="off" >
+              <Paper component="div"
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 200 }}>
+                <DatePicker
+                  value={selectedDayRange}
+                  onChange={handleDateChange}
+                  inputPlaceholder="Select a date range"
+                  shouldHighlightWeekends
+                  colorPrimary={'#296BB5'}
+                />
+                {/* <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                <IconButton
+                  type="submit"
+                  sx={{ p: '10px' }}
+                  aria-label="search"
+                  onClick={() => {
+                    fetchOnDateReset();
+                  }}
+                >
+                  <SearchIcon />
+                </IconButton> */}
+                
+                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+
+                { isShown && <IconButton
+                  color="primary"
+                  sx={{ p: '10px' }}
+                  onClick={() => {
+                    fetchOnDateReset();
+                  }}
+                 >
+                  <ClearIcon />
+                </IconButton>}
+              </Paper>
+            </Box>
+          </Typography>
+          <Typography
+            sx={{ flex: '1 1 5%' }}
             component="div">
             <Box component="form"
               sx={{ '& > :not(style)': { m: 1 } }}
@@ -326,6 +422,7 @@ export default function EnhancedTable() {
                   sx={{ p: '10px' }}
                   aria-label="search"
                   onClick={handleSearch} >
+                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
                   <SearchIcon />
                 </IconButton>
                 <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
