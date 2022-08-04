@@ -64,7 +64,7 @@ const ChangePassword = () => {
             <Col md="6">
                 <Form onSubmit={changePassword}>
                     <FormGroup>
-                        <Label><span style={{color:'red'}}>*</span> Old Password</Label>
+                        <Label>Old Password<span style={{color:'red'}}>*</span> </Label>
                         <InputGroup>
                             <Input 
                                 invalid={oldPassword.length && oldPassword.length<=3} 
@@ -83,7 +83,7 @@ const ChangePassword = () => {
                         </InputGroup>
                     </FormGroup>
                     <FormGroup>
-                        <Label><span style={{color:'red'}}>*</span> New Password</Label>
+                        <Label>New Password<span style={{color:'red'}}>*</span></Label>
                         <InputGroup>
                             <Input 
                                 invalid={password.length && password.length<=3} 
@@ -102,7 +102,7 @@ const ChangePassword = () => {
                         </InputGroup>
                     </FormGroup>
                     <FormGroup>
-                        <Label><span style={{color:'red'}}>*</span> Confirm Password</Label>
+                        <Label>Confirm Password<span style={{color:'red'}}>*</span> </Label>
                         <InputGroup>
                             <Input 
                                 invalid={password.length && password!==repassword} 
