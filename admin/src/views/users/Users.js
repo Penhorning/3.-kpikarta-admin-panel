@@ -514,7 +514,25 @@ export default function EnhancedTable() {
                         </div>
                       </TableCell>
                       <TableCell align="right">
-                        {moment(user.createdAt).format("YYYY-MM-DD")}
+                        {moment(user.createdAt).format("MM-DD-YYYY")}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Box
+                          sx={{
+                            flexWrap: 'wrap',
+                            '& > :not(style)': {
+                              width: 75,
+                              height: 20,
+                            },
+                          }}
+                        >
+                          {
+                            user.active === false
+                              ?<Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card> 
+                              :<Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
+                               
+                          }
+                        </Box>
                       </TableCell>
                       <TableCell align="right" style={{
                         paddingTop: '15px',
