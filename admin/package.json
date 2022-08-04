@@ -5,7 +5,7 @@
   "description": "material-pro react admin for KPI Karta",
   "main": "index.js",
   "scripts": {
-    "start": "env-cmd -f .env.dev react-scripts start",
+    "start": "env-cmd -f .env.local react-scripts start",
     "start:dev": "env-cmd -f .env.development react-scripts start",
     "build": "react-scripts build",
     "build:dev": "env-cmd -f .env.development react-scripts build && mv build development",

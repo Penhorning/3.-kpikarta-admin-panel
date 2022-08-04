@@ -30,7 +30,6 @@ import Snackbar from '@mui/material/Snackbar';
 export default function Suggestion() {
   const [phases, setPhases] = useState([]);
   const [suggestion, setSuggestion] = useState({});
-  const [suggestionInput, setSuggestionInput] = useState(true);
   const [descDisArr, setDescDisArr] = useState([]);
   const [tabValue, setTabValue] = React.useState('62b07978c389310e2c74f586');
   const [loading, setLoading] = useState(true);
@@ -114,9 +113,9 @@ export default function Suggestion() {
     // setLoading(true);
     SuggestionService.getSuggestion({phaseId}).then(response => {
       initialValues.definition = response.definition;
+      let disableArray = [];
       for (let i=0; i<response.descriptions.length; i++) {
         initialValues.descriptions.push({ description: response.descriptions[i].description });
-        const disableArray = [...descDisArr];
         disableArray.push(true);
         setDescDisArr(disableArray);
       }
