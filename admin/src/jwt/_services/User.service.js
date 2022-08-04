@@ -4,7 +4,8 @@ export const UserService = {
   getAll,
   getUserCount,
   blockUser,
-  unBlockUser
+  unBlockUser,
+  addUser
 };
 
 function getAll(data) {
@@ -38,11 +39,17 @@ function unBlockUser(userId,page,rowsPerPage) {
   return fetch(Constants.BASE_URL+`/api/users/unblock`, requestOptions).then(HandleResponse);
 }
 
-
-
-
-
 function getUserCount() {
   const requestOptions = { method: "POST", headers: AuthHeader() };
   return fetch(Constants.BASE_URL+`/api/users/count`, requestOptions).then(HandleResponse);
+}
+
+function addUser(data) {
+  const requestOptions = { method: "POST", headers: AuthHeader(),body:JSON.stringify({
+    fullName: data.fullName,
+    email: data.email,
+    mobile: data.mobile,
+    companyName: data.companyName
+}) };
+  return fetch(Constants.BASE_URL+`/api/users`, requestOptions).then(HandleResponse);
 }

@@ -22,6 +22,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LinearProgress from '@mui/material/LinearProgress';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+
 
 
 export default function Suggestion() {
@@ -31,6 +34,8 @@ export default function Suggestion() {
   const [tabValue, setTabValue] = React.useState('62b07978c389310e2c74f586');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [saveDatatost, setSaveDatatost] = useState(false);
+  
 
   // Suggestion form
   const initialValues = {
@@ -59,7 +64,17 @@ export default function Suggestion() {
     setValues({ ...values, descriptions });
   }
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSaveDatatost(false);
+  };
+
+
   const onSubmit = (values) => {
+    const result = window.confirm("Are you sure do you want to save this suggestion?");
+   if(result){
     setSubmitting(true);
     let suggestionId = values.id;
     let data = {
@@ -68,8 +83,9 @@ export default function Suggestion() {
     };
     SuggestionService.updateSuggestion(suggestionId, data).then(response => {
       setSubmitting(false);
-      alert("Suggestion updated successfully");
+      setSaveDatatost(true);
     });
+   }
   }
 
   // Get phases
@@ -211,7 +227,16 @@ export default function Suggestion() {
           </Formik>
           </TabPanel>
         </TabContext>
-        
+        <Snackbar open={saveDatatost} autoHideDuration={3000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Suggestion updated successfully
+        </Alert>
+      </Snackbar>
       </Paper>
     </Box>
   );

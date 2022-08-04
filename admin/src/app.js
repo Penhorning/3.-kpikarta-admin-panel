@@ -6,9 +6,9 @@ import { configureStore } from "./redux/Store";
 import { History } from "./jwt/_helpers";
 import { PrivateRoute } from "./routes/PrivateRoutes";
 import BlankLayout from "./layouts/BlankLayout";
+import Newuser from "./views/users/newuser";
 
 const App = () => {
-  //const [currentUser, SetcurrentUser] = useState(null);
   return (
     <Provider store={configureStore()}>
       <Router history={History}>
