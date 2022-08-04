@@ -28,6 +28,7 @@ export default function Suggestion() {
   const [phases, setPhases] = useState([]);
   const [suggestion, setSuggestion] = useState({});
   const [suggestionInput, setSuggestionInput] = useState(true);
+  const [descDisArr, setDescDisArr] = useState([]);
   const [tabValue, setTabValue] = React.useState('62b07978c389310e2c74f586');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -51,12 +52,24 @@ export default function Suggestion() {
       const descriptions = [...values.descriptions];
       descriptions.push({ description: "" });
       setValues({ ...values, descriptions });
+      const disableArray = [...descDisArr];
+      disableArray.push(false);
+      setDescDisArr(disableArray);
     }
   }
   const deleteDescription = (values, setValues, index) => {
     const descriptions = [...values.descriptions];
     descriptions.splice(index, 1);
     setValues({ ...values, descriptions });
+    const disableArray = [...descDisArr];
+    disableArray.splice(index, 1);
+    setDescDisArr(disableArray);
+  }
+
+  const enableDescription = (index) => {
+    const disableArray = [...descDisArr];
+    disableArray[index] = false;
+    setDescDisArr(disableArray);
   }
 
   const onSubmit = (values) => {
@@ -87,6 +100,9 @@ export default function Suggestion() {
       initialValues.definition = response.definition;
       for (let i=0; i<response.descriptions.length; i++) {
         initialValues.descriptions.push({ description: response.descriptions[i].description });
+        const disableArray = [...descDisArr];
+        disableArray.push(true);
+        setDescDisArr(disableArray);
       }
       setSuggestion(response);
       setLoading(false);
@@ -173,7 +189,7 @@ export default function Suggestion() {
                   return (
                   <div key={index} className={ index > 0 ? "mt-2": ""}>
                     <Grid container className="justify-content-end">
-                      <EditIcon onClick={() => setSuggestionInput(false)} style={{ cursor: "pointer" }} />
+                      <EditIcon onClick={() => enableDescription(index)} style={{ cursor: "pointer" }} />
                       {
                         values.descriptions.length > 1
                         ? 
@@ -192,6 +208,7 @@ export default function Suggestion() {
                         label="Suggestion"
                         multiline
                         maxRows={4}
+                        disabled={descDisArr[index]}
                         autoFocus
                         {...field}
                         error={descriptionsErrors.description && descriptionsTouched.description ? true: false}
