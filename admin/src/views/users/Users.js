@@ -565,7 +565,7 @@ export default function EnhancedTable() {
                         </div>
                       </TableCell>
                       <TableCell align="right">
-                        {moment(user.createdAt).format("YYYY-MM-DD")}
+                        {moment(user.createdAt).format("MM-DD-YYYY")}
                       </TableCell>
                       <TableCell align="right">
                         <Box
@@ -578,9 +578,10 @@ export default function EnhancedTable() {
                           }}
                         >
                           {
-                            user.active === true
-                              ? <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
-                              : <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card>
+                            user.active === false
+                              ?<Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card> 
+                              :<Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
+                               
                           }
                         </Box>
                       </TableCell>
