@@ -1,12 +1,9 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
-
 import './suggestion.scss';
 import { SuggestionService } from '../../jwt/_services/suggestion.service';
-
 import { Formik, Form, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
-
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -199,8 +196,8 @@ export default function Suggestion() {
               </Typography>
               <FieldArray name="descriptions">
                 {() => (values.descriptions.map((item, index) => {
-                  const descriptionsErrors = errors.descriptions?.length && errors.descriptions[index] || {};
-                  const descriptionsTouched = touched.descriptions?.length && touched.descriptions[index] || {};
+                  const descriptionsErrors = (errors.descriptions?.length && errors.descriptions[index]) || {};
+                  const descriptionsTouched = (touched.descriptions?.length && touched.descriptions[index]) || {};
                   return (
                   <div key={index} className={ index > 0 ? "mt-2": ""}>
                     <Grid container className="justify-content-end">

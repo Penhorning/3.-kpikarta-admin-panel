@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { UserService } from "../../jwt/_services";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -89,25 +89,31 @@ const headCells = [
   },
   {
     id: 'mobile',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Mobile',
   },
   {
     id: 'createdAt',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Created',
   },
   {
+    id: 'active',
+    numeric: false,
+    disablePadding: false,
+    label: 'Status',
+  },
+  {
     id: 'action',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Action',
   },
 ];
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { order, orderBy, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -115,15 +121,14 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell>
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
-            style={{ fontWeight: 'bold' }}
+            style={{ fontWeight: 'bold', paddingLeft: '25px' }}
+
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -161,32 +166,28 @@ export default function EnhancedTable() {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
-  const [dense, setDense] = useState(false);
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [value, setValue] = useState(new Date());
   const [unBlocktost, setunBlocktost] = useState(false);
   const [blocktost, setBlocktost] = useState(false);
-  // const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
   const [dateRange, setDateRange] = useState(initialValue);
   const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
   const [isShown, setIsShown] = useState(false)
-
- 
+  const [isSearchShown, setIsSearchShown] = useState(false)
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
       fetchData();
     }
-  }, [dateRange.to]);
+  },[dateRange.to]);
 
 
   useEffect(() => {
     fetchData('paginationChange');
-  }, [page, rowsPerPage]);
+  },[page,rowsPerPage]);
 
 
   const unblockToast = () => {
@@ -205,39 +206,42 @@ export default function EnhancedTable() {
   };
 
   const block = (userId, page, rowsPerPage) => {
-    UserService.blockUser(userId, page, rowsPerPage).then((res) => {
-      if (res.status = true) {
-        fetchData('paginationChange');
-        unblockToast(true)
-      }
-    })
+    const result = window.confirm("Are you sure do you want to Deactivate this user?");
+    if (result) {
+      UserService.blockUser(userId, page, rowsPerPage).then((res) => {
+        if (res.status === true) {
+          fetchData('paginationChange');
+          unblockToast(true)
+        }
+      })
+    }
   }
 
   const unblock = (userId, page, rowsPerPage) => {
-    UserService.unBlockUser(userId, page, rowsPerPage).then((res) => {
-      if (res.status = true) {
-        fetchData('paginationChange');
-        blockToast(true)
-      }
-    })
+    const result = window.confirm("Are you sure do you want to Activate this user?");
+    if (result) {
+      UserService.unBlockUser(userId, page, rowsPerPage).then((res) => {
+        if (res.status === true) {
+          fetchData('paginationChange');
+          blockToast(true)
+        }
+      })
+    }
   }
 
   const fetchData = (param) => {
-    console.log("inheritance",dateRange)
+    let searchData;
+    if(param === "cancel") searchData = "";
+    else searchData = search;
+
     let data = {
       page: page + 1,
       limit: rowsPerPage,
-      search: search,
+      search: searchData,
       start: dateRange.from,
       end: dateRange.to,
-
     }
-    if (param == "cancel") {
-      data.search = '';
-      data.start = '';
-      data.end = '';
-
-    }
+   
     UserService.getAll(data).then((apiResponse) => {
       setUsers(apiResponse.users[0].data);
       if (apiResponse.users[0].metadata.length > 0) {
@@ -251,7 +255,6 @@ export default function EnhancedTable() {
     }
   }
 
-  console.log("Users", users)
 
   // SEARCH CODES    
   const handleSearch = (event) => {
@@ -260,39 +263,53 @@ export default function EnhancedTable() {
   };
 
   const handleCancel = (event) => {
-    event.preventDefault();
     setSearch("");
     fetchData("cancel");
+    event.preventDefault();
+    setIsSearchShown(false)
   };
 
 
-
   // DATE CODES  
+  const customDateInput = ({ ref }) => (
+    <input
+      readOnly
+      ref={ref}
+      placeholder="Select created date range"
+      value={
+        selectedDayRange.from && selectedDayRange.to
+          ? `From ${selectedDayRange.from.month}/${selectedDayRange.from.day}/${selectedDayRange.from.year} To ${selectedDayRange.to.month}/${selectedDayRange.to.day}/${selectedDayRange.to.year}`
+          : ""
+      }
+      className="date__input"
+    />
+  );
+
   const handleDateChange = async (event) => {
-    setSelectedDayRange(event);
     setIsShown(true)
+    setSelectedDayRange(event);
     if (event.to) {
       setDateRange({
-        from: moment({ ...event.from, month: event.from.month - 1 }).format("YYYY-MM-DD"),
-        to: moment({ ...event.to, month: event.to.month - 1 }).format("YYYY-MM-DD"),
+        from: moment({ ...event.from, month: event.from.month - 1 }).toDate(),
+        to: moment({ ...event.to, month: event.to.month - 1 }).endOf("day").toDate(),
       });
     }
   };
 
-  const fetchOnDateReset = () => {
-    fetchData("cancel");
+  const maximumDate = {
+    month: new Date().getMonth() + 1,
+    day: new Date().getDay(),
+    year: new Date().getFullYear()
+  }
+
+  const handleDateFilterCancel = (event) => {
+    event.preventDefault();
     setSelectedDayRange(initialValue);
     setDateRange(initialValue);
     dateRange.from = dateRange.to = '';
-  }
-  
-
-
-  //  const {from, to} = dateRange
-  // const start={dateRange}
-  console.log("Selected Date", dateRange)
-  console.log(" selectedDayRange", selectedDayRange)
-
+    setIsShown(false)
+    fetchData("cancel");
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -309,25 +326,6 @@ export default function EnhancedTable() {
     setSelected([]);
   };
 
-  const handleClick = (event, fullName) => {
-    const selectedIndex = selected.indexOf(fullName);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, fullName);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -338,15 +336,17 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
 
   const isSelected = (fullName) => selected.indexOf(fullName) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+  const onInputChnage = (e) => {
+    if (e.target.value === '') {
+      setIsSearchShown(false)
+    } else {
+      setIsSearchShown(true)
+    }
+    setSearch(e.target.value)
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -361,44 +361,35 @@ export default function EnhancedTable() {
             Users
           </Typography>
           <Typography
-            sx={{ flex: '1 1 5%' }}
+            sx={{ flex: '1 1' }}
             component="div">
             <Box component="form"
-              sx={{ '& > :not(style)': { m: 1 } }}
+              sx={{ '& > :not(style)': {} }}
               noValidate
               autoComplete="off" >
               <Paper component="div"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 200 }}>
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 253 }}>
                 <DatePicker
                   value={selectedDayRange}
                   onChange={handleDateChange}
-                  inputPlaceholder="Select a date range"
+                  inputPlaceholder="Select created date range"
                   shouldHighlightWeekends
                   colorPrimary={'#296BB5'}
+                  maximumDate={maximumDate}
+                  renderInput={customDateInput}
                 />
-                {/* <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                <IconButton
-                  type="submit"
-                  sx={{ p: '10px' }}
-                  aria-label="search"
-                  onClick={() => {
-                    fetchOnDateReset();
-                  }}
-                >
-                  <SearchIcon />
-                </IconButton> */}
-                
-                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-
-                { isShown && <IconButton
-                  color="primary"
-                  sx={{ p: '10px' }}
-                  onClick={() => {
-                    fetchOnDateReset();
-                  }}
-                 >
-                  <ClearIcon />
-                </IconButton>}
+                {isShown &&
+                  <>
+                    <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                    <IconButton
+                      color="primary"
+                      sx={{ p: '10px' }}
+                      onClick={handleDateFilterCancel}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </>
+                }
               </Paper>
             </Box>
           </Typography>
@@ -413,40 +404,48 @@ export default function EnhancedTable() {
                 sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 250 }}>
                 <InputBase
                   value={search}
-                  onInput={(e) => setSearch(e.target.value)}
+                  onInput={onInputChnage}
                   sx={{ ml: 1, flex: 1 }}
                   placeholder="Search"
                   inputProps={{ 'aria-label': 'search' }}
                 />
-                <IconButton
-                  type="submit"
-                  sx={{ p: '10px' }}
-                  aria-label="search"
-                  onClick={handleSearch} >
-                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                  <SearchIcon />
-                </IconButton>
-                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                <IconButton
-                  color="primary"
-                  sx={{ p: '10px' }}
-                  onClick={handleCancel}>
-                  <ClearIcon />
-                </IconButton>
+                <>
+                  <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                  <IconButton
+                    type="submit"
+                    sx={{ p: '10px' }}
+                    aria-label="search"
+                    onClick={handleSearch} >
+                    <SearchIcon />
+                  </IconButton>
+                </>
+                {isSearchShown &&
+                  <>
+                    <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                    <IconButton
+                      color="primary"
+                      sx={{ p: '10px' }}
+                      onClick={handleCancel}>
+                      <ClearIcon />
+                    </IconButton>
+                  </>
+                }
               </Paper>
             </Box>
           </Typography>
           <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-              <Button variant="contained">ADD USER</Button>
+             
+                <Button className="text-nowrap" variant="contained">ADD USER</Button>
+             
             </Stack>
           </Typography>
         </Toolbar>
+        <Divider sx={{ m: 1.0 }} orientation="horizontal" />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -470,17 +469,16 @@ export default function EnhancedTable() {
                       key={user._id}
                       selected={isItemSelected}
                     >
-                      <TableCell>
-                      </TableCell>
                       <TableCell
-                        component="th"
+                        component="td"
                         id={labelId}
                         scope="row"
                         padding="none"
+                        style={{ paddingLeft: '25px' }}
                       >
                         {user.fullName}
                       </TableCell>
-                      <TableCell align="left" >
+                      <TableCell>
                         <div style={{ display: 'flex' }}>
                           {user.email}{user.emailVerified
                             ? <span className="status_icon" style={{ color: 'green' }}>
@@ -495,12 +493,12 @@ export default function EnhancedTable() {
                             </span>}
                         </div>
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell>
                         <div style={{ display: 'flex' }}>
-                          {user.mobile.e164Number}
-                          {user.mobile.e164Number
+                          {user?.mobile?.e164Number}
+                          {user?.mobile?.e164Number
                             ? user.mobileVerified === true
-                              ? <span className="status_icon" style={{ color: 'green' }}>
+                              ? <span className="status_icon" style={{ color: 'green', textAlign: 'center' }}>
                                 <Tooltip title="Verified">
                                   <CheckCircleIcon />
                                 </Tooltip>
@@ -510,14 +508,14 @@ export default function EnhancedTable() {
                                   <CancelIcon />
                                 </Tooltip>
                               </span>
-                            : ''
+                            : 'N/A'
                           }
                         </div>
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell>
                         {moment(user.createdAt).format("MM-DD-YYYY")}
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell>
                         <Box
                           sx={{
                             flexWrap: 'wrap',
@@ -529,33 +527,35 @@ export default function EnhancedTable() {
                         >
                           {
                             user.active === false
-                              ?<Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card> 
-                              :<Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
-                               
+                              ? <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card>
+                              : <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
+
                           }
                         </Box>
                       </TableCell>
-                      <TableCell align="right" style={{
+                      <TableCell align="left" style={{
                         paddingTop: '15px',
                         paddingRight: '15px',
                         paddingBottom: '15px',
                         paddingLeft: '15px'
                       }}
                       >
-                        {<Tooltip title="Edit / Update" className='MuiIconButton-root'>
+                        {<Tooltip title="Edit" className='MuiIconButton-root'>
+                          
                           <EditIcon style={{ color: '#0c85d0' }} />
+                       
                         </Tooltip>
                         }
                         {user.active === true
-                          ? <Tooltip title="Unblock" className='MuiIconButton-root'>
-                            <LockOpenIcon
-                              style={{ color: 'green' }}
+                          ? <Tooltip title="Inactive" className='MuiIconButton-root'>
+                            <BlockIcon
+                              style={{ color: 'red' }}
                               onClick={(e) => block(user._id)} />
                           </Tooltip>
                           :
-                          <Tooltip title="Block" className='MuiIconButton-root'>
-                            <BlockIcon
-                              style={{ color: 'red' }}
+                          <Tooltip title="Active" className='MuiIconButton-root'>
+                            <LockOpenIcon
+                              style={{ color: 'green' }}
                               onClick={(e) => unblock(user._id)} />
                           </Tooltip>
                         }
@@ -585,7 +585,7 @@ export default function EnhancedTable() {
           variant="filled"
           sx={{ width: '100%' }}
         >
-          You have blocked user successfully!
+          User deactivated successfully
         </Alert>
       </Snackbar>
       <Snackbar open={blocktost} autoHideDuration={3000} onClose={handleClose}>
@@ -595,7 +595,7 @@ export default function EnhancedTable() {
           variant="filled"
           sx={{ width: '100%' }}
         >
-          You have Unblocked user successfully!
+          User activated successfully
         </Alert>
       </Snackbar>
     </Box>

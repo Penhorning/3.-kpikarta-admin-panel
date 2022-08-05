@@ -3,25 +3,14 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
-import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
+import { Formik, Form, Field} from 'formik';
 import * as Yup from 'yup';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
-import { UserService } from "../../jwt/_services";
 import 'intl-tel-input/build/css/intlTelInput.css';
-import ReactIntlTelInput from 'react-intl-tel-input-v2';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { styled } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
-import MuiPhoneNumber from 'material-ui-phone-number';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import './newUser.scss';
-import startsWith from 'lodash.startswith';
 
 const initialValues = {
   fullName: '',
@@ -29,18 +18,14 @@ const initialValues = {
   mobile: {},
   companyName: ''
 }
-
-
 export default function Newuser() {
-
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Full Name is required!'),
-    email: Yup.string().required('Email is required!'),
+    email: Yup.string().email().required('Valid email is required!'),
     mobile: Yup.object().required('Mobile number is required!'),
     companyName: Yup.string().required('Company Name is required!'),
   });
 
- 
   const onSubmit = (values) => {
     console.log("Submit value", values)
     let data = {
@@ -62,8 +47,7 @@ export default function Newuser() {
             sx={{ flex: '1 1 20%' }}
             variant="h6"
             id="tableTitle"
-            component="div"
-          >
+            component="div">
             Add User
           </Typography>
         </Toolbar>
@@ -86,7 +70,7 @@ export default function Newuser() {
                       display='flex'
                       {...field}
                       style={{ margin: '20px', marginLeft: '25px' }}
-                      error={errors.fullName && touched.fullName ? true: false}
+                      error={errors.fullName && touched.fullName ? true : false}
                       helperText={(errors.fullName && touched.fullName ? 'Full Name is required!' : '')}
                     />
                   )}
@@ -99,7 +83,7 @@ export default function Newuser() {
                       display='flex'
                       {...field}
                       style={{ margin: '20px', marginRight: '25px' }}
-                      error={errors.email && touched.email ? true: false}
+                      error={errors.email && touched.email ? true : false}
                       helperText={(errors.email && touched.email ? 'Email is required!' : '')}
                     />
                   )}
@@ -109,22 +93,19 @@ export default function Newuser() {
                 display: 'flex',
                 alignItems: 'center',
                 '& > :not(style)': {}
-                 }}
+              }}
                 style={{ alignSelf: 'center' }}>
-
                 <Field name="mobile">
                   {({ field }) => (
                     <PhoneInput
-                  country={'us'}
-                  onChange={(e) => {
-                    values.mobile = {e164Number: `+${e}`}
-                   }}
-                   isValid={(inputNumber, country, countries) => {
-                    return countries.some((country) => {
-                      return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-                    });
-                  }}
-                  style={{ margin: '20px', marginRight: '25px' }} />
+                      inputProps={{
+                        name: 'phone',
+                        required: true,
+                      }}
+                      country={'us'}
+                      onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
+                      style={{ margin: '20px', marginRight: '25px' }}
+                    />
                   )}
                 </Field>
                 <Field name="companyName">
@@ -135,7 +116,7 @@ export default function Newuser() {
                       display='flex'
                       {...field}
                       style={{ margin: '20px', marginRight: '25px' }}
-                      error={errors.companyName && touched.companyName ? true: false}
+                      error={errors.companyName && touched.companyName ? true : false}
                       helperText={(errors.companyName && touched.companyName ? 'Organization name is required!' : '')}
                     />
                   )}

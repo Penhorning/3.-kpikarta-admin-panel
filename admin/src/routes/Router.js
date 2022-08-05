@@ -1,9 +1,10 @@
 import { lazy } from "react";
-import Newuser from "../views/users/newuser";
+const Newuser = lazy(() => import("../views/users/newuser/newuser"));
 const Dashboard = lazy(() => import("../views/dashboard/Dashboard"));
 const Users = lazy(() => import("../views/users/Users"));
 const Suggestions = lazy(() => import("../views/suggestions/suggestions"));
 const ChangePassword = lazy(() => import("../views/change-password/ChangePassword"));
+const EditUser = lazy(() => import("../views/users/edituser/edituser"));
 
 var ThemeRoutes = [
   {
@@ -19,12 +20,11 @@ var ThemeRoutes = [
     icon: "mdi mdi-account-multiple",
     component: Users,
     sideRoute: true,
-
   },
   {
     path: "/suggestions",
     name: "Suggestions",
-    icon: "mdi mdi-gauge",
+    icon: "mdi mdi-book",
     component: Suggestions,
     sideRoute: true,
 
@@ -32,18 +32,24 @@ var ThemeRoutes = [
   {
     path: "/settings",
     name: "Settings",
-    icon: "mdi mdi-gauge",
+    icon: "mdi mdi-settings",
     component: ChangePassword,
     sideRoute: true,
   },
-  {
-    path: "/newuser",
-    name: "newuser",
-    icon: "mdi mdi-gauge",
-    component: Newuser,
-    sideRoute: false,
-  },
-
+  // {
+  //   path: "/newuser",
+  //   name: "newuser",
+  //   icon: "mdi mdi-gauge",
+  //   component: Newuser,
+  //   sideRoute: false,
+  // },
+  // {
+  //   path: "/edituser",
+  //   name: "edituser",
+  //   icon: "mdi mdi-gauge",
+  //   component: EditUser,
+  //   sideRoute: false,
+  // },
   {
     path: "/",
     pathTo: "/dashboard",

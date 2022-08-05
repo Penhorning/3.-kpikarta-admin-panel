@@ -11,18 +11,8 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
-  UncontrolledCarousel,
-  Progress,
-  ListGroup,
-  ListGroupItem,
-  Row,
-  Col,
-  Form,
-  FormGroup,
-  Input,
+  DropdownItem
 } from "reactstrap";
-import * as data from "./Data";
 import {AuthenticationService} from "../../../jwt/_services"
 
 /*--------------------------------------------------------------------------------*/

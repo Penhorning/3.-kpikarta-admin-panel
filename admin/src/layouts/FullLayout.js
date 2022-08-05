@@ -4,7 +4,6 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import Header from "./layout-components/header/Header";
 import Sidebar from "./layout-components/sidebar/Sidebar";
 import Footer from "./layout-components/footer/Footer";
-import Customizer from "./layout-components/customizer/Customizer";
 import ThemeRoutes from "../routes/Router";
 import Spinner from "./../views/spinner/Spinner";
 
