@@ -114,7 +114,7 @@ const headCells = [
   },
 ];
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { order, orderBy, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -167,7 +167,6 @@ export default function EnhancedTable() {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
-  const [dense, setDense] = useState(false);
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
@@ -184,12 +183,12 @@ export default function EnhancedTable() {
     if (dateRange.from && dateRange.to) {
       fetchData();
     }
-  }, [dateRange.to]);
+  });
 
 
   useEffect(() => {
     fetchData('paginationChange');
-  }, [page, rowsPerPage]);
+  });
 
 
   const unblockToast = () => {
@@ -211,7 +210,7 @@ export default function EnhancedTable() {
     const result = window.confirm("Are you sure do you want to Deactivate this user?");
     if (result) {
       UserService.blockUser(userId, page, rowsPerPage).then((res) => {
-        if (res.status = true) {
+        if (res.status === true) {
           fetchData('paginationChange');
           unblockToast(true)
         }
@@ -223,7 +222,7 @@ export default function EnhancedTable() {
     const result = window.confirm("Are you sure do you want to Activate this user?");
     if (result) {
       UserService.unBlockUser(userId, page, rowsPerPage).then((res) => {
-        if (res.status = true) {
+        if (res.status === true) {
           fetchData('paginationChange');
           blockToast(true)
         }
@@ -232,14 +231,18 @@ export default function EnhancedTable() {
   }
 
   const fetchData = (param) => {
+    let searchData;
+    if(param === "cancel") searchData = "";
+    else searchData = search;
+
     let data = {
       page: page + 1,
       limit: rowsPerPage,
-      search: search,
+      search: searchData,
       start: dateRange.from,
       end: dateRange.to,
-
     }
+   
     UserService.getAll(data).then((apiResponse) => {
       setUsers(apiResponse.users[0].data);
       if (apiResponse.users[0].metadata.length > 0) {
@@ -260,25 +263,15 @@ export default function EnhancedTable() {
     event.preventDefault();
   };
 
-  const handleDateFilterCancel = (event) => {
-    event.preventDefault();
-    setSelectedDayRange(initialValue);
-    setDateRange(initialValue);
-    dateRange.from = dateRange.to = '';
-    setIsShown(false)
-    fetchData("cancel");
-  };
-
   const handleCancel = (event) => {
-    event.preventDefault();
     setSearch("");
     fetchData("cancel");
+    event.preventDefault();
     setIsSearchShown(false)
   };
 
 
   // DATE CODES  
-
   const customDateInput = ({ ref }) => (
     <input
       readOnly
@@ -310,6 +303,15 @@ export default function EnhancedTable() {
     year: new Date().getFullYear()
   }
 
+  const handleDateFilterCancel = (event) => {
+    event.preventDefault();
+    setSelectedDayRange(initialValue);
+    setDateRange(initialValue);
+    dateRange.from = dateRange.to = '';
+    setIsShown(false)
+    fetchData("cancel");
+  };
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -338,12 +340,8 @@ export default function EnhancedTable() {
 
   const isSelected = (fullName) => selected.indexOf(fullName) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
-
   const onInputChnage = (e) => {
-    if (e.target.value == '') {
+    if (e.target.value === '') {
       setIsSearchShown(false)
     } else {
       setIsSearchShown(true)
@@ -439,7 +437,7 @@ export default function EnhancedTable() {
           <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
               <Link to="/newuser">
-                <Button variant="contained">ADD USER</Button>
+                <Button className="text-nowrap" variant="contained">ADD USER</Button>
               </Link>
             </Stack>
           </Typography>
@@ -449,7 +447,6 @@ export default function EnhancedTable() {
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
               numSelected={selected.length}

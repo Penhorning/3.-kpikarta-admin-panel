@@ -3,25 +3,14 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
-import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
+import { Formik, Form, Field} from 'formik';
 import * as Yup from 'yup';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
-import { UserService } from '../../../jwt/_services';
 import 'intl-tel-input/build/css/intlTelInput.css';
-import ReactIntlTelInput from 'react-intl-tel-input-v2';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { styled } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
-import MuiPhoneNumber from 'material-ui-phone-number';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import './newUser.scss';
-import startsWith from 'lodash.startswith';
 
 const initialValues = {
   fullName: '',
@@ -116,8 +105,6 @@ export default function Newuser() {
                       country={'us'}
                       onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
                       style={{ margin: '20px', marginRight: '25px' }}
-                    // inputClass={`${errors.mobile ? "error" : ""}`}
-                    // containerClass="myPhoneInput"
                     />
                   )}
                 </Field>

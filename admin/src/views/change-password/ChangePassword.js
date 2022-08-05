@@ -24,7 +24,7 @@ const ChangePassword = () => {
     const [responseMessage,setResponseMessage] = useState({success:null,message:''});
     const changePassword=(e)=>{
         e.preventDefault();
-        if(oldPassword==password){
+        if(oldPassword===password){
             setResponseMessage({success:false,message:"Old password and new password can not be same"});
             updatePassword('');
             updateRepassword('');
