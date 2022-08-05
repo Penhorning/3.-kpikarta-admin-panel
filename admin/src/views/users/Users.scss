@@ -1,6 +1,5 @@
 
 .p {
-    // margin-top: auto !important;
    p{margin-top: auto !important;};
 }
 .MuiIconButton-root{
@@ -12,13 +11,8 @@
     font-weight: 500 !important;
 }
 .ForwardRef-searchIconButton-4 {
-        // margin-right: 0 !important;
         padding-right: 20px !important;
 }
-// padding-top: 15px;
-//     padding-right: 15px;
-//     padding-bottom: 15px;
-//     padding-left: 15px;
 
 .successLabel{
     background-color: #28a745
@@ -29,7 +23,7 @@
 .status_icon svg{
     font-size: 16px;
 }
- .DatePicker__input{
+ .DatePicker .date__input{
     height: 38px;
     border-radius: 5px;
     border-radius: none;
@@ -46,16 +40,12 @@
     line-height: inherit !important;
     font-family: inherit !important;
     text-transform: capitalize !important;
-    // width: 128%;
-    width: 264px !important;
+    width: 210px !important;
 }
 .css-1azl6jz-MuiTableCell-root{
-    text-align: center !important;
+    text-align: left !important;
 }
 
-.css-1m1vg0 {
-    text-align: -webkit-right;
-}
 
 .css-ki1hdl-MuiAlert-action{
     padding: 8px 0 0 16px !important;
@@ -64,15 +54,11 @@
 .css-m1xwsv-MuiTableCell-root{
     text-align: left !important;
 }
-.css-11w94w9-MuiTableCell-root{
-    // text-align: center !important;
-}
-.css-11w94w9-MuiTableCell-root{
 
-}
-// .css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon{
-//     color: #fff;
+
+// .css-10dfkli-MuiTableCell-root{
+//     padding-left: 25px !important;
 // }
-// .css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon{
-//     color: #fff !important;
+// .css-11w94w9-MuiTableCell-root{
+//     padding-left: 25px !important;
 // }
