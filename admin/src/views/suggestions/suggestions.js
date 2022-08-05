@@ -124,7 +124,7 @@ export default function Suggestion() {
   // On init
   useEffect(() => {
     getPhases();
-  });
+  }, []);
 
 
   // On tab change
