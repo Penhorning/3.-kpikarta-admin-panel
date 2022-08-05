@@ -85,7 +85,7 @@ export default function Suggestion() {
 
 
   const onSubmit = (values) => {
-    const result = window.confirm("Are you sure do you want to save this suggestion?");
+    const result = window.confirm("Are you sure do you want to update this suggestion?");
    if(result){
     setSubmitting(true);
     let suggestionId = values.id;
