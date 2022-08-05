@@ -183,12 +183,12 @@ export default function EnhancedTable() {
     if (dateRange.from && dateRange.to) {
       fetchData();
     }
-  });
+  },[dateRange.to]);
 
 
   useEffect(() => {
     fetchData('paginationChange');
-  });
+  },[page,rowsPerPage]);
 
 
   const unblockToast = () => {
