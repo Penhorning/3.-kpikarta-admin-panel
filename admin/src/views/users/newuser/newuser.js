@@ -11,6 +11,7 @@ import 'intl-tel-input/build/css/intlTelInput.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import './newUser.scss';
+import { UserService } from '../../../jwt/_services';
 
 const initialValues = {
   fullName: '',
@@ -28,6 +29,7 @@ export default function Newuser() {
 
   const onSubmit = (values) => {
     console.log("Submit value", values)
+
     let data = {
       fullName: values.fullName,
       email: values.email,
@@ -35,9 +37,9 @@ export default function Newuser() {
       companyName: values.companyName,
     };
     console.log("Submit data of data", data)
-    // UserService.addUser(data).then(res => {
-    //   console.log("res", res)
-    // })
+    UserService.addUser(data).then(res => {
+      console.log("res", res)
+    })
   }
   return (
     <Box sx={{ width: '100%' }}>

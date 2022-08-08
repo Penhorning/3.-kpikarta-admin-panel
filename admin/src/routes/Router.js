@@ -44,7 +44,7 @@ var ThemeRoutes = [
   //   sideRoute: false,
   // },
   // {
-  //   path: "/edituser",
+  //   path: "/edit-user/:id",
   //   name: "edituser",
   //   icon: "mdi mdi-gauge",
   //   component: EditUser,

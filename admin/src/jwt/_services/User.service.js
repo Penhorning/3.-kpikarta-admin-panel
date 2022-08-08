@@ -5,7 +5,11 @@ export const UserService = {
   getUserCount,
   blockUser,
   unBlockUser,
-  addUser
+  addUser,
+  getUserId,
+  updateUser,
+  getDepartment,
+  getEmployeeRange
 };
 
 function getAll(data) {
@@ -44,6 +48,11 @@ function getUserCount() {
   return fetch(Constants.BASE_URL+`/api/users/count`, requestOptions).then(HandleResponse);
 }
 
+function getUserId(id) {
+  const requestOptions = { method: "GET", headers: AuthHeader() };
+  return fetch(Constants.BASE_URL+`/api/users/${id}`, requestOptions).then(HandleResponse);
+}
+
 function addUser(data) {
   const requestOptions = { method: "POST", headers: AuthHeader(),body:JSON.stringify({
     fullName: data.fullName,
@@ -52,4 +61,25 @@ function addUser(data) {
     companyName: data.companyName
 }) };
   return fetch(Constants.BASE_URL+`/api/users`, requestOptions).then(HandleResponse);
+}
+
+function updateUser(id,data) {
+  const requestOptions = { method: "PATCH", headers: AuthHeader(),body:JSON.stringify({
+    fullName: data.fullName,
+    email: data.email,
+    mobile: data.mobile,
+    telephone: data.telephone
+}) };
+  return fetch(Constants.BASE_URL+`/api/users/${id}`, requestOptions).then(HandleResponse);
+}
+
+
+function getDepartment() {
+  const requestOptions = { method: "GET", headers: AuthHeader() };
+  return fetch(Constants.BASE_URL+`/api/departments`, requestOptions).then(HandleResponse);
+}
+
+function getEmployeeRange() {
+  const requestOptions = { method: "GET", headers: AuthHeader() };
+  return fetch(Constants.BASE_URL+`/api/employees_ranges`, requestOptions).then(HandleResponse);
 }
