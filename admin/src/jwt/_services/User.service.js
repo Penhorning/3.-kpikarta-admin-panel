@@ -9,7 +9,9 @@ export const UserService = {
   getUserId,
   updateUser,
   getDepartment,
-  getEmployeeRange
+  getEmployeeRange,
+  upadateCompanyDetails,
+  getCompanyID
 };
 
 function getAll(data) {
@@ -58,7 +60,8 @@ function addUser(data) {
     fullName: data.fullName,
     email: data.email,
     mobile: data.mobile,
-    companyName: data.companyName
+    companyName: data.companyName,
+    type:"admin"
 }) };
   return fetch(Constants.BASE_URL+`/api/users`, requestOptions).then(HandleResponse);
 }
@@ -82,4 +85,19 @@ function getDepartment() {
 function getEmployeeRange() {
   const requestOptions = { method: "GET", headers: AuthHeader() };
   return fetch(Constants.BASE_URL+`/api/employees_ranges`, requestOptions).then(HandleResponse);
+}
+
+function getCompanyID(id) {
+  const requestOptions = { method: "GET", headers: AuthHeader() };
+  return fetch(Constants.BASE_URL+`/api/companies/findOne?filter[where][userId]=${id}`, requestOptions).then(HandleResponse);
+} 
+
+function upadateCompanyDetails(companyIds,data) {
+  const requestOptions = { method: "PATCH", headers: AuthHeader(),body:JSON.stringify({
+    name: data.name,
+    job_title: data.job_title,
+    departmentId: data.departmentId,
+    employeesRangeId: data.employeesRangeId
+}) };
+  return fetch(Constants.BASE_URL+`/api/companies/${companyIds}`, requestOptions).then(HandleResponse);
 }

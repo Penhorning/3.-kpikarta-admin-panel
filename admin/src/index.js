@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 import "./assets/scss/style.scss";
+import { SnackbarProvider } from 'notistack';
 import Spinner from "./views/spinner/Spinner";
 
 const App = lazy(
@@ -12,7 +13,9 @@ const App = lazy(
 
 ReactDOM.render(
   <Suspense fallback={<Spinner />}>
+    <SnackbarProvider maxSnack={3}>
     <App />
+  </SnackbarProvider>
   </Suspense>,
   document.getElementById("root")
 );

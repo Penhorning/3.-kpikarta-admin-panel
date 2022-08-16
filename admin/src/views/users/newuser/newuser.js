@@ -3,15 +3,17 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Formik, Form, Field} from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import 'intl-tel-input/build/css/intlTelInput.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
+import {useHistory } from 'react-router-dom';
 import './newUser.scss';
 import { UserService } from '../../../jwt/_services';
+import { useSnackbar } from 'notistack';
 
 const initialValues = {
   fullName: '',
@@ -20,6 +22,8 @@ const initialValues = {
   companyName: ''
 }
 export default function Newuser() {
+  const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Full Name is required!'),
     email: Yup.string().email().required('Valid email is required!'),
@@ -28,18 +32,31 @@ export default function Newuser() {
   });
 
   const onSubmit = (values) => {
-    console.log("Submit value", values)
+    const result = window.confirm("Are you sure, you want to add new user?");
+    if (result) {
+      let data = {
+        fullName: values.fullName,
+        email: values.email,
+        mobile: values.mobile,
+        companyName: values.companyName,
+      };
+      UserService.addUser(data).then(response => {
+        console.log("response",response)
+        if(response = true){
 
-    let data = {
-      fullName: values.fullName,
-      email: values.email,
-      mobile: values.mobile,
-      companyName: values.companyName,
-    };
-    console.log("Submit data of data", data)
-    UserService.addUser(data).then(res => {
-      console.log("res", res)
-    })
+          // if ([422].indexOf(response.statusCode) && response.error) {
+          //   let variant = 'error';
+          //   enqueueSnackbar('Email already exists.', { variant });
+          // }else{
+            let variant = "success";
+            enqueueSnackbar('New user added successfully.', { variant });
+            history.replace('/users');
+          // }
+           
+        }
+      })
+    }
+  
   }
   return (
     <Box sx={{ width: '100%' }}>
@@ -104,7 +121,17 @@ export default function Newuser() {
                         name: 'phone',
                         required: true,
                       }}
+                      isValid={(value, country) => {
+                        if (value.match(/12345/)) {
+                          return 'Invalid value: '+value+', '+country.name;
+                        } else if (value.match(/1234/)) {
+                          return false;
+                        } else {
+                          return true;
+                        }
+                      }}
                       country={'us'}
+                      enableSearch={true}
                       onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
                       style={{ margin: '20px', marginRight: '25px' }}
                     />
@@ -142,7 +169,5 @@ export default function Newuser() {
         </Formik>
       </Paper>
     </Box>
-
-
   )
 }

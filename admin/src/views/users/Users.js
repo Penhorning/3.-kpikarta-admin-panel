@@ -36,6 +36,7 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import DatePicker from "react-modern-calendar-datepicker";
 import {Card} from '@mui/material';
 import {Link} from 'react-router-dom';
+import MessageIcon from '@mui/icons-material/Message';
 
 
 function createData(name, calories, fat, carbs, protein) {
@@ -312,20 +313,20 @@ export default function EnhancedTable() {
     fetchData("cancel");
   };
 
-  // const handleRequestSort = (event, property) => {
-  //   const isAsc = orderBy === property && order === 'asc';
-  //   setOrder(isAsc ? 'desc' : 'asc');
-  //   setOrderBy(property);
-  // };
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
 
-  // const handleSelectAllClick = (event) => {
-  //   if (event.target.checked) {
-  //     const newSelecteds = users.map((n) => n.fullName);
-  //     setSelected(newSelecteds);
-  //     return;
-  //   }
-  //   setSelected([]);
-  // };
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = users.map((n) => n.fullName);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
 
 
   const handleChangePage = (event, newPage) => {
@@ -436,7 +437,7 @@ export default function EnhancedTable() {
           </Typography>
           <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-              <Link to='adduser'>
+              <Link to='/newuser'>
                 <Button className="text-nowrap" variant="contained">ADD USER</Button>
               </Link>
              
@@ -542,6 +543,13 @@ export default function EnhancedTable() {
                         paddingLeft: '15px'
                       }}
                       >
+                        {<Tooltip title="My-Suggestion" className='MuiIconButton-root'>
+                          <Link to={`/my-suggestion/${user._id}`}>
+                          <MessageIcon/>
+                          </Link>
+                          </Tooltip>
+                          }
+
                         {<Tooltip title="Edit" className='MuiIconButton-root'>
                           <Link to={`/edit-user/${user._id}`}>
                           <EditIcon style={{ color: '#0c85d0' }} />

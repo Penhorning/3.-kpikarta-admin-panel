@@ -1,70 +1,42 @@
-// import * as React from 'react';
-// import Stack from '@mui/material/Stack';
-// import Button from '@mui/material/Button';
-// import Snackbar from '@mui/material/Snackbar';
-// import MuiAlert from '@mui/material/Alert';
-
-// const Alert = React.forwardRef(function Alert(props, ref) {
-//   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-// });
-
-// export default function CustomizedSnackbars() {
-//   const [open, setOpen] = React.useState(false);
-
-//   const handleClick = () => {
-//     setOpen(true);
-//   };
-
-//   const handleClose = (event, reason) => {
-//     if (reason === 'clickaway') {
-//       return;
-//     }
-
-//     setOpen(false);
-//   };
-
-//   return (
-//     <Stack spacing={2} sx={{ width: '100%' }}>
-//       <Button variant="outlined" onClick={handleClick}>
-//         Open success snackbar
-//       </Button>
-//       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-//         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-//           This is a success message!
-//         </Alert>
-//       </Snackbar>
-//       <Alert severity="error">This is an error message!</Alert>
-//       <Alert severity="warning">This is a warning message!</Alert>
-//       <Alert severity="info">This is an information message!</Alert>
-//       <Alert severity="success">This is a success message!</Alert>
-//     </Stack>
-//   );
-// }
-
-import * as React from 'react';
+import React,{forwardRef,useState} from 'react';
+import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import MuiAlert from '@mui/material/Alert';
 
-export default function Toaster(props) {
-  let { isOpen, type, message } = props.props;
+const Alert = forwardRef(function Alert(props, ref) {
+  console.log("PROPS 123",props)
+
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+export default function CustomizedSnackbars(props) {
+  console.log("PROPS",props)
+  const {open} = props;
+  const [opens, setOpen] = useState(false);
+
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    isOpen = false;
-    return false;
+
+    setOpen(false);
   };
-  
+
   return (
-    <Snackbar open={isOpen} autoHideDuration={3000} onClose={handleClose}>
-      <Alert
-        onClose={handleClose}
-        severity={type}
-        variant="filled"
-        sx={{ width: '100%' }}
-      >
-        {message}
-      </Alert>
-    </Snackbar>
-  )
+    <div>
+
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert
+         onClose={handleClose}
+          severity="success"
+           sx={{ width: '100%' }}
+           elevation={6}
+          variant="filled"
+           >
+          This is a success message props!
+        </Alert>
+      </Snackbar>
+    </div>
+  );
 }
