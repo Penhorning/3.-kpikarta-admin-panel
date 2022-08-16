@@ -53,7 +53,7 @@ class Sidebar extends React.Component {
             {/* Sidebar Menus will go here                                                */}
             {/*--------------------------------------------------------------------------------*/}
             <Nav id="sidebarnav">
-              {this.props.routes.map((prop, key) => {
+              {this.props.routes.filter(item => item.sideRoute === true).map((prop, key) => {
                 if (prop.redirect) {
                   return null;
                 } else if (prop.navlabel) {
