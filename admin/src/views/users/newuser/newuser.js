@@ -41,19 +41,14 @@ export default function Newuser() {
         companyName: values.companyName,
       };
       UserService.addUser(data).then(response => {
-        console.log("response",response)
-        if(response = true){
-
-          // if ([422].indexOf(response.statusCode) && response.error) {
-          //   let variant = 'error';
-          //   enqueueSnackbar('Email already exists.', { variant });
-          // }else{
-            let variant = "success";
-            enqueueSnackbar('New user added successfully.', { variant });
-            history.replace('/users');
-          // }
-           
-        }
+        if(!response.error){
+          let variant = "success";
+          enqueueSnackbar('New user added successfully.', { variant });
+          history.replace('/users');
+        }else if (response.error.statusCode === 422 && response.error.details.codes.email[0] === "uniqueness") {
+            let variant = 'error';
+            enqueueSnackbar("Email already exists", { variant });
+          }
       })
     }
   

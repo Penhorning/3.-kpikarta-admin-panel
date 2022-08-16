@@ -21,6 +21,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LinearProgress from '@mui/material/LinearProgress';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { useSnackbar } from 'notistack';
 
 
 
@@ -32,7 +33,7 @@ export default function Suggestion() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [saveDatatost, setSaveDatatost] = useState(false);
-  
+  const { enqueueSnackbar } = useSnackbar();
 
   // Suggestion form
   const initialValues = {
@@ -92,7 +93,10 @@ export default function Suggestion() {
     };
     SuggestionService.updateSuggestion(suggestionId, data).then(response => {
       setSubmitting(false);
-      setSaveDatatost(true);
+      let variant = "success";
+      enqueueSnackbar('Suggestion updated successfully.', { variant });
+      
+      // setSaveDatatost(true);
     });
    }
   }
@@ -240,7 +244,7 @@ export default function Suggestion() {
           </Formik>
           </TabPanel>
         </TabContext>
-        <Snackbar open={saveDatatost} autoHideDuration={3000} onClose={handleClose}>
+        {/* <Snackbar open={saveDatatost} autoHideDuration={3000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
           severity="success"
@@ -249,7 +253,7 @@ export default function Suggestion() {
         >
           Suggestion updated successfully
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
       </Paper>
     </Box>
   );
