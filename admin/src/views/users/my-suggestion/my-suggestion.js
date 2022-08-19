@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -19,11 +19,8 @@ import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import LinearProgress from '@mui/material/LinearProgress';
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
 import { useSnackbar } from 'notistack';
-
+import Spinner from "../../spinner/Spinner";
 
 export default function MySuggestion() {
   const [phases, setPhases] = useState([]);
@@ -32,10 +29,10 @@ export default function MySuggestion() {
   const [tabValue, setTabValue] = React.useState('62b07978c389310e2c74f586');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [saveDatatost, setSaveDatatost] = useState(false);
-  const [ phaseIds , setPhaseID] = useState('');
+  const [phaseIds, setPhaseID] = useState('');
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
 
   // Suggestion form
   const initialValues = {
@@ -76,19 +73,11 @@ export default function MySuggestion() {
     setDescDisArr(disableArray);
   }
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSaveDatatost(false);
-  };
-
-
   const onSubmit = (values) => {
     const result = window.confirm("Are you sure do you want to update this suggestion?");
     if (result) {
       setSubmitting(true);
-      
+
       let data = {
         definition: values.definition,
         descriptions: values.descriptions
@@ -96,7 +85,7 @@ export default function MySuggestion() {
       if (suggestion.hasOwnProperty("userId")) {
         let suggestionId = values.id;
         SuggestionService.updateSuggestion(suggestionId, data).then(response => {
-          if(response){
+          if (response) {
             let variant = "success";
             enqueueSnackbar('Suggestion updated successfully.', { variant });
             setSubmitting(false);
@@ -105,8 +94,8 @@ export default function MySuggestion() {
       } else {
         let userId = id;
         let phaseId = phaseIds;
-        SuggestionService.createSuggestion(userId,phaseId, data).then(response => {
-          if(response){
+        SuggestionService.createSuggestion(userId, phaseId, data).then(response => {
+          if (response) {
             let variant = "success";
             enqueueSnackbar('New suggestion created successfully.', { variant });
           }
@@ -117,19 +106,36 @@ export default function MySuggestion() {
     }
   }
 
+  const onResetChange = () => {
+    const phase = phases.filter((item) => item.id === suggestion.phaseId);
+    const result = window.confirm(`Are you sure, you want to reset your "${phase[0].name}" suggestions?`);
+    if (result) {
+      if (!suggestion.hasOwnProperty("userId")) {
+        let variant = "success";
+        enqueueSnackbar('Suggestion reset successfully.', { variant });
+        getPhases();
+      } else {
+        SuggestionService.deleteSuggestion(suggestion.id).then(response => {
+          getSuggestion(suggestion.phaseId);
+          let variant = "success";
+          enqueueSnackbar('Suggestion reset successfully.', { variant });
+        })
+      }
+    }
+  }
+
   // Get phases
   const getPhases = () => {
     SuggestionService.getPhases().then(response => {
-     
       setPhases(response);
       setTabValue(response[0].id);
       getSuggestion(response[0].id);
       setPhaseID(response[0].id)
     });
   }
+
   // Get suggestion
   const getSuggestion = (phaseId) => {
-    // setLoading(true);
     const userId = id;
     SuggestionService.getMySuggestion(phaseId, userId).then(response => {
       initialValues.definition = response.definition;
@@ -156,7 +162,7 @@ export default function MySuggestion() {
     getSuggestion(newValue);
   };
 
-  return loading ? (<LinearProgress />) : (
+  return loading ? (<Spinner />) : (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <Toolbar>
@@ -255,28 +261,19 @@ export default function MySuggestion() {
                       )
                     }))}
                   </FieldArray>
-                  <Stack spacing={2} direction="row" sx={{ mt: 3 }}>
+                  <Stack spacing={2} direction="row" sx={{ mt: 3 }} style={{ justifyContent: 'space-between' }}>
                     <Button type="submit" variant="contained" disabled={submitting}>Save</Button>
+                    <Button onClick={onResetChange} variant="outlined" disabled={submitting}>Reset</Button>
                   </Stack>
+
                 </Form>
               )}
             </Formik>
           </TabPanel>
         </TabContext>
-        {/* <Snackbar open={saveDatatost} autoHideDuration={3000} onClose={handleClose}>
-          <Alert
-            onClose={handleClose}
-            severity="success"
-            variant="filled"
-            sx={{ width: '100%' }}
-          >
-            Suggestion updated successfully
-          </Alert>
-        </Snackbar> */}
       </Paper>
     </Box>
   );
 }
-
 
 

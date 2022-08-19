@@ -53,11 +53,18 @@ const getMySuggestion = (phaseId,userId) => {
   return fetch(Constants.BASE_URL+`/api/suggestion-by-phase`, requestOptions).then(HandleResponse);
 }
 
-
+const deleteSuggestion = (data) => {
+  let requestOptions = {
+    method: "DELETE",
+    headers: AuthHeader(),
+  };
+  return fetch(Constants.BASE_URL+`/api/suggestions/${data}`, requestOptions).then(HandleResponse);
+}
 export const SuggestionService = {
   getPhases,
   getSuggestion,
   updateSuggestion,
   getMySuggestion,
-  createSuggestion
+  createSuggestion,
+  deleteSuggestion
 };

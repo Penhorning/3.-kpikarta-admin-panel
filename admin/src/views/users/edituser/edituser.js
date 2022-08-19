@@ -19,6 +19,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
 import { UserService } from '../../../jwt/_services';
 import { useSnackbar } from 'notistack';
+import Spinner from '../../spinner/Spinner';
 
 const initialValues = {
   fullName: '',
@@ -35,9 +36,10 @@ const initialCompanyValues = {
 
 export default function LabTabs() {
   const [value, setValue] = useState('1');
-  const [department, setDepartment] = useState('');
-  const [employeeRange, setEmployeeRange] = useState('')
-  const [companyId, setCompanyID] = useState('');
+  const [department, setDepartment] = useState([]);
+  const [employeeRange, setEmployeeRange] = useState([])
+  const [companyId, setCompanyID] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
@@ -58,14 +60,14 @@ export default function LabTabs() {
       initialValues.email = email;
       initialValues.mobile = response.mobile ? mobile : "";
       initialValues.telephone = response.telephone ? telephone : " ";
+      setLoading(false)
     });
     UserService.getDepartment().then(response => {
-      setDepartment(response)
+      setDepartment(response);
     })
     UserService.getEmployeeRange().then(response => {
-      setEmployeeRange(response)
+      setEmployeeRange(response);
     })
-
     UserService.getCompanyID(id).then(response => {
       const { name, job_title, departmentId, employeesRangeId } = response;
       setCompanyID(response.id)
@@ -73,7 +75,8 @@ export default function LabTabs() {
       initialCompanyValues.companyJobTitle = job_title;
       initialCompanyValues.companyDepartment = departmentId;
       initialCompanyValues.companyEmployeeRange = employeesRangeId;
-    })
+      setLoading(false)
+    });
   }, [id])
 
   const onUpdateSubmit = (values) => {
@@ -93,7 +96,6 @@ export default function LabTabs() {
         }
       })
     }
-    
   }
 
   const onCompanySubmit = (values) => {
@@ -106,6 +108,7 @@ export default function LabTabs() {
         departmentId: values.companyDepartment,
         employeesRangeId: values.companyEmployeeRange,
       };
+
       UserService.upadateCompanyDetails(companyIds, data).then(response => {
         if (response = true) {
           let variant = "success";
@@ -119,8 +122,6 @@ export default function LabTabs() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-
 
   return (
     <Box sx={{}}>
@@ -137,9 +138,9 @@ export default function LabTabs() {
         </Toolbar>
         <TabContext value={value} >
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <TabList onChange={handleChange} aria-label="lab API tabs example" id="user_tab">
               <Tab label="Personal Details" value="1" />
-              <Tab label="Company Details" value="2" />
+              <Tab label="Company Details" value="2"/>
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -156,96 +157,97 @@ export default function LabTabs() {
                 </Toolbar>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 </Box>
-                <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onUpdateSubmit} >
-                  {({ errors, values, touched }) => (
-                    <Form>
-                      <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        '& > :not(style)': {}
-                      }}
-                        style={{ alignSelf: 'center' }}>
-                        <Field name="fullName">
-                          {({ field }) => (
-                            <TextField
-                              label="Full Name"
-                              fullWidth
-                              display='flex'
-                              {...field}
-                              style={{ margin: '20px', marginLeft: '25px' }}
-                              error={errors.fullName && touched.fullName ? true : false}
-                              helperText={(errors.fullName && touched.fullName ? 'Full Name is required!' : '')}
-                            />
-                          )}
-                        </Field>
-                        <Field name="email">
-                          {({ field }) => (
-                            <TextField
-                              label="Email"
-                              fullWidth
-                              disabled={true}
-                              display='flex'
-                              {...field}
-                              style={{ margin: '20px', marginRight: '25px' }}
-                              error={errors.email && touched.email ? true : false}
-                              helperText={(errors.email && touched.email ? 'Email is required!' : '')}
-                            />
-                          )}
-                        </Field>
-                      </Box>
-                      <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        '& > :not(style)': {}
-                      }}
-                        style={{ alignSelf: 'center' }}>
-                        <Field name="mobile">
-                          {({ field }) => (
-                            <PhoneInput
-                              inputProps={{
-                                name: 'phone',
-                                required: true,
-                              }}
-                              country={'us'}
-                              onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
-                              value={values.mobile.e164Number}
-                              style={{ margin: '20px', marginRight: '25px' }}
-                            />
-                          )}
-                        </Field>
-                        <Field name="telephone">
-                          {({ field }) => (
-                            <TextField
-                              label="Telephone"
-                              fullWidth
-                              display='flex'
-                              {...field}
-                              style={{ margin: '20px', marginRight: '25px' }}
-                            />
-                          )}
-                        </Field>
-                      </Box>
-                      <Button
-                        style={{
-                          width: 100,
-                          marginLeft: '25px',
-                          marginTop: '25px',
-                          marginBottom: '25px'
+                {loading ? (<Spinner />) :
+                  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onUpdateSubmit} >
+                    {({ errors, values, touched }) => (
+                      <Form>
+                        <Box sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          '& > :not(style)': {}
                         }}
-                        variant="contained"
-                        size="medium"
-                        type='submit'
+                          style={{ alignSelf: 'center' }}>
+                          <Field name="fullName">
+                            {({ field }) => (
+                              <TextField
+                                label="Full Name"
+                                fullWidth
+                                display='flex'
+                                {...field ?? ''}
+                                style={{ margin: '20px', marginLeft: '25px' }}
+                                error={errors.fullName && touched.fullName ? true : false}
+                                helperText={(errors.fullName && touched.fullName ? 'Full Name is required!' : '')}
+                              />
+                            )}
+                          </Field>
+                          <Field name="email">
+                            {({ field }) => (
+                              <TextField
+                                label="Email"
+                                fullWidth
+                                disabled={true}
+                                display='flex'
+                                {...field}
+                                style={{ margin: '20px', marginRight: '25px' }}
+                                error={errors.email && touched.email ? true : false}
+                                helperText={(errors.email && touched.email ? 'Email is required!' : '')}
+                              />
+                            )}
+                          </Field>
+                        </Box>
+                        <Box sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          '& > :not(style)': {}
+                        }}
+                          style={{ alignSelf: 'center' }}>
+                          <Field name="mobile">
+                            {({ field }) => (
+                              <PhoneInput
+                                inputProps={{
+                                  name: 'phone',
+                                  required: true,
+                                }}
+                                country={'us'}
+                                onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
+                                value={values.mobile.e164Number}
+                                style={{ margin: '20px', marginRight: '25px' }}
+                              />
+                            )}
+                          </Field>
+                          <Field name="telephone">
+                            {({ field }) => (
+                              <TextField
+                                label="Telephone"
+                                fullWidth
+                                display='flex'
+                                {...field}
+                                style={{ margin: '20px', marginRight: '25px' }}
+                              />
+                            )}
+                          </Field>
+                        </Box>
+                        <Button
+                          style={{
+                            width: 100,
+                            marginLeft: '25px',
+                            marginTop: '25px',
+                            marginBottom: '25px'
+                          }}
+                          variant="contained"
+                          size="medium"
+                          type='submit'
                         // onClick={() => history.push("/users")}
-                      >
-                        Update
-                      </Button>
-                    </Form>
-                  )}
-                </Formik>
+                        >
+                          Update
+                        </Button> 
+                      </Form>
+                    )}
+                  </Formik>
+                }
               </Paper>
             </Box>
           </TabPanel>
-
           <TabPanel value="2">
             <Box sx={{ width: '100%' }}>
               <Paper sx={{ width: '100%', mb: 2 }}>
@@ -260,107 +262,115 @@ export default function LabTabs() {
                 </Toolbar>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 </Box>
-                <Formik initialValues={initialCompanyValues} validationSchema={companyValidationSchema} onSubmit={onCompanySubmit} >
-                  {({ errors, values, touched }) => (
-                    <Form>
-                      <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        '& > :not(style)': {}
-                      }}
-                        style={{ alignSelf: 'center' }}>
-                        <Field name="companyName">
-                          {({ field }) => (
-                            <TextField
-                              label="Company Name"
-                              fullWidth
-                              value={values}
-                              display='flex'
-                              {...field}
-                              style={{ margin: '20px', marginLeft: '25px' }}
-                              error={errors.companyName && touched.companyName ? true : false}
-                              helperText={(errors.companyName && touched.companyName ? 'Company Name is required!' : '')}
-                            />
-                          )}
-                        </Field>
-                        <Field name="companyJobTitle">
-                          {({ field }) => (
-                            <TextField
-                              label="Job Title"
-                              fullWidth
-                              display='flex'
-                              {...field}
-                              style={{ margin: '20px', marginLeft: '25px' }}
-                            />
-                          )}
-                        </Field>
-                      </Box>
-
-                      <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        '& > :not(style)': {}
-                      }}
-                        style={{ alignSelf: 'center' , marginLeft:'5px'}}>
-                        <Field name="companyDepartment">
-                          {({ field }) => (
-                            <TextField
-                              id='ref'
-                              select
-                              label="Department"
-                              fullWidth
-                              display='flex'
-                              style={{ margin: '20px', marginRight: '25px' }}
-                              {...field}
-                              defaultValue={''}
-                            >
-                              {department.map((option) => (
-                                <MenuItem key={option.id} value={option.id}>
-                                  {option.name}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                          )}
-                        </Field>
-                        <Field name="companyEmployeeRange" >
-                          {({ field }) => (
-                            <TextField
-                              id={employeeRange.id}
-                              select
-                              label="Number of Employees"
-                              fullWidth
-                              display='flex'
-                              style={{ margin: '20px', marginRight: '25px' }}
-                              {...field}
-                              defaultValue={''}
-                            
-                            >
-                              {employeeRange.map((option) => (
-                                <MenuItem key={option.id} value={option.id}>
-                                  {option.range}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                          )}
-                        </Field>
-                      </Box>
-
-                      <Button
-                        style={{
-                          width: 100,
-                          marginLeft: '25px',
-                          marginTop: '25px',
-                          marginBottom: '25px'
+                {loading ? (<Spinner />) :
+                  <Formik initialValues={initialCompanyValues} validationSchema={companyValidationSchema} onSubmit={onCompanySubmit} >
+                    {({ errors, values, touched }) => (
+                      <Form>
+                        <Box sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          '& > :not(style)': {}
                         }}
-                        variant="contained"
-                        size="medium"
-                        type='submit'
-                      >
-                        Update
-                      </Button>
-                    </Form>
-                  )}
-                </Formik>
+                          style={{ alignSelf: 'center' }}>
+                          <Field name="companyName">
+                            {({ field }) => (
+                              <TextField
+                                type="text"
+                                label="Company Name"
+                                fullWidth
+                                value={values}
+                                display='flex'
+                                {...field}
+                                style={{ margin: '20px', marginLeft: '25px' }}
+                                error={errors.companyName && touched.companyName ? true : false}
+                                helperText={(errors.companyName && touched.companyName ? 'Company Name is required!' : '')}
+                                defaultValue={undefined}
+
+                              />
+                            )}
+                          </Field>
+                          <Field name="companyJobTitle">
+                            {({ field }) => (
+                              <TextField
+                                type="text"
+                                label="Job Title"
+                                fullWidth
+                                display='flex'
+                                {...field}
+                                style={{ margin: '20px', marginLeft: '25px' }}
+                                defaultValue={undefined}
+                              />
+                            )}
+                          </Field>
+                        </Box>
+                        <Box sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          '& > :not(style)': {}
+                        }}
+                          style={{ alignSelf: 'center', marginLeft: '5px' }}>
+                          <Field name="companyDepartment">
+                            {({ field }) => (
+                              <TextField
+                                id='ref'
+                                type="text"
+                                select
+                                label="Department"
+                                fullWidth
+                                display='flex'
+                                style={{ margin: '20px', marginRight: '25px' }}
+                                {...field}
+                                defaultValue={undefined}
+                              >
+                                {department.map((option) => (
+                                  <MenuItem key={option.id} value={option.id}>
+                                    {option?.name || ''}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            )}
+                          </Field>
+                          <Field name="companyEmployeeRange" >
+                            {({ field }) => (
+                              <TextField
+                                id={employeeRange.id}
+                                type="text"
+                                select
+                                label="Number of Employees"
+                                fullWidth
+                                display='flex'
+                                style={{ margin: '20px', marginRight: '25px' }}
+                                {...field}
+                                defaultValue={undefined}
+
+                              >
+                                {employeeRange.map((option) => (
+                                  <MenuItem key={option.id} value={option.id}>
+                                    {option?.range || ''}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            )}
+                          </Field>
+                        </Box>
+
+                        <Button
+                          style={{
+                            width: 100,
+                            marginLeft: '25px',
+                            marginTop: '25px',
+                            marginBottom: '25px'
+                          }}
+                          variant="contained"
+                          size="medium"
+                          type='submit'
+                        >
+                          Update
+                        </Button>
+                      </Form>
+                    )}
+                  </Formik>
+                  }
               </Paper>
             </Box>
           </TabPanel>

@@ -1,10 +1,5 @@
-.css-heg063-MuiTabs-flexContainer{
-    justify-content:space-around !important;
-}
 
 .css-1aquho2-MuiTabs-indicator{
-    // left:0% !important;
-    // width: auto !important;
     height: 3px !important;
 }
 .react-tel-input .form-control{
@@ -12,4 +7,8 @@
     height: 55px !important;
     width: 100% !important;
     margin-left: 4px !important;
+}
+
+#user_tab .MuiTabs-flexContainer {
+    justify-content:space-evenly !important;
 }

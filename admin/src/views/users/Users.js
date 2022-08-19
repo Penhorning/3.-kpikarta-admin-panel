@@ -30,14 +30,25 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import moment from "moment";
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import DatePicker from "react-modern-calendar-datepicker";
-import {Card} from '@mui/material';
-import {Link} from 'react-router-dom';
+import { Card } from '@mui/material';
+import { Link } from 'react-router-dom';
 import MessageIcon from '@mui/icons-material/Message';
+import { makeStyles } from '@mui/styles';
+import Spinner from '../spinner/Spinner';
 
+const useStyles = makeStyles({
+  customTextField: {
+    "& input::placeholder": {
+      color: 'rgb(0, 0, 0, 0.87)',
+      opacity: '0.8',
+    }
+  },
+});
 
 function createData(name, calories, fat, carbs, protein) {
   return {
@@ -130,7 +141,6 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
             style={{ fontWeight: 'bold', paddingLeft: '25px' }}
-
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -179,22 +189,23 @@ export default function EnhancedTable() {
   const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
   const [isShown, setIsShown] = useState(false)
   const [isSearchShown, setIsSearchShown] = useState(false)
+  const [loading, setLoading] = useState(true);
+  const classes = useStyles();
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
       fetchData();
     }
-  },[dateRange.to]);
-
+  }, [dateRange.to]);
 
   useEffect(() => {
     fetchData('paginationChange');
-  },[page,rowsPerPage]);
-
+  }, [page, rowsPerPage]);
 
   const unblockToast = () => {
     setunBlocktost(true);
   };
+
   const blockToast = () => {
     setBlocktost(true);
   };
@@ -233,9 +244,8 @@ export default function EnhancedTable() {
 
   const fetchData = (param) => {
     let searchData;
-    if(param === "cancel") searchData = "";
+    if (param === "cancel") searchData = "";
     else searchData = search;
-
     let data = {
       page: page + 1,
       limit: rowsPerPage,
@@ -243,7 +253,6 @@ export default function EnhancedTable() {
       start: dateRange.from,
       end: dateRange.to,
     }
-   
     UserService.getAll(data).then((apiResponse) => {
       setUsers(apiResponse.users[0].data);
       if (apiResponse.users[0].metadata.length > 0) {
@@ -251,12 +260,12 @@ export default function EnhancedTable() {
       } else {
         setTotal(0);
       }
+      setLoading(false)
     });
     if (param !== 'paginationChange') {
       setPage(0);
     }
   }
-
 
   // SEARCH CODES    
   const handleSearch = (event) => {
@@ -270,7 +279,6 @@ export default function EnhancedTable() {
     event.preventDefault();
     setIsSearchShown(false)
   };
-
 
   // DATE CODES  
   const customDateInput = ({ ref }) => (
@@ -300,7 +308,7 @@ export default function EnhancedTable() {
 
   const maximumDate = {
     month: new Date().getMonth() + 1,
-    day: new Date().getDay(),
+    day: new Date().getDate(),
     year: new Date().getFullYear()
   }
 
@@ -310,7 +318,7 @@ export default function EnhancedTable() {
     setDateRange(initialValue);
     dateRange.from = dateRange.to = '';
     setIsShown(false)
-    fetchData("cancel");
+    fetchData();
   };
 
   const handleRequestSort = (event, property) => {
@@ -327,7 +335,6 @@ export default function EnhancedTable() {
     }
     setSelected([]);
   };
-
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -358,8 +365,7 @@ export default function EnhancedTable() {
             sx={{ flex: '1 1 30%' }}
             variant="h6"
             id="tableTitle"
-            component="div"
-          >
+            component="div">
             Users
           </Typography>
           <Typography
@@ -410,6 +416,7 @@ export default function EnhancedTable() {
                   sx={{ ml: 1, flex: 1 }}
                   placeholder="Search"
                   inputProps={{ 'aria-label': 'search' }}
+                  classes={{ root: classes.customTextField }}
                 />
                 <>
                   <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
@@ -440,142 +447,148 @@ export default function EnhancedTable() {
               <Link to='/newuser'>
                 <Button className="text-nowrap" variant="contained">ADD USER</Button>
               </Link>
-             
             </Stack>
           </Typography>
         </Toolbar>
         <Divider sx={{ m: 1.0 }} orientation="horizontal" />
         <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={users.length}
-              key={users._id}
-            />
-            <TableBody>
-              {users && stableSort(users, getComparator(order, orderBy))
-                .map((user, index) => {
-                  const isItemSelected = isSelected(user._id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-                  return (
-                    <TableRow
-                      hover
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={user._id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell
-                        component="td"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        style={{ paddingLeft: '25px' }}
+          {loading ? (<Spinner />) :
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={users.length}
+                key={users._id}
+              />
+              <TableBody>
+                {users && stableSort(users, getComparator(order, orderBy))
+                  .map((user, index) => {
+                    const isItemSelected = isSelected(user._id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
+                    return (
+                      <TableRow
+                        hover
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={user._id}
+                        selected={isItemSelected}
                       >
-                        {user.fullName}
-                      </TableCell>
-                      <TableCell>
-                        <div style={{ display: 'flex' }}>
-                          {user.email}{user.emailVerified
-                            ? <span className="status_icon" style={{ color: 'green' }}>
-                              <Tooltip title="Verified">
-                                <CheckCircleIcon />
-                              </Tooltip>
-                            </span>
-                            : <span className="status_icon text-danger" >
-                              <Tooltip title="Unverified">
-                                <CancelIcon />
-                              </Tooltip>
-                            </span>}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div style={{ display: 'flex' }}>
-                          {user?.mobile?.e164Number}
-                          {user?.mobile?.e164Number
-                            ? user.mobileVerified === true
-                              ? <span className="status_icon" style={{ color: 'green', textAlign: 'center' }}>
+                        <TableCell
+                          component="td"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          style={{ paddingLeft: '25px' }}
+                        >
+                          {user.fullName}
+                        </TableCell>
+                        <TableCell>
+                          <div style={{ display: 'flex' }}>
+                            {user.email}{user.emailVerified
+                              ? <span className="status_icon" style={{ color: 'green' }}>
                                 <Tooltip title="Verified">
                                   <CheckCircleIcon />
                                 </Tooltip>
                               </span>
-                              : <span className="status_icon text-danger">
+                              : <span className="status_icon text-danger" >
                                 <Tooltip title="Unverified">
                                   <CancelIcon />
                                 </Tooltip>
-                              </span>
-                            : 'N/A'
-                          }
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {moment(user.createdAt).format("MM-DD-YYYY")}
-                      </TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{
-                            flexWrap: 'wrap',
-                            '& > :not(style)': {
-                              width: 75,
-                              height: 20,
-                            },
-                          }}
+                              </span>}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div style={{ display: 'flex' }}>
+                            {user?.mobile?.e164Number}
+                            {user?.mobile?.e164Number
+                              ? user.mobileVerified === true
+                                ? <span className="status_icon" style={{ color: 'green', textAlign: 'center' }}>
+                                  <Tooltip title="Verified">
+                                    <CheckCircleIcon />
+                                  </Tooltip>
+                                </span>
+                                : <span className="status_icon text-danger">
+                                  <Tooltip title="Unverified">
+                                    <CancelIcon />
+                                  </Tooltip>
+                                </span>
+                              : 'N/A'
+                            }
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {moment(user.createdAt).format("MM-DD-YYYY")}
+                        </TableCell>
+                        <TableCell>
+                          <Box
+                            sx={{
+                              flexWrap: 'wrap',
+                              '& > :not(style)': {
+                                width: 75,
+                                height: 20,
+                              },
+                            }}
+                          >
+                            {
+                              user.active === false
+                                ? <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card>
+                                : <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
+
+                            }
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left" style={{
+                          paddingTop: '15px',
+                          paddingRight: '15px',
+                          paddingBottom: '15px',
+                          paddingLeft: '15px'
+                        }}
                         >
+                          {<Tooltip title="User Suggestion" className='MuiIconButton-root'>
+                            <Link to={`/my-suggestion/${user._id}`}>
+                              <MessageIcon />
+                            </Link>
+                          </Tooltip>
+                          }
+
+                          {<Tooltip title="Edit" className='MuiIconButton-root'>
+                            <Link to={`/edit-user/${user._id}`}>
+                              <EditIcon style={{ color: '#0c85d0' }} />
+                            </Link>
+
+                          </Tooltip>
+                          }
                           {
-                            user.active === false
-                              ? <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card>
-                              : <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
-
+                            <Tooltip title="View">
+                              <VisibilityIcon style={{ color:"#67757c" }} />
+                            </Tooltip>
                           }
-                        </Box>
-                      </TableCell>
-                      <TableCell align="left" style={{
-                        paddingTop: '15px',
-                        paddingRight: '15px',
-                        paddingBottom: '15px',
-                        paddingLeft: '15px'
-                      }}
-                      >
-                        {<Tooltip title="My-Suggestion" className='MuiIconButton-root'>
-                          <Link to={`/my-suggestion/${user._id}`}>
-                          <MessageIcon/>
-                          </Link>
-                          </Tooltip>
+                          {user.active === true
+                            ? <Tooltip title="Deactivate" className='MuiIconButton-root'>
+                              <BlockIcon
+                                style={{ color: 'red' }}
+                                onClick={(e) => block(user._id)} />
+                            </Tooltip>
+                            :
+                            <Tooltip title="Activate" className='MuiIconButton-root'>
+                              <LockOpenIcon
+                                style={{ color: 'green' }}
+                                onClick={(e) => unblock(user._id)} />
+                            </Tooltip>
                           }
-
-                        {<Tooltip title="Edit" className='MuiIconButton-root'>
-                          <Link to={`/edit-user/${user._id}`}>
-                          <EditIcon style={{ color: '#0c85d0' }} />
-                          </Link>
-                       
-                        </Tooltip>
-                        }
-                        {user.active === true
-                          ? <Tooltip title="Inactive" className='MuiIconButton-root'>
-                            <BlockIcon
-                              style={{ color: 'red' }}
-                              onClick={(e) => block(user._id)} />
-                          </Tooltip>
-                          :
-                          <Tooltip title="Active" className='MuiIconButton-root'>
-                            <LockOpenIcon
-                              style={{ color: 'green' }}
-                              onClick={(e) => unblock(user._id)} />
-                          </Tooltip>
-                        }
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          }
         </TableContainer>
         <TablePagination
           className='p'

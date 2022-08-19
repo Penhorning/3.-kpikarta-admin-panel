@@ -1,16 +1,13 @@
 import React,{forwardRef,useState} from 'react';
-import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
 const Alert = forwardRef(function Alert(props, ref) {
-  console.log("PROPS 123",props)
 
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 export default function CustomizedSnackbars(props) {
-  console.log("PROPS",props)
   const {open} = props;
   const [opens, setOpen] = useState(false);
 

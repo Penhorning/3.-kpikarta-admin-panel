@@ -102,7 +102,7 @@ const Login = (props) => {
                   ></Formik>
                 <div className="cre_fog"> <a href="/authentication/forgot-password" className="for_pass">Forgot Password</a> </div>
                 <div className="bot_link">
-                  <p><a href="https://www.kpikarta.com/terms-of">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://www.kpikarta.com/contact">Contact Us</a></p>
+                  <p><a href="https://www.kpikarta.com/terms-of" target="_balnk">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://www.kpikarta.com/contact" target="_balnk">Contact Us</a></p>
                 </div>
               </div>
             </div>

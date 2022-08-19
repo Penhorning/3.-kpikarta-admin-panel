@@ -85,7 +85,7 @@ const ForgotPassword = (props) => {
               <p>Back To <a href="/authentication/login" class="text-white"><strong>Login</strong></a></p>
             </div>
             <div class="bot_link">
-              <p><a href="#!">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="#!">Contact Us</a></p>
+              <p><a href="https://www.kpikarta.com/terms-of" target="_balnk">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://www.kpikarta.com/contact" target="_balnk">Contact Us</a></p>
             </div>
           </div>
         </div>

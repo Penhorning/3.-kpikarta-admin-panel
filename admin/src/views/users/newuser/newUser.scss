@@ -1,6 +1,10 @@
-.react-tel-input .form-control{
+.react-tel-input .form-control {
     font-size: 20px !important;
     height: 55px !important;
     width: 100% !important;
     margin-left: 4px !important;
+}
+
+.react-tel-input .form-control:focus {
+    color: rgba(0, 0, 0, 0.87) !important;
 }
