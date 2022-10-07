@@ -1,16 +1,16 @@
 {
-  "name": "KPIKarta-Admin",
+  "name": "kpi-karta-admin",
   "version": "1.0.0",
   "homepage": "/",
   "description": "material-pro react admin for KPI Karta",
   "main": "index.js",
   "scripts": {
-    "start": "env-cmd -f .env.local react-scripts start",
+    "start": "env-cmd -f .env.development react-scripts start",
     "start:dev": "env-cmd -f .env.development react-scripts start",
     "build": "react-scripts build",
     "build:dev": "env-cmd -f .env.development react-scripts build && mv build development",
     "build:qa": "env-cmd -f .env.qa react-scripts build && mv build qa",
-    "build:prod": "CI=false env-cmd -f .env.production react-scripts build && mv build production",
+    "build:prod": "CI=true env-cmd -f .env.production react-scripts build && mv build production",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
