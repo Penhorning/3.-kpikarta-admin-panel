@@ -566,7 +566,9 @@ export default function EnhancedTable() {
                           }
                           {
                             <Tooltip title="View">
-                              <VisibilityIcon style={{ color:"#67757c" }} />
+                              <Link to={`/view-user/${user._id}`}>
+                              <VisibilityIcon style={{ color:"#243864", cursor:'pointer' }} />
+                              </Link>
                             </Tooltip>
                           }
                           {user.active === true

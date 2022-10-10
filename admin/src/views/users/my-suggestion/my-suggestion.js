@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -32,7 +32,6 @@ export default function MySuggestion() {
   const [phaseIds, setPhaseID] = useState('');
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const history = useHistory();
 
   // Suggestion form
   const initialValues = {

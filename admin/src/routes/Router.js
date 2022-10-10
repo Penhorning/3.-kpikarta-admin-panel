@@ -6,6 +6,8 @@ const Suggestions = lazy(() => import("../views/suggestions/suggestions"));
 const ChangePassword = lazy(() => import("../views/change-password/ChangePassword"));
 const EditUser = lazy(() => import("../views/users/edituser/edituser"));
 const MySuggestion = lazy(() => import("../views/users/my-suggestion/my-suggestion"));
+const Viewuser = lazy(() => import("../views/users/view-user/view-user"));
+
 
 
 var ThemeRoutes = [
@@ -57,6 +59,13 @@ var ThemeRoutes = [
     name: "My-Suggestion",
     icon: "mdi mdi-gauge",
     component: MySuggestion,
+    sideRoute: false,
+  },
+  {
+    path: "/view-user/:id",
+    name: "view-user",
+    icon: "mdi mdi-gauge",
+    component: Viewuser,
     sideRoute: false,
   },
   {
