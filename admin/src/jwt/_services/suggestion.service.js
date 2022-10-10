@@ -6,7 +6,7 @@ const getPhases = () => {
     method: "GET",
     headers: AuthHeader()
   };
-  return fetch(Constants.BASE_URL +`/api/kartaphases`, requestOptions).then(HandleResponse);
+  return fetch(Constants.BASE_URL +`/api/karta_phases`, requestOptions).then(HandleResponse);
 }
 
 const getSuggestion = (data) => {

@@ -63,7 +63,7 @@ export default function Viewuser() {
             setLoading(false)
         });
     }, [id])
-       
+
     // filter data by id
     const deptField = department.filter((e) => { return e.id === initialCompanyValues.companyDepartment })
     const employFiled = employeeRange.filter((e) => { return e.id === initialCompanyValues.companyEmployeeRange })
@@ -71,7 +71,7 @@ export default function Viewuser() {
     const onBackClick = () => {
         history.push('/users');
     }
-    
+
     return (
         <Box sx={{}}>
             <Paper sx={{ mb: 2 }}>
@@ -135,10 +135,15 @@ export default function Viewuser() {
                                                         <TableRow>
                                                             <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Address</TableCell>
                                                             <TableCell align="left" style={{ fontSize: 18 }}>
-                                                                {user?.street === undefined || user?.street === "" ? '' : `${user?.street}, `}
-                                                                {user?.city === undefined || user?.city === "" ? '' : `${user?.city}, `}
-                                                                {user?.postal_code === undefined || user?.postal_code === "" ? '' : `${user?.postal_code}, `}
-                                                                {user?.country === undefined || user?.country === "" ? '' : `${user?.country} `}
+                                                                {user?.street && user?.city && user?.postal_code && user?.country ? (
+                                                                    <>
+                                                                        {user?.street === undefined || user?.street === "" ? '' : `${user?.street}, `}
+                                                                        {user?.city === undefined || user?.city === "" ? '' : `${user?.city}, `}
+                                                                        {user?.postal_code === undefined || user?.postal_code === "" ? '' : `${user?.postal_code}, `}
+                                                                        {user?.country === undefined || user?.country === "" ? '' : `${user?.country} `}
+                                                                    </>
+                                                                ) : "N/A"}
+
                                                             </TableCell>
                                                         </TableRow>
                                                     </TableBody>
@@ -192,19 +197,28 @@ export default function Viewuser() {
                                                         </TableRow>
                                                         <TableRow>
                                                             <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Employees Range</TableCell>
-                                                            {employFiled.map((option) => (
+                                                            {employFiled.length > 0 ? employFiled.map((option) => (
                                                                 <TableCell align="left" style={{ fontSize: 18 }} key={option?.id} >
-                                                                    {option?.range}
+                                                                    {option?.range ? option?.range : 'N/A'}
                                                                 </TableCell>
-                                                            ))}
+                                                            )) : (
+                                                                <TableCell align="left" style={{ fontSize: 18 }}>
+                                                                {'N/A'}
+                                                            </TableCell>
+                                                            )}
                                                         </TableRow>
                                                         <TableRow>
                                                             <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Department</TableCell>
-                                                            {deptField.map((option) => (
+                                                            {deptField.length > 0 ? deptField.map((option) => (
                                                                 <TableCell align="left" style={{ fontSize: 18 }} key={option?.id} >
-                                                                    {option?.name}
+                                                                    {option?.name ? option?.name : 'N/A'}
                                                                 </TableCell>
-                                                            ))}
+                                                            )
+                                                            ) : (
+                                                                <TableCell align="left" style={{ fontSize: 18 }} >
+                                                                {'N/A'}
+                                                            </TableCell>
+                                                            )}
                                                         </TableRow>
                                                     </TableBody>
                                                 </Table>

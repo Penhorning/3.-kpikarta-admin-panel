@@ -108,7 +108,7 @@ function getDepartment() {
 
 function getEmployeeRange() {
   const requestOptions = { method: "GET", headers: AuthHeader() };
-  return fetch(Constants.BASE_URL + `/api/employees_ranges`, requestOptions).then(HandleResponse);
+  return fetch(Constants.BASE_URL + `/api/employee_ranges`, requestOptions).then(HandleResponse);
 }
 
 function getCompanyID(id) {
