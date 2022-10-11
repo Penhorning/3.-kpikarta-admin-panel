@@ -51,6 +51,8 @@ export default function LabTabs() {
   const { id } = useParams();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const actionUrlCompany = `${Constants.BASE_URL}/api/Containers/company/upload`;
+  const actionUrlUser = `${Constants.BASE_URL}/api/Containers/user/upload`;
   const [fileList, setFileList] = useState([
     {
       uid: '-1',
@@ -265,7 +267,7 @@ export default function LabTabs() {
                   <Grid item xs={6} >
                     <ImgCrop grid rotate shape={'round'}>
                       <Upload
-                        action={"https://dev-api.kpikarta.com/api/Containers/user/upload"}
+                        action={actionUrlUser}
                         name={'photo'}
                         maxCount={1}
                         showUploadList={false}
@@ -398,7 +400,7 @@ export default function LabTabs() {
                       <Upload
                        beforeUpload={beforeUpload}
                         onChange={onCompanyPhotoChange}
-                        action={"https://dev-api.kpikarta.com/api/Containers/company/upload"}
+                        action={actionUrlCompany}
                         name={'photo'}
                         maxCount={1}
                         showUploadList={false}
