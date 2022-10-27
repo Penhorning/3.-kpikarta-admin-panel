@@ -111,14 +111,7 @@ export default function Newuser() {
                     />
                   )}
                 </Field>
-              </Box>
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                '& > :not(style)': {}
-              }}
-                style={{ alignSelf: 'center' }}>
-                 <Field name="duration">
+                <Field name="duration">
                   {({ field }) => (
                     <TextField
                       label="Duration"
@@ -132,11 +125,21 @@ export default function Newuser() {
                     />
                   )}
                 </Field>
+              </Box>
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                '& > :not(style)': {}
+              }}
+                style={{ alignSelf: 'center' }}>
+                
                 <Field name="description">
                   {({ field }) => (
                     <TextField
                       label="Description "
                       fullWidth
+                      multiline
+                      rows={4}
                       display='flex'
                       {...field}
                       style={{ margin: '20px', marginRight: '25px'}}
