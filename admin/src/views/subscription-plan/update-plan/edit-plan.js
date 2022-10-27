@@ -13,9 +13,9 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import 'react-phone-input-2/lib/material.css';
 import { useParams, useHistory } from 'react-router-dom';
-import { UserService } from '../../../../jwt/_services';
+import { UserService } from '../../../jwt/_services';
 import { useSnackbar } from 'notistack';
-import Spinner from '../../../spinner/Spinner';
+import Spinner from '../../spinner/Spinner';
 
 const initialValues = {
   name: '',

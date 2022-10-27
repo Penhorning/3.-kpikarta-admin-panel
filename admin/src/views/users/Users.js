@@ -444,7 +444,7 @@ export default function EnhancedTable() {
           </Typography>
           <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-              <Link to='/newuser'>
+              <Link to='/new-user'>
                 <Button className="text-nowrap" variant="contained">ADD USER</Button>
               </Link>
             </Stack>

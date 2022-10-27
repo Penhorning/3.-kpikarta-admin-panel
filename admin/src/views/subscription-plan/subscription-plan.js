@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
-import { UserService } from "../../../jwt/_services";
+import { UserService } from "../../jwt/_services";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -28,9 +28,8 @@ import Snackbar from '@mui/material/Snackbar';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Card } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
-import Spinner from '../../spinner/Spinner';
-import { AuthenticationService } from "../../../jwt/_services"
+import Spinner from '../spinner/Spinner';
+import { AuthenticationService } from "../../jwt/_services/Authentication.service"
 
 function createData(name, calories, fat, carbs, protein) {
   return {
@@ -256,7 +255,7 @@ export default function EnhancedTable() {
           </Typography>
           <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-              <Link to='/addnewplan'>
+              <Link to='/new-plan'>
                 <Button className="text-nowrap" variant="contained">ADD PLAN</Button>
               </Link>
             </Stack>
@@ -335,7 +334,7 @@ export default function EnhancedTable() {
                         }}
                         >
                           {<Tooltip title="Edit-plan" className='MuiIconButton-root'>
-                            <Link to={`/editplan/${plan.id}`} >
+                            <Link to={`/edit-plan/${plan.id}`} >
                               <EditIcon style={{ color: '#0c85d0' }} />
                             </Link>
                           </Tooltip>
