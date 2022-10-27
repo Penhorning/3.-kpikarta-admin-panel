@@ -22,7 +22,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
 import Button from '@mui/material/Button';
-import './Users.scss';
+import './users.scss';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -369,14 +369,14 @@ export default function EnhancedTable() {
             Users
           </Typography>
           <Typography
-            sx={{ flex: '1 1' }}
+            sx={{ flex: '1 1', zIndex: 1  }}
             component="div">
             <Box component="form"
               sx={{ '& > :not(style)': {} }}
               noValidate
               autoComplete="off" >
               <Paper component="div"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 253 }}>
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 275}}>
                 <DatePicker
                   value={selectedDayRange}
                   onChange={handleDateChange}

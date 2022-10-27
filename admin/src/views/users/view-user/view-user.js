@@ -11,8 +11,8 @@ import Card from '@mui/material/Card';
 import Paper from '@mui/material/Paper';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import companyPhoto from "../../../assets/images/users/kpi-karta-logo.png";
-import profilephoto from "../../../assets/images/users/avatar.png";
+// import companyPhoto from "../../../assets/images/users/kpi-karta-logo.png";
+// import profilephoto from "../../../assets/images/users/avatar.png";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -20,6 +20,7 @@ import TableRow from '@mui/material/TableRow';
 import Spinner from '../../spinner/Spinner';
 import Button from '@mui/material/Button';
 import { useParams, useHistory } from 'react-router-dom';
+import Constants from '../../../jwt/_helpers/constants';
 
 const initialCompanyValues = {
     companyName: '',
@@ -38,21 +39,22 @@ export default function Viewuser() {
     const [company, setCompany] = useState([]);
     const { id } = useParams();
     const history = useHistory();
-
+    const [profilephoto, setProfilephoto] = useState()
+    const [companyPhoto, setCompanyPhoto] = useState()
+    
     useEffect(() => {
-        UserService.getUserId(id).then(response => {
+        UserService.getUserDetails(id).then(response => {
+            setProfilephoto(response.profilePic ? `${Constants.BASE_URL}/user/${response.profilePic}`:`${'https://i.ibb.co/wynJtDH/avatar.png'}`)
             setUsers(response)
-            setLoading(false)
         });
         UserService.getDepartment().then(response => {
             setDepartment(response);
-            setLoading(false)
         })
         UserService.getEmployeeRange().then(response => {
             setEmployeeRange(response);
-            setLoading(false)
         })
-        UserService.getCompanyID(id).then(response => {
+        UserService.getCompanyDetails(id).then(response => {
+            setCompanyPhoto(response.logo ? `${Constants.BASE_URL}/company/${response.logo}`:`${'https://i.ibb.co/wynJtDH/avatar.png'}`)
             setCompany(response)
             const { name, job_title, departmentId, employeesRangeId } = response;
             setCompanyID(response.id)
@@ -97,7 +99,6 @@ export default function Viewuser() {
                                         component="img"
                                         height="235"
                                         image={profilephoto}
-                                        alt="green iguana"
                                         style={{ objectFit: 'contain' }}
                                     />
                                     <CardContent>
@@ -170,7 +171,6 @@ export default function Viewuser() {
                                         component="img"
                                         height="176"
                                         image={companyPhoto}
-                                        alt="green iguana"
                                         style={{ objectFit: 'contain' }}
                                     />
                                     <CardContent>
