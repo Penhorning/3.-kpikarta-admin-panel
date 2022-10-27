@@ -18,10 +18,8 @@ import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import LinearProgress from '@mui/material/LinearProgress';
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
 import { useSnackbar } from 'notistack';
+import Spinner from '../spinner/Spinner';
 
 
 
@@ -32,7 +30,6 @@ export default function Suggestion() {
   const [tabValue, setTabValue] = React.useState('62b07978c389310e2c74f586');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [saveDatatost, setSaveDatatost] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   // Suggestion form
@@ -74,12 +71,7 @@ export default function Suggestion() {
     setDescDisArr(disableArray);
   }
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSaveDatatost(false);
-  };
+ 
 
 
   const onSubmit = (values) => {
@@ -95,8 +87,6 @@ export default function Suggestion() {
       setSubmitting(false);
       let variant = "success";
       enqueueSnackbar('Suggestion updated successfully.', { variant });
-      
-      // setSaveDatatost(true);
     });
    }
   }
@@ -137,7 +127,7 @@ export default function Suggestion() {
     getSuggestion(newValue);
   };
 
-  return loading ? (<LinearProgress />) : (
+  return loading ? (<Spinner />) : (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <Toolbar>
@@ -244,16 +234,6 @@ export default function Suggestion() {
           </Formik>
           </TabPanel>
         </TabContext>
-        {/* <Snackbar open={saveDatatost} autoHideDuration={3000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          Suggestion updated successfully
-        </Alert>
-      </Snackbar> */}
       </Paper>
     </Box>
   );

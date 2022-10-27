@@ -11,7 +11,7 @@ import 'intl-tel-input/build/css/intlTelInput.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import {useHistory } from 'react-router-dom';
-import './newUser.scss';
+import './new-user.scss';
 import { UserService } from '../../../jwt/_services';
 import { useSnackbar } from 'notistack';
 
@@ -25,10 +25,10 @@ export default function Newuser() {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const validationSchema = Yup.object().shape({
-    fullName: Yup.string().required('Full Name is required!'),
+    fullName: Yup.string().trim().required('Full Name is required!'),
     email: Yup.string().email().required('Valid email is required!'),
     mobile: Yup.object().required('Mobile number is required!'),
-    companyName: Yup.string().required('Company Name is required!'),
+    companyName: Yup.string().trim().required('Company Name is required!'),
   });
 
   const onSubmit = (values) => {
@@ -45,14 +45,17 @@ export default function Newuser() {
           let variant = "success";
           enqueueSnackbar('New user added successfully.', { variant });
           history.replace('/users');
-        }else if (response.error.statusCode === 422 && response.error.details.codes.email[0] === "uniqueness") {
+        }else if (response.error.statusCode === 422) {
             let variant = 'error';
-            enqueueSnackbar("Email already exists", { variant });
+            enqueueSnackbar(`${response.error.message}`, { variant });
           }
       })
     }
-  
   }
+  
+  const onBackClick = () => {
+    history.push('/users');
+}
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -64,6 +67,7 @@ export default function Newuser() {
             component="div">
             Add User
           </Typography>
+          <Button variant="outlined" onClick={onBackClick}>Back</Button>
         </Toolbar>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         </Box>
