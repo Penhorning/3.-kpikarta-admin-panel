@@ -4,7 +4,6 @@ import { HandleResponse,Constants,AuthHeader } from "../_helpers";
 const currentUserSubject = new BehaviorSubject(
   JSON.parse(localStorage.getItem("currentUser"))
 );
-
 export const AuthenticationService = {
   login,
   logout,
@@ -27,9 +26,14 @@ function login(email, password) {
     .then(HandleResponse)
     .then((user) => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      currentUserSubject.next(user);
-      return user;
+      if(user?.error?.statusCode == 400){
+        return user
+      } else {
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        currentUserSubject.next(user);
+        return user;
+      }
+     
     });
 }
 

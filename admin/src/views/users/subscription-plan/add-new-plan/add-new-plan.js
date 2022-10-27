@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -8,51 +8,58 @@ import * as Yup from 'yup';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import 'intl-tel-input/build/css/intlTelInput.css';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/material.css';
 import {useHistory } from 'react-router-dom';
-import './newUser.scss';
-import { UserService } from '../../../jwt/_services';
+import './add-new-plan.scss';
+import { UserService } from '../../../../jwt/_services';
 import { useSnackbar } from 'notistack';
+import { AuthenticationService } from "../../../../jwt/_services"
 
 const initialValues = {
-  fullName: '',
-  email: '',
-  mobile: {},
-  companyName: ''
-}
+    plan_name: '',
+    amount: '',
+    description: '',
+    duration: ''
+  }
 export default function Newuser() {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const [userId, setUserIds] = useState(AuthenticationService.currentUser.source._value.userId)
   const validationSchema = Yup.object().shape({
-    fullName: Yup.string().required('Full Name is required!'),
-    email: Yup.string().email().required('Valid email is required!'),
-    mobile: Yup.object().required('Mobile number is required!'),
-    companyName: Yup.string().required('Company Name is required!'),
+    plan_name: Yup.string().trim().required('Plan Name is required!'),
+    amount: Yup.number().moreThan(0, 'Price should not be zero or less than zero')
+    .lessThan(999999, "Price should not be more than 6 digits").required('Price is required!'),
+    description: Yup.string().trim().required('Description is required!'),
+    duration: Yup.number().moreThan(0, 'Duration should not be zero or less than zero')
+    .lessThan(365, "Duration should not be more than 365").required('Duration is required!'),
   });
 
+  // Submit plan function
   const onSubmit = (values) => {
-    const result = window.confirm("Are you sure, you want to add new user?");
+    const result = window.confirm("Are you sure, you want to add new plan?");
     if (result) {
       let data = {
-        fullName: values.fullName,
-        email: values.email,
-        mobile: values.mobile,
-        companyName: values.companyName,
+        plan_name: values.plan_name,
+        amount: values.amount,
+        description: values.description,
+        duration: values.duration,
+        userId: userId
       };
-      UserService.addUser(data).then(response => {
+      UserService.addNewPlan(data).then(response => {
         if(!response.error){
           let variant = "success";
-          enqueueSnackbar('New user added successfully.', { variant });
-          history.replace('/users');
-        }else if (response.error.statusCode === 422 && response.error.details.codes.email[0] === "uniqueness") {
+          enqueueSnackbar('New subscription plan added successfully', { variant });
+          history.replace('/subscription-plans');
+        }else if (response.error.statusCode === 422) {
             let variant = 'error';
-            enqueueSnackbar("Email already exists", { variant });
+            enqueueSnackbar("Something went worng", { variant });
           }
       })
     }
-  
   }
+
+  const onBackClick = () => {
+    history.push('/subscription-plans');
+}
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -62,13 +69,14 @@ export default function Newuser() {
             variant="h6"
             id="tableTitle"
             component="div">
-            Add User
+            Add New Plan
           </Typography>
+          <Button variant="outlined" onClick={onBackClick}>Back</Button>
         </Toolbar>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         </Box>
         <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} >
-          {({ errors, values, touched }) => (
+          {({ errors, touched }) => (
             <Form>
               <Box sx={{
                 display: 'flex',
@@ -76,29 +84,30 @@ export default function Newuser() {
                 '& > :not(style)': {}
               }}
                 style={{ alignSelf: 'center' }}>
-                <Field name="fullName">
+                <Field name="plan_name">
                   {({ field }) => (
                     <TextField
-                      label="Full Name"
+                      label="Plan Name"
                       fullWidth
                       display='flex'
                       {...field}
                       style={{ margin: '20px', marginLeft: '25px' }}
-                      error={errors.fullName && touched.fullName ? true : false}
-                      helperText={(errors.fullName && touched.fullName ? 'Full Name is required!' : '')}
+                      error={errors.plan_name && touched.plan_name ? true : false}
+                      helperText={(errors.plan_name && touched.plan_name ? `${errors.plan_name}` : '')}
                     />
                   )}
                 </Field>
-                <Field name="email">
+                <Field name="amount">
                   {({ field }) => (
                     <TextField
-                      label="Email"
+                      label="Price"
                       fullWidth
+                      type="number"
                       display='flex'
                       {...field}
                       style={{ margin: '20px', marginRight: '25px' }}
-                      error={errors.email && touched.email ? true : false}
-                      helperText={(errors.email && touched.email ? 'Email is required!' : '')}
+                      error={errors.amount && touched.amount ? true : false}
+                      helperText={(errors.amount && touched.amount ? `${errors.amount}` : '')}
                     />
                   )}
                 </Field>
@@ -109,39 +118,30 @@ export default function Newuser() {
                 '& > :not(style)': {}
               }}
                 style={{ alignSelf: 'center' }}>
-                <Field name="mobile">
-                  {({ field }) => (
-                    <PhoneInput
-                      inputProps={{
-                        name: 'phone',
-                        required: true,
-                      }}
-                      isValid={(value, country) => {
-                        if (value.match(/12345/)) {
-                          return 'Invalid value: '+value+', '+country.name;
-                        } else if (value.match(/1234/)) {
-                          return false;
-                        } else {
-                          return true;
-                        }
-                      }}
-                      country={'us'}
-                      enableSearch={true}
-                      onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
-                      style={{ margin: '20px', marginRight: '25px' }}
-                    />
-                  )}
-                </Field>
-                <Field name="companyName">
+                 <Field name="duration">
                   {({ field }) => (
                     <TextField
-                      label="Organization"
+                      label="Duration"
+                      type="number"
                       fullWidth
                       display='flex'
                       {...field}
-                      style={{ margin: '20px', marginRight: '25px' }}
-                      error={errors.companyName && touched.companyName ? true : false}
-                      helperText={(errors.companyName && touched.companyName ? 'Organization name is required!' : '')}
+                      style={{ margin: '20px', marginLeft: '25px' }}
+                      error={errors.duration && touched.duration ? true : false}
+                      helperText={(errors.duration && touched.duration ? `${errors.duration}` : '')}
+                    />
+                  )}
+                </Field>
+                <Field name="description">
+                  {({ field }) => (
+                    <TextField
+                      label="Description "
+                      fullWidth
+                      display='flex'
+                      {...field}
+                      style={{ margin: '20px', marginRight: '25px'}}
+                      error={errors.description && touched.description ? true : false}
+                      helperText={(errors.description && touched.description ? 'Description is required!' : '')}
                     />
                   )}
                 </Field>

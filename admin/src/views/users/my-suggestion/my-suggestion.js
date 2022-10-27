@@ -19,6 +19,7 @@ import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import {useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import Spinner from "../../spinner/Spinner";
 
@@ -32,17 +33,17 @@ export default function MySuggestion() {
   const [phaseIds, setPhaseID] = useState('');
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-
+  const history = useHistory();
   // Suggestion form
   const initialValues = {
     definition: "",
     descriptions: []
   };
   const validationSchema = Yup.object().shape({
-    definition: Yup.string().required('Definition is required!'),
+    definition: Yup.string().trim().required('Definition is required!'),
     descriptions: Yup.array().of(
       Yup.object().shape({
-        description: Yup.string().required('Description is required')
+        description: Yup.string().trim().required('Description is required')
       })
     )
   });
@@ -161,6 +162,10 @@ export default function MySuggestion() {
     getSuggestion(newValue);
   };
 
+  const onBackClick = () => {
+    history.push('/users');
+  }
+
   return loading ? (<Spinner />) : (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -173,6 +178,7 @@ export default function MySuggestion() {
           >
             Suggestions
           </Typography>
+          <Button variant="outlined" onClick={onBackClick}>Back</Button>
         </Toolbar>
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

@@ -6,15 +6,20 @@ export const UserService = {
   blockUser,
   unBlockUser,
   addUser,
-  getUserId,
+  getUserDetails,
   updateUser,
   getDepartment,
   getEmployeeRange,
   upadateCompanyDetails,
-  getCompanyID
+  getCompanyDetails,
+  addNewPlan,
+  getSubscriptionPlans,
+  updateSubscriptionPlan,
+  updateSubscriptionPlanStatus,
+  getSubscriptionPlanById
 };
 
-function getAll(data) {
+async function getAll(data) {
   const requestOptions = {
     method: "POST", headers: AuthHeader(), body: JSON.stringify({
       page: data.page,
@@ -24,10 +29,10 @@ function getAll(data) {
       end: data.end
     })
   };
-  return fetch(Constants.BASE_URL + `/api/users/get-all`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/users/get-all`, requestOptions).then(HandleResponse);
 }
 
-function blockUser(userId, page, rowsPerPage) {
+async function blockUser(userId, page, rowsPerPage) {
   const requestOptions = {
     method: "PUT", headers: AuthHeader(), body: JSON.stringify({
       userId: userId,
@@ -36,10 +41,10 @@ function blockUser(userId, page, rowsPerPage) {
 
     })
   };
-  return fetch(Constants.BASE_URL + `/api/users/block`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/users/block`, requestOptions).then(HandleResponse);
 }
 
-function unBlockUser(userId, page, rowsPerPage) {
+async function unBlockUser(userId, page, rowsPerPage) {
   const requestOptions = {
     method: "PUT", headers: AuthHeader(), body: JSON.stringify({
       userId: userId,
@@ -48,20 +53,20 @@ function unBlockUser(userId, page, rowsPerPage) {
 
     })
   };
-  return fetch(Constants.BASE_URL + `/api/users/unblock`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/users/unblock`, requestOptions).then(HandleResponse);
 }
 
-function getUserCount() {
+async function getUserCount() {
   const requestOptions = { method: "POST", headers: AuthHeader() };
-  return fetch(Constants.BASE_URL + `/api/users/count`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/users/count`, requestOptions).then(HandleResponse);
 }
 
-function getUserId(id) {
+async function getUserDetails(id) {
   const requestOptions = { method: "GET", headers: AuthHeader() };
-  return fetch(Constants.BASE_URL + `/api/users/${id}`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/users/${id}`, requestOptions).then(HandleResponse);
 }
 
-function addUser(data) {
+async function addUser(data) {
   const requestOptions = {
     method: "POST", headers: AuthHeader(), body: JSON.stringify({
       fullName: data.fullName,
@@ -71,10 +76,10 @@ function addUser(data) {
       type: "admin"
     })
   };
-  return fetch(Constants.BASE_URL + `/api/users`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/users`, requestOptions).then(HandleResponse);
 }
 
-function updateUser(id, data) {
+async function updateUser(id, data) {
   const requestOptions = {
     method: "PATCH", headers: AuthHeader(), body: JSON.stringify({
       fullName: data.fullName,
@@ -84,10 +89,10 @@ function updateUser(id, data) {
       profilePic: data.profilePic
     })
   };
-  return fetch(Constants.BASE_URL + `/api/users/${id}`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/users/${id}`, requestOptions).then(HandleResponse);
 }
 
-function upadateCompanyDetails(companyIds, data) {
+async function upadateCompanyDetails(companyIds, data) {
   const requestOptions = {
     method: "PATCH", headers: AuthHeader(), body: JSON.stringify({
       name: data.name,
@@ -98,21 +103,68 @@ function upadateCompanyDetails(companyIds, data) {
       logo: data.logo,
     })
   };
-  return fetch(Constants.BASE_URL + `/api/companies/${companyIds}`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/companies/${companyIds}`, requestOptions).then(HandleResponse);
 }
 
-function getDepartment() {
+async function getDepartment() {
   const requestOptions = { method: "GET", headers: AuthHeader() };
-  return fetch(Constants.BASE_URL + `/api/departments`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/departments`, requestOptions).then(HandleResponse);
 }
 
-function getEmployeeRange() {
+async function getEmployeeRange() {
   const requestOptions = { method: "GET", headers: AuthHeader() };
-  return fetch(Constants.BASE_URL + `/api/employee_ranges`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/employee_ranges`, requestOptions).then(HandleResponse);
 }
 
-function getCompanyID(id) {
+async function getCompanyDetails(id) {
   const requestOptions = { method: "GET", headers: AuthHeader() };
-  return fetch(Constants.BASE_URL + `/api/companies/findOne?filter[where][userId]=${id}`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/companies/findOne?filter[where][userId]=${id}`, requestOptions).then(HandleResponse);
 }
 
+async function addNewPlan(data) {
+  const requestOptions = {
+    method: "POST", headers: AuthHeader(), body: JSON.stringify({
+      planName: data.plan_name,
+      amount: data.amount,
+      description: data.description,
+      duration: data.duration,
+      userId: data.userId
+    })
+  };
+  return await fetch(Constants.BASE_URL + `/api/subscriptions/create-plan`, requestOptions).then(HandleResponse);
+}
+
+async function getSubscriptionPlans(userId) {
+  const data = {
+    where: {
+      user_id: userId
+    }
+  }
+  return await fetch(Constants.BASE_URL + `/api/subscriptions?filter[order]=createdAt Desc`).then(HandleResponse);
+}
+
+async function getSubscriptionPlanById(id) {
+  return await fetch(Constants.BASE_URL + `/api/subscriptions/${id}`).then(HandleResponse);
+}
+
+async function updateSubscriptionPlan(id, data) {
+  const requestOptions = {
+    method: "PATCH", headers: AuthHeader(), body: JSON.stringify({
+      planName: data.plan_name,
+      description: data.description,
+      userId: data.userId,
+      planId: data.planId
+    })
+  };
+  return await fetch(Constants.BASE_URL + `/api/subscriptions/${id}`, requestOptions).then(HandleResponse);
+}
+
+async function updateSubscriptionPlanStatus(data) {
+  const requestOptions = {
+    method: "PUT", headers: AuthHeader(), body: JSON.stringify({
+      planId: data.planId,
+      status: data.status
+    })
+  };
+  return await fetch(Constants.BASE_URL + `/api/subscriptions/change-plan-status`, requestOptions).then(HandleResponse);
+}

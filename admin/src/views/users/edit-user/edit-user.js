@@ -7,7 +7,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import './edituser.scss';
+import './edit-user.scss';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Formik, Form, Field } from 'formik';
@@ -30,7 +30,8 @@ const initialValues = {
   fullName: '',
   email: '',
   mobile: {},
-  telephone: ''
+  telephone: '',
+  profilePic:''
 }
 const initialCompanyValues = {
   companyName: '',
@@ -51,6 +52,8 @@ export default function LabTabs() {
   const { id } = useParams();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const actionUrlCompany = `${Constants.BASE_URL}/api/Containers/company/upload`;
+  const actionUrlUser = `${Constants.BASE_URL}/api/Containers/user/upload`;
   const [fileList, setFileList] = useState([
     {
       uid: '-1',
@@ -71,18 +74,18 @@ export default function LabTabs() {
   ]);
 
   const validationSchema = Yup.object().shape({
-    fullName: Yup.string().required('Full Name is required!'),
+    fullName: Yup.string().trim().required('Full Name is required!'),
     email: Yup.string().email().required('Valid email is required!'),
-    mobile: Yup.object().required('Mobile number is required!'),
+    mobile: Yup.object().required('Mobile number is required!')
   });
 
   const companyValidationSchema = Yup.object().shape({
-    companyName: Yup.string().required('Company Name is required!'),
+    companyName: Yup.string().trim().required('Company Name is required!')
   });
 
   useEffect(() => {
     // get individula user data by passing user id
-    UserService.getUserId(id).then(response => {
+    UserService.getUserDetails(id).then(response => {
       const { fullName, email, mobile, telephone } = response;
       initialValues.fullName = fullName;
       initialValues.email = email;
@@ -112,7 +115,7 @@ export default function LabTabs() {
     })
 
     // get company data by passing user company ID
-    UserService.getCompanyID(id).then(response => {
+    UserService.getCompanyDetails(id).then(response => {
       const { name, job_title, departmentId, employeesRangeId } = response;
       setCompanyID(response.id)
       initialCompanyValues.companyName = name;
@@ -144,7 +147,7 @@ export default function LabTabs() {
         email: values.email,
         mobile: values.mobile,
         telephone: values.telephone,
-        profilePic: profilePic,
+        profilePic: profilePic == '' ? initialValues.profilePic : profilePic,
       };
       UserService.updateUser(id, data).then((response) => {
         if (response = true) {
@@ -166,8 +169,8 @@ export default function LabTabs() {
         job_title: values.companyJobTitle,
         departmentId: values.companyDepartment,
         employeesRangeId: values.companyEmployeeRange,
-        logo: newCompanyLogo,
-        oldCompanyLogo: oldCompanyLogo,
+        logo: newCompanyLogo == '' ? oldCompanyLogo : newCompanyLogo,
+        oldCompanyLogo: newCompanyLogo == '' ? newCompanyLogo : oldCompanyLogo,
       };
       UserService.upadateCompanyDetails(companyIds, data).then(response => {
         if (response = true) {
@@ -216,6 +219,9 @@ export default function LabTabs() {
     setValue(newValue);
   };
 
+  const onBackClick = () => {
+    history.push('/users');
+}
   return (
     <Box sx={{}}>
       <Paper sx={{ mb: 2 }}>
@@ -228,6 +234,7 @@ export default function LabTabs() {
           >
             Update Profile
           </Typography>
+          <Button variant="outlined" onClick={onBackClick}>Back</Button>
         </Toolbar>
         <TabContext value={value} >
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -265,7 +272,7 @@ export default function LabTabs() {
                   <Grid item xs={6} >
                     <ImgCrop grid rotate shape={'round'}>
                       <Upload
-                        action={"https://dev-api.kpikarta.com/api/Containers/user/upload"}
+                        action={actionUrlUser}
                         name={'photo'}
                         maxCount={1}
                         showUploadList={false}
@@ -298,7 +305,7 @@ export default function LabTabs() {
                             {...field ?? ''}
                             style={{ margin: '20px', marginLeft: '25px' }}
                             error={errors.fullName && touched.fullName ? true : false}
-                            helperText={(errors.fullName && touched.fullName ? 'Full Name is required!' : '')}
+                            helperText={(errors.fullName && touched.fullName ? `${errors.fullName}` : '')}
                           />
                         )}
                       </Field>
@@ -398,7 +405,7 @@ export default function LabTabs() {
                       <Upload
                        beforeUpload={beforeUpload}
                         onChange={onCompanyPhotoChange}
-                        action={"https://dev-api.kpikarta.com/api/Containers/company/upload"}
+                        action={actionUrlCompany}
                         name={'photo'}
                         maxCount={1}
                         showUploadList={false}
@@ -431,7 +438,7 @@ export default function LabTabs() {
                             {...field}
                             style={{ margin: '20px', marginLeft: '25px' }}
                             error={errors.companyName && touched.companyName ? true : false}
-                            helperText={(errors.companyName && touched.companyName ? 'Company Name is required!' : '')}
+                            helperText={(errors.companyName && touched.companyName ? `${errors.companyName}` : '')}
                             defaultValue={undefined}
                           />
                         )}
@@ -445,6 +452,8 @@ export default function LabTabs() {
                             display='flex'
                             {...field}
                             style={{ margin: '20px', marginLeft: '25px' }}
+                            error={errors.companyJobTitle && touched.companyJobTitle ? true : false}
+                            helperText={(errors.companyJobTitle && touched.companyJobTitle ? `${errors.companyJobTitle}` : '')}
                             defaultValue={undefined}
                           />
                         )}

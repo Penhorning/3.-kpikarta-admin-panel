@@ -1,12 +1,16 @@
 import { lazy } from "react";
-const Newuser = lazy(() => import("../views/users/newuser/newuser"));
+const NewUser = lazy(() => import("../views/users/new-user/new-user"));
 const Dashboard = lazy(() => import("../views/dashboard/Dashboard"));
-const Users = lazy(() => import("../views/users/Users"));
+const Users = lazy(() => import("../views/users/users"));
 const Suggestions = lazy(() => import("../views/suggestions/suggestions"));
-const ChangePassword = lazy(() => import("../views/change-password/ChangePassword"));
-const EditUser = lazy(() => import("../views/users/edituser/edituser"));
+const ChangePassword = lazy(() => import("../views/change-password/change-password"));
+const EditUser = lazy(() => import("../views/users/edit-user/edit-user"));
 const MySuggestion = lazy(() => import("../views/users/my-suggestion/my-suggestion"));
-const Viewuser = lazy(() => import("../views/users/view-user/view-user"));
+const ViewUser = lazy(() => import("../views/users/view-user/view-user"));
+const ViewAdmin = lazy(() => import("../views/users/view-admin/view-admin"));
+const SubscriptionPlan = lazy(() => import("../views/users/subscription-plan/subscription-plan"));
+const AddNewPlan = lazy(() => import("../views/users/subscription-plan/add-new-plan/add-new-plan"));
+const EditPlan = lazy(() => import("../views/users/subscription-plan/update-plan/edit-plan"));
 
 
 
@@ -44,7 +48,7 @@ var ThemeRoutes = [
     path: "/newuser",
     name: "New-user",
     icon: "mdi mdi-gauge",
-    component: Newuser,
+    component: NewUser,
     sideRoute: false,
   },
   {
@@ -65,7 +69,35 @@ var ThemeRoutes = [
     path: "/view-user/:id",
     name: "view-user",
     icon: "mdi mdi-gauge",
-    component: Viewuser,
+    component: ViewUser,
+    sideRoute: false,
+  },
+  {
+    path: "/viewadmin",
+    name: "view-admin",
+    icon: "mdi mdi-gauge",
+    component: ViewAdmin,
+    sideRoute: false,
+  },
+  {
+    path: "/subscription-plans",
+    name: "Subscription Plans",
+    icon: "mdi mdi-book-multiple",
+    component: SubscriptionPlan,
+    sideRoute: true,
+  },
+  {
+    path: "/addnewplan",
+    name: "Add new plan",
+    icon: "mdi mdi-gauge",
+    component: AddNewPlan,
+    sideRoute: false,
+  },
+  {
+    path: "/editplan/:id",
+    name: "Update plan",
+    icon: "mdi mdi-gauge",
+    component: EditPlan,
     sideRoute: false,
   },
   {
@@ -74,6 +106,7 @@ var ThemeRoutes = [
     name: "Dashboard",
     redirect: true,
     sideRoute: true,
-  },
+  }
+  
 ];
 export default ThemeRoutes;
