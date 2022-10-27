@@ -5,7 +5,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import './view-admin.scss';
+import './edit-profile.scss';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Formik, Form, Field } from 'formik';
@@ -13,7 +13,7 @@ import * as Yup from 'yup';
 import 'intl-tel-input/build/css/intlTelInput.css';
 import { UserService } from '../../../jwt/_services';
 import { useSnackbar } from 'notistack';
-import Spinner from '../../spinner/Spinner';
+import Spinner from '../../spinner-loader/spinner-loader';
 import Grid from '@mui/material/Grid';
 import 'antd/dist/antd.css';
 import { message, Upload } from 'antd';
@@ -22,13 +22,15 @@ import Constants from '../../../jwt/_helpers/constants';
 import {useHistory } from 'react-router-dom';
 import { AuthenticationService } from '../../../jwt/_services';
 
+
+
 const initialValues = {
   fullName: '',
   email: '',
   profilePic: ''
 }
 
-export default function LabTabs() {
+export default function EditProfile() {
   const [value, setValue] = useState('1');
   const [profilePic, setProfilePic] = useState('');
   const [loading, setLoading] = useState(true);

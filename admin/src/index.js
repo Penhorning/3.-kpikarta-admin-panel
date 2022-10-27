@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 import "./assets/scss/style.scss";
 import { SnackbarProvider } from 'notistack';
-import Spinner from "./views/spinner/Spinner";
+import Spinner from "./views/spinner-loader/spinner-loader";
 
 const App = lazy(
   () =>

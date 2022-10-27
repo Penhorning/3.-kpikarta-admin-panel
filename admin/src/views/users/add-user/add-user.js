@@ -11,7 +11,7 @@ import 'intl-tel-input/build/css/intlTelInput.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import {useHistory } from 'react-router-dom';
-import './new-user.scss';
+import './add-user.scss';
 import { UserService } from '../../../jwt/_services';
 import { useSnackbar } from 'notistack';
 
@@ -21,7 +21,7 @@ const initialValues = {
   mobile: {},
   companyName: ''
 }
-export default function Newuser() {
+export default function AddUser() {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const validationSchema = Yup.object().shape({

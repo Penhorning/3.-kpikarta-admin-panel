@@ -19,7 +19,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
 import { UserService } from '../../../jwt/_services';
 import { useSnackbar } from 'notistack';
-import Spinner from '../../spinner/Spinner';
+import Spinner from '../../spinner-loader/spinner-loader';
 import Grid from '@mui/material/Grid';
 import 'antd/dist/antd.css';
 import { message, Upload } from 'antd';
@@ -40,7 +40,7 @@ const initialCompanyValues = {
   companyEmployeeRange: ''
 }
 
-export default function LabTabs() {
+export default function EditUser() {
   const [value, setValue] = useState('1');
   const [department, setDepartment] = useState([]);
   const [employeeRange, setEmployeeRange] = useState([])

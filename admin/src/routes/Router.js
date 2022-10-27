@@ -2,8 +2,8 @@ import { lazy } from "react";
 
 const Dashboard = lazy(() => import("../views/dashboard/dashboard"));
 
-const Users = lazy(() => import("../views/users/users"));
-const NewUser = lazy(() => import("../views/users/new-user/new-user"));
+const Users = lazy(() => import("../views/users/user"));
+const AddUser = lazy(() => import("../views/users/add-user/add-user"));
 const EditUser = lazy(() => import("../views/users/edit-user/edit-user"));
 const ViewUser = lazy(() => import("../views/users/view-user/view-user"));
 
@@ -11,11 +11,11 @@ const Suggestions = lazy(() => import("../views/suggestions/suggestions"));
 const MySuggestion = lazy(() => import("../views/users/my-suggestion/my-suggestion"));
 
 const SubscriptionPlan = lazy(() => import("../views/subscription-plan/subscription-plan"));
-const AddNewPlan = lazy(() => import("../views/subscription-plan/add-new-plan/add-new-plan"));
-const EditPlan = lazy(() => import("../views/subscription-plan/update-plan/edit-plan"));
+const AddPlan = lazy(() => import("../views/subscription-plan/add-plan/add-plan"));
+const EditPlan = lazy(() => import("../views/subscription-plan/edit-plan/edit-plan"));
 
-const EditProfile = lazy(() => import("../views/users/view-admin/view-admin"));
-const ChangePassword = lazy(() => import("../views/change-password/change-password"));
+const EditProfile = lazy(() => import("../views/admin/edit-profile/edit-profile"));
+const ChangePassword = lazy(() => import("../views/admin/change-password/change-password"));
 
 
 var ThemeRoutes = [
@@ -34,10 +34,10 @@ var ThemeRoutes = [
     sideRoute: true
   },
   {
-    path: "/new-user",
-    name: "New-user",
+    path: "/add-user",
+    name: "Add-user",
     icon: "mdi mdi-gauge",
-    component: NewUser,
+    component: AddUser,
     sideRoute: false
   },
   {
@@ -83,22 +83,22 @@ var ThemeRoutes = [
     sideRoute: true
   },
   {
-    path: "/new-plan",
-    name: "Add new plan",
+    path: "/add-plan",
+    name: "Add plan",
     icon: "mdi mdi-gauge",
-    component: AddNewPlan,
+    component: AddPlan,
     sideRoute: false
   },
   {
     path: "/edit-plan/:id",
-    name: "Update plan",
+    name: "Edit plan",
     icon: "mdi mdi-gauge",
     component: EditPlan,
     sideRoute: false
   },
   {
-    path: "/view-admin",
-    name: "view-admin",
+    path: "/edit-profile",
+    name: "edit-profile",
     icon: "mdi mdi-gauge",
     component: EditProfile,
     sideRoute: false

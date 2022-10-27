@@ -7,6 +7,8 @@ import { AuthenticationService } from "../../jwt/_services";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import {Alert} from 'reactstrap';
 
+
+
 const ForgotPassword = (props) => {
 
   return (<section id="common_sec">

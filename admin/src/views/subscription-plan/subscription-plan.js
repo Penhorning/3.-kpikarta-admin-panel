@@ -19,7 +19,7 @@ import Stack from '@mui/material/Stack';
 import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
 import Button from '@mui/material/Button';
-import './subscribe-paln.scss';
+import './subscription-paln.scss';
 import Divider from '@mui/material/Divider';
 import moment from "moment";
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -28,8 +28,10 @@ import Snackbar from '@mui/material/Snackbar';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Card } from '@mui/material';
 import { Link } from 'react-router-dom';
-import Spinner from '../spinner/Spinner';
-import { AuthenticationService } from "../../jwt/_services/Authentication.service"
+import Spinner from '../spinner-loader/spinner-loader';
+import { AuthenticationService } from "../../jwt/_services/authentication.service"
+
+
 
 function createData(name, calories, fat, carbs, protein) {
   return {
@@ -153,7 +155,7 @@ const initialValue = {
   from: "",
   to: "",
 };
-export default function EnhancedTable() {
+export default function SubscriptionTable() {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
@@ -255,7 +257,7 @@ export default function EnhancedTable() {
           </Typography>
           <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-              <Link to='/new-plan'>
+              <Link to='/add-plan'>
                 <Button className="text-nowrap" variant="contained">ADD PLAN</Button>
               </Link>
             </Stack>

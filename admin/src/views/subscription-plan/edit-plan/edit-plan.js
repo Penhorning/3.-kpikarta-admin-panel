@@ -15,7 +15,9 @@ import 'react-phone-input-2/lib/material.css';
 import { useParams, useHistory } from 'react-router-dom';
 import { UserService } from '../../../jwt/_services';
 import { useSnackbar } from 'notistack';
-import Spinner from '../../spinner/Spinner';
+import Spinner from '../../spinner-loader/spinner-loader';
+
+
 
 const initialValues = {
   name: '',
@@ -24,7 +26,7 @@ const initialValues = {
   description: '',
 }
 
-export default function LabTabs() {
+export default function EditPlan() {
   const [value, setValue] = useState('1');
   const [loading, setLoading] = useState(true);
   const [planId, setPlanId] = useState();

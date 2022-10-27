@@ -17,7 +17,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import Spinner from '../../spinner/Spinner';
+import Spinner from '../../spinner-loader/spinner-loader';
 import Button from '@mui/material/Button';
 import { useParams, useHistory } from 'react-router-dom';
 import Constants from '../../../jwt/_helpers/constants';
@@ -29,7 +29,7 @@ const initialCompanyValues = {
     companyEmployeeRange: ''
 }
 
-export default function Viewuser() {
+export default function ViewUser() {
     const [value, setValue] = useState('1');
     const [department, setDepartment] = useState([]);
     const [employeeRange, setEmployeeRange] = useState([])

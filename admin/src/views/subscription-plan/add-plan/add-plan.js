@@ -9,10 +9,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import 'intl-tel-input/build/css/intlTelInput.css';
 import {useHistory } from 'react-router-dom';
-import './add-new-plan.scss';
+import './add-plan.scss';
 import { UserService } from '../../../jwt/_services';
 import { useSnackbar } from 'notistack';
 import { AuthenticationService } from "../../../jwt/_services"
+
+
 
 const initialValues = {
     plan_name: '',

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import './suggestion.scss';
+import './my-suggestion.scss';
 import { SuggestionService } from '../../../jwt/_services/suggestion.service';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
@@ -21,7 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import {useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import Spinner from "../../spinner/Spinner";
+import Spinner from "../../spinner-loader/spinner-loader";
 
 export default function MySuggestion() {
   const [phases, setPhases] = useState([]);
