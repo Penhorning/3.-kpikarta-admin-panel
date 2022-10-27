@@ -300,7 +300,7 @@ export default function EnhancedTable() {
 
   const maximumDate = {
     month: new Date().getMonth() + 1,
-    day: new Date().getDay(),
+    day: new Date().getDate(),
     year: new Date().getFullYear()
   }
 
