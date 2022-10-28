@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import './view-user.scss';
-import { UserService } from '../../../jwt/_services';
+import { UserService } from '../../../shared/_services';
 import Grid from '@mui/material/Unstable_Grid2';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -20,7 +20,7 @@ import TableRow from '@mui/material/TableRow';
 import Spinner from '../../spinner-loader/spinner-loader';
 import Button from '@mui/material/Button';
 import { useParams, useHistory } from 'react-router-dom';
-import Constants from '../../../jwt/_helpers/constants';
+import Constants from '../../../shared/_helpers/constants';
 
 const initialCompanyValues = {
     companyName: '',

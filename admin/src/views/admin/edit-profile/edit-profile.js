@@ -11,16 +11,16 @@ import Button from '@mui/material/Button';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import 'intl-tel-input/build/css/intlTelInput.css';
-import { UserService } from '../../../jwt/_services';
 import { useSnackbar } from 'notistack';
 import Spinner from '../../spinner-loader/spinner-loader';
 import Grid from '@mui/material/Grid';
 import 'antd/dist/antd.css';
 import { message, Upload } from 'antd';
 import ImgCrop from 'antd-img-crop';
-import Constants from '../../../jwt/_helpers/constants';
+import Constants from '../../../shared/_helpers/constants';
 import {useHistory } from 'react-router-dom';
-import { AuthenticationService } from '../../../jwt/_services';
+import { AuthenticationService } from '../../../shared/_services';
+import { UserService } from '../../../shared/_services';
 
 
 

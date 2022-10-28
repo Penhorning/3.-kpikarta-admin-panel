@@ -3,7 +3,7 @@ import logoImg from "../../assets/images/kpi-karta-logo.png";
 import loginCss from "../../assets/scss/login.css"
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { AuthenticationService } from "../../jwt/_services";
+import { AuthenticationService } from "../../shared/_services";
 import { Alert } from 'reactstrap';
 import { useSnackbar } from 'notistack';
 

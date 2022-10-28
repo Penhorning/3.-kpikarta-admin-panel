@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
 import './suggestion.scss';
-import { SuggestionService } from '../../jwt/_services/suggestion.service';
+import { SuggestionService } from '../../shared/_services/suggestion.service';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import Box from '@mui/material/Box';
