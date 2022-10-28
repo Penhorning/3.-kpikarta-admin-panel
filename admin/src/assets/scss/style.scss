@@ -40,3 +40,8 @@ File: scss
 button:focus {
     outline: none;
 }
+
+.MuiFormHelperText-root.Mui-error {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
