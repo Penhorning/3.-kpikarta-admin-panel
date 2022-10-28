@@ -32,6 +32,7 @@ export default function EditPlan() {
   const [userId, setUserID] = useState();
   const { id } = useParams();
   const history = useHistory();
+  const [isOpenBtn, setIsOpenBtn] = useState(false)
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
@@ -63,6 +64,8 @@ export default function EditPlan() {
         userId: userId,
         planId: planId
       };
+      setLoading(true)
+      setIsOpenBtn(true)
       UserService.updateSubscriptionPlan(id, data).then(
         (response) => {
           if (response?.error?.statusCode == 404) {
@@ -71,12 +74,16 @@ export default function EditPlan() {
             history.push('/subscription-plans');
             setPlanId();
             setUserID();
+            setIsOpenBtn(false)
+            setLoading(false)
           } else {
             let variant = "success";
             enqueueSnackbar('Plan has upadated successfully', { variant });
             history.push('/subscription-plans');
             setPlanId();
             setUserID();
+            setIsOpenBtn(false)
+            setLoading(false)
           }
         }
       )
@@ -183,6 +190,7 @@ export default function EditPlan() {
                       }}
                       variant="contained"
                       size="medium"
+                      disabled={isOpenBtn}
                       type='submit'
                     >
                       Update
