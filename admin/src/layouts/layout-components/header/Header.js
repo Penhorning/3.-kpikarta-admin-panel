@@ -175,7 +175,7 @@ export default () => {
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
-                <Link to='/view-admin'>
+                <Link to='/edit-profile'>
                   <div color="success" className="btn-rounded ml-3 mb-2 mt-2" >
                     View Profile
                   </div>

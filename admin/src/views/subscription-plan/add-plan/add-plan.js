@@ -24,6 +24,7 @@ const initialValues = {
   }
 export default function Newuser() {
   const history = useHistory();
+  const [isOpenBtn, setIsOpenBtn] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [userId, setUserIds] = useState(AuthenticationService.currentUser.source._value.userId)
   const validationSchema = Yup.object().shape({
@@ -46,14 +47,17 @@ export default function Newuser() {
         duration: values.duration,
         userId: userId
       };
+      setIsOpenBtn(true)
       UserService.addNewPlan(data).then(response => {
         if(!response.error){
           let variant = "success";
           enqueueSnackbar('New subscription plan added successfully', { variant });
           history.replace('/subscription-plans');
+          setIsOpenBtn(false)
         }else if (response.error.statusCode === 422) {
             let variant = 'error';
             enqueueSnackbar("Something went worng", { variant });
+            setIsOpenBtn(false)
           }
       })
     }
@@ -160,6 +164,7 @@ export default function Newuser() {
                 }}
                 variant="contained"
                 size="medium"
+                disabled={isOpenBtn}
                 type='submit'
               >
                 submit
