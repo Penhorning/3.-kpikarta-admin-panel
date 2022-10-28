@@ -14,9 +14,9 @@ import {
   DropdownItem
 } from "reactstrap";
 import { Link } from 'react-router-dom';
-import { AuthenticationService } from "../../../jwt/_services"
-import Constants from '../../../jwt/_helpers/constants';
-import { UserService } from '../../../jwt/_services';
+import { AuthenticationService } from "../../../shared/_services";
+import { UserService } from "../../../shared/_services";
+import Constants from '../../../shared/_helpers/constants';
 /*--------------------------------------------------------------------------------*/
 /* Import images which are need for the HEADER                                    */
 /*--------------------------------------------------------------------------------*/

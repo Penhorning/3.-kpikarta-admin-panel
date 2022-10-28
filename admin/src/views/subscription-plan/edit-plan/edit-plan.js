@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -13,7 +12,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import 'react-phone-input-2/lib/material.css';
 import { useParams, useHistory } from 'react-router-dom';
-import { UserService } from '../../../jwt/_services';
+import { UserService } from '../../../shared/_services';
 import { useSnackbar } from 'notistack';
 import Spinner from '../../spinner-loader/spinner-loader';
 

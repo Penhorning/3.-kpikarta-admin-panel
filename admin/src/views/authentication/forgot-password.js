@@ -2,7 +2,7 @@ import React from "react";
 import logoImg from "../../assets/images/kpi-karta-logo.png";
 import loginCss from "../../assets/scss/login.css"
 import * as Yup from "yup";
-import { AuthenticationService } from "../../jwt/_services";
+import { AuthenticationService } from "../../shared/_services";
 
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import {Alert} from 'reactstrap';

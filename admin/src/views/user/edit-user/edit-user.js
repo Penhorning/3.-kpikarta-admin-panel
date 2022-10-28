@@ -17,14 +17,14 @@ import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import { useParams, useHistory } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
-import { UserService } from '../../../jwt/_services';
+import { UserService } from '../../../shared/_services';
 import { useSnackbar } from 'notistack';
 import Spinner from '../../spinner-loader/spinner-loader';
 import Grid from '@mui/material/Grid';
 import 'antd/dist/antd.css';
 import { message, Upload } from 'antd';
 import ImgCrop from 'antd-img-crop';
-import Constants from '../../../jwt/_helpers/constants';
+import Constants from '../../../shared/_helpers/constants';
 
 const initialValues = {
   fullName: '',

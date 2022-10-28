@@ -2,13 +2,13 @@ import { lazy } from "react";
 
 const Dashboard = lazy(() => import("../views/dashboard/dashboard"));
 
-const Users = lazy(() => import("../views/users/user"));
-const AddUser = lazy(() => import("../views/users/add-user/add-user"));
-const EditUser = lazy(() => import("../views/users/edit-user/edit-user"));
-const ViewUser = lazy(() => import("../views/users/view-user/view-user"));
+const Users = lazy(() => import("../views/user/user"));
+const AddUser = lazy(() => import("../views/user/add-user/add-user"));
+const EditUser = lazy(() => import("../views/user/edit-user/edit-user"));
+const ViewUser = lazy(() => import("../views/user/view-user/view-user"));
 
 const Suggestions = lazy(() => import("../views/suggestions/suggestions"));
-const MySuggestion = lazy(() => import("../views/users/my-suggestion/my-suggestion"));
+const MySuggestion = lazy(() => import("../views/user/my-suggestion/my-suggestion"));
 
 const SubscriptionPlan = lazy(() => import("../views/subscription-plan/subscription-plan"));
 const AddPlan = lazy(() => import("../views/subscription-plan/add-plan/add-plan"));

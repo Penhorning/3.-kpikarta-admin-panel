@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
-import { UserService } from "../../jwt/_services";
+import { UserService } from "../../shared/_services";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -29,7 +29,7 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Card } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Spinner from '../spinner-loader/spinner-loader';
-import { AuthenticationService } from "../../jwt/_services/authentication.service"
+import { AuthenticationService } from "../../shared/_services/authentication.service"
 
 
 

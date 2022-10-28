@@ -12,7 +12,7 @@ import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import {useHistory } from 'react-router-dom';
 import './add-user.scss';
-import { UserService } from '../../../jwt/_services';
+import { UserService } from '../../../shared/_services';
 import { useSnackbar } from 'notistack';
 
 const initialValues = {

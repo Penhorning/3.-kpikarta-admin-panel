@@ -6,7 +6,7 @@ import {
     CardBody,
 } from 'reactstrap';
 import "react-table/react-table.css";
-import { UserService } from "../../jwt/_services";
+import { UserService } from "../../shared/_services";
 
 
 
