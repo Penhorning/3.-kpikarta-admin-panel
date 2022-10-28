@@ -19,7 +19,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useSnackbar } from 'notistack';
-import Spinner from '../spinner/Spinner';
+import Spinner from '../spinner-loader/spinner-loader';
 
 
 

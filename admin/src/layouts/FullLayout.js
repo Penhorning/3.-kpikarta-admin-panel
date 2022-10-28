@@ -5,7 +5,7 @@ import Header from "./layout-components/header/Header";
 import Sidebar from "./layout-components/sidebar/Sidebar";
 import Footer from "./layout-components/footer/Footer";
 import ThemeRoutes from "../routes/Router";
-import Spinner from "./../views/spinner/Spinner";
+import Spinner from "../views/spinner-loader/spinner-loader";
 
 export default (props) => {
   const [width, setWidth] = useState(window.innerWidth);

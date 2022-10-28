@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
-import { UserService } from "../../../jwt/_services";
+import { UserService } from "../../jwt/_services";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -19,7 +19,7 @@ import Stack from '@mui/material/Stack';
 import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
 import Button from '@mui/material/Button';
-import './subscribe-paln.scss';
+import './subscription-paln.scss';
 import Divider from '@mui/material/Divider';
 import moment from "moment";
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -28,9 +28,10 @@ import Snackbar from '@mui/material/Snackbar';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Card } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
-import Spinner from '../../spinner/Spinner';
-import { AuthenticationService } from "../../../jwt/_services"
+import Spinner from '../spinner-loader/spinner-loader';
+import { AuthenticationService } from "../../jwt/_services/authentication.service"
+
+
 
 function createData(name, calories, fat, carbs, protein) {
   return {
@@ -154,7 +155,7 @@ const initialValue = {
   from: "",
   to: "",
 };
-export default function EnhancedTable() {
+export default function SubscriptionTable() {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
@@ -256,7 +257,7 @@ export default function EnhancedTable() {
           </Typography>
           <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-              <Link to='/addnewplan'>
+              <Link to='/add-plan'>
                 <Button className="text-nowrap" variant="contained">ADD PLAN</Button>
               </Link>
             </Stack>
@@ -335,7 +336,7 @@ export default function EnhancedTable() {
                         }}
                         >
                           {<Tooltip title="Edit-plan" className='MuiIconButton-root'>
-                            <Link to={`/editplan/${plan.id}`} >
+                            <Link to={`/edit-plan/${plan.id}`} >
                               <EditIcon style={{ color: '#0c85d0' }} />
                             </Link>
                           </Tooltip>

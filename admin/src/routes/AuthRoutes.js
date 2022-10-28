@@ -1,6 +1,6 @@
 import { lazy } from "react";
-const Login = lazy(() => import("../views/authentication/Login"));
-const ForgotPassword = lazy(() => import("../views/authentication/ForgotPassword"));
+const Login = lazy(() => import("../views/authentication/login"));
+const ForgotPassword = lazy(() => import("../views/authentication/forgot-password"));
 
 var authRoutes = [
   {
