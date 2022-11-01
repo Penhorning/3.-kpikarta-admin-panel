@@ -7,14 +7,20 @@ import {
 } from 'reactstrap';
 import "react-table/react-table.css";
 import { UserService } from "../../shared/_services";
-
+import { useSnackbar } from 'notistack';
 
 
 const Dashboard = () => {
     const [count,setCount] = useState('.');
+    const { enqueueSnackbar } = useSnackbar();
     function getUserCount(){
-        UserService.getUserCount().then(res => {
-            setCount(res.count);
+        UserService.getUserCount().then(response => {
+            if (!response.error) {
+                setCount(response.count);
+              } else if (response.error.statusCode ===  400 ) {
+                let variant = 'error';
+                enqueueSnackbar("Something went worng", { variant });
+              }
         })
     }
     useEffect(()=>{

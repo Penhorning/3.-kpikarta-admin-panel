@@ -22,7 +22,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
 import Button from '@mui/material/Button';
-import './user.scss';
+import './transaction-management.scss';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -40,8 +40,6 @@ import { Link } from 'react-router-dom';
 import MessageIcon from '@mui/icons-material/Message';
 import { makeStyles } from '@mui/styles';
 import Spinner from '../spinner-loader/spinner-loader';
-import { useSnackbar } from 'notistack';
-
 
 const useStyles = makeStyles({
   customTextField: {
@@ -94,25 +92,25 @@ const headCells = [
     id: 'fullName',
     numeric: false,
     disablePadding: true,
-    label: 'Full Name',
+    label: 'User Name',
   },
   {
     id: 'email',
     numeric: false,
     disablePadding: false,
-    label: 'Email',
+    label: 'Plan Name',
   },
   {
     id: 'mobile',
     numeric: false,
     disablePadding: false,
-    label: 'Mobile',
+    label: 'Price',
   },
   {
     id: 'createdAt',
     numeric: false,
     disablePadding: false,
-    label: 'Created',
+    label: 'Payment Date',
   },
   {
     id: 'active',
@@ -120,12 +118,12 @@ const headCells = [
     disablePadding: false,
     label: 'Status',
   },
-  {
-    id: 'action',
-    numeric: false,
-    disablePadding: false,
-    label: 'Action',
-  },
+//   {
+//     id: 'action',
+//     numeric: false,
+//     disablePadding: false,
+//     label: 'Action',
+//   },
 ];
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } =
@@ -176,7 +174,7 @@ const initialValue = {
   from: "",
   to: "",
 };
-export default function UserTable() {
+export default function TransactionTable() {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
@@ -193,7 +191,6 @@ export default function UserTable() {
   const [isSearchShown, setIsSearchShown] = useState(false)
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
@@ -256,20 +253,15 @@ export default function UserTable() {
       start: dateRange.from,
       end: dateRange.to,
     }
-    UserService.getAll(data).then((response) => {
-      if (!response.error) {
-        setUsers(response.users[0].data);
-        if (response.users[0].metadata.length > 0) {
-          setTotal(response.users[0].metadata[0].total);
-        } else {
-          setTotal(0);
-        }
-        setLoading(false)
-      } else if (response.error.statusCode ===  400 ) {
-        let variant = 'error';
-        enqueueSnackbar("Something went worng", { variant });
+    UserService.getAll(data).then((apiResponse) => {
+      setUsers(apiResponse.users[0].data);
+      if (apiResponse.users[0].metadata.length > 0) {
+        setTotal(apiResponse.users[0].metadata[0].total);
+      } else {
+        setTotal(0);
       }
-    })
+      setLoading(false)
+    });
     if (param !== 'paginationChange') {
       setPage(0);
     }
@@ -374,17 +366,17 @@ export default function UserTable() {
             variant="h6"
             id="tableTitle"
             component="div">
-            Users
+            Transactions
           </Typography>
           <Typography
-            sx={{ flex: '1 1', zIndex: 1 }}
+            sx={{ flex: '1 1', zIndex: 1  }}
             component="div">
             <Box component="form"
               sx={{ '& > :not(style)': {} }}
               noValidate
               autoComplete="off" >
               <Paper component="div"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 275 }}>
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 275}}>
                 <DatePicker
                   value={selectedDayRange}
                   onChange={handleDateChange}
@@ -450,13 +442,13 @@ export default function UserTable() {
               </Paper>
             </Box>
           </Typography>
-          <Typography component="div">
+          {/* <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
               <Link to='/add-user'>
                 <Button className="text-nowrap" variant="contained">ADD USER</Button>
               </Link>
             </Stack>
-          </Typography>
+          </Typography> */}
         </Toolbar>
         <Divider sx={{ m: 1.0 }} orientation="horizontal" />
         <TableContainer>
@@ -551,7 +543,7 @@ export default function UserTable() {
                             }
                           </Box>
                         </TableCell>
-                        <TableCell align="left" style={{
+                        {/* <TableCell align="left" style={{
                           paddingTop: '15px',
                           paddingRight: '15px',
                           paddingBottom: '15px',
@@ -575,7 +567,7 @@ export default function UserTable() {
                           {
                             <Tooltip title="View">
                               <Link to={`/view-user/${user._id}`}>
-                                <VisibilityIcon style={{ color: "#243864", cursor: 'pointer' }} />
+                              <VisibilityIcon style={{ color:"#243864", cursor:'pointer' }} />
                               </Link>
                             </Tooltip>
                           }
@@ -592,7 +584,7 @@ export default function UserTable() {
                                 onClick={(e) => unblock(user._id)} />
                             </Tooltip>
                           }
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}

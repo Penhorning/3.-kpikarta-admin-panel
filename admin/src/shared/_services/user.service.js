@@ -1,30 +1,30 @@
 import { AuthHeader, HandleResponse, Constants } from "../_helpers";
 
-export const UserService = {
-  getAll,
-  getUserCount,
-  blockUser,
-  unBlockUser,
-  addUser,
-  getUserDetails,
-  updateUser,
-  getDepartment,
-  getEmployeeRange,
-  upadateCompanyDetails,
-  getCompanyDetails,
-  addNewPlan,
-  getSubscriptionPlans,
-  updateSubscriptionPlan,
-  updateSubscriptionPlanStatus,
-  getSubscriptionPlanById
-};
+// const getAll = async (data) => {
+//   try {
+//     const response = await axios.post(Constants.BASE_URL + `/api/users/get-all`,{
+//             page: data.page,
+//             limit: data.limit,
+//             search_query: data.search,
+//             start: data.start,
+//             end: data.end
+//           },
+//     {headers: AuthHeader()})
+//     return response.data;
+// } catch (err) {
+//     const error = handleError(err, data);
+//     console.log("⛔ Error ", err);
+//     if (error !== "Unauthorized") data.toast({ status: "error", description: error.error })
+//     return error
+// }
+// }
 
 async function getAll(data) {
   const requestOptions = {
     method: "POST", headers: AuthHeader(), body: JSON.stringify({
       page: data.page,
       limit: data.limit,
-      search_query: data.search,
+      searchQuery: data.search,
       start: data.start,
       end: data.end
     })
@@ -168,3 +168,36 @@ async function updateSubscriptionPlanStatus(data) {
   };
   return await fetch(Constants.BASE_URL + `/api/subscriptions/change-plan-status`, requestOptions).then(HandleResponse);
 }
+
+const handleError = (err, data) => {
+  if (err.response) {
+      // client received an error response (5xx, 4xx)
+      if (err.response.data === "Unauthorized") {
+          data.handleUnauthorized()
+      } 
+      return err.response.data
+  } else if (err.request) {
+      console.log("⛔ 2");
+      return { error: "Network error" }
+  }
+  return err
+}
+
+export const UserService = {
+  getAll,
+  getUserCount,
+  blockUser,
+  unBlockUser,
+  addUser,
+  getUserDetails,
+  updateUser,
+  getDepartment,
+  getEmployeeRange,
+  upadateCompanyDetails,
+  getCompanyDetails,
+  addNewPlan,
+  getSubscriptionPlans,
+  updateSubscriptionPlan,
+  updateSubscriptionPlanStatus,
+  getSubscriptionPlanById
+};

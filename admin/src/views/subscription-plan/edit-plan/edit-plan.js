@@ -68,7 +68,7 @@ export default function EditPlan() {
       setIsOpenBtn(true)
       UserService.updateSubscriptionPlan(id, data).then(
         (response) => {
-          if (response?.error?.statusCode == 404) {
+          if (response?.error?.statusCode ===  400) {
             let variant = "error";
             enqueueSnackbar('Something went worng', { variant });
             history.push('/subscription-plans');

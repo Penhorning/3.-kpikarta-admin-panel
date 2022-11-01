@@ -59,22 +59,26 @@ export default function EditProfile() {
   useEffect(() => {
     // get individula user data by passing user id
     UserService.getUserDetails(userId).then(response => {
-      const { fullName, email, profilePic} = response;
-      initialValues.fullName = fullName;
-      initialValues.email = email;
-      initialValues.profilePic = profilePic;
-
-      setFileList(
-        [
-          {
-            uid: response.id,
-            thumbUrl:  response.profilePic ? `${Constants.BASE_URL}/user/${response.profilePic}`:`${'https://i.ibb.co/wynJtDH/avatar.png'}`,
-            status: 'done',
-            url: ''
-          },
-        ]
-      )
-      setLoading(false)
+      if (!response.error) {
+        const { fullName, email, profilePic} = response;
+        initialValues.fullName = fullName;
+        initialValues.email = email;
+        initialValues.profilePic = profilePic;
+        setFileList(
+          [
+            {
+              uid: response.id,
+              thumbUrl:  response.profilePic ? `${Constants.BASE_URL}/user/${response.profilePic}`:`${'https://i.ibb.co/wynJtDH/avatar.png'}`,
+              status: 'done',
+              url: ''
+            },
+          ]
+        )
+        setLoading(false)
+      } else if (response.error.statusCode === 400 ) {
+        let variant = 'error';
+        enqueueSnackbar("Something went worng", { variant });
+      }
     });
 
   }, [userId])
