@@ -63,7 +63,7 @@ async function getUserCount() {
 
 async function getUserDetails(id) {
   const requestOptions = { method: "GET", headers: AuthHeader() };
-  return await fetch(Constants.BASE_URL + `/api/users/${id}`, requestOptions).then(HandleResponse);
+  return await fetch(Constants.BASE_URL + `/api/users/${id}?filter[include]=company`, requestOptions).then(HandleResponse);
 }
 
 async function addUser(data) {
