@@ -19,3 +19,5 @@ ReactDOM.render(
   </Suspense>,
   document.getElementById("root")
 );
+// API_URL = "https://dev-api.kpikarta.com"
+// API_URL = "https://qa-api.kpikarta.com"

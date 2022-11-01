@@ -45,7 +45,7 @@ export default function AddUser() {
           let variant = "success";
           enqueueSnackbar('New user added successfully.', { variant });
           history.replace('/users');
-        }else if (response.error.statusCode === 422) {
+        }else if (response.error.statusCode === 422 || 404 || 400 || 500) {
             let variant = 'error';
             enqueueSnackbar(`${response.error.message}`, { variant });
           }

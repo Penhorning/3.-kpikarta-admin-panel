@@ -17,6 +17,9 @@ const EditPlan = lazy(() => import("../views/subscription-plan/edit-plan/edit-pl
 const EditProfile = lazy(() => import("../views/admin/edit-profile/edit-profile"));
 const ChangePassword = lazy(() => import("../views/admin/change-password/change-password"));
 
+const TransactionManagement = lazy(() => import("../views/transactions-management/transaction-management"));
+
+
 
 var ThemeRoutes = [
   {
@@ -103,6 +106,14 @@ var ThemeRoutes = [
     component: EditProfile,
     sideRoute: false
   },
+  // {
+  //   title: "Transaction Management",
+  //   path: "/transaction-management",
+  //   name: "Transaction",
+  //   icon: "mdi mdi-account-switch",
+  //   component: TransactionManagement,
+  //   sideRoute: true
+  // },
   {
     path: "/",
     pathTo: "/dashboard",
