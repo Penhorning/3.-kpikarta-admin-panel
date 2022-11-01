@@ -6,23 +6,23 @@ import { AuthenticationService } from "../../shared/_services";
 
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import {Alert} from 'reactstrap';
-
+import { useSnackbar } from 'notistack';
 
 
 const ForgotPassword = (props) => {
-
+  const { enqueueSnackbar } = useSnackbar();
   return (<section id="common_sec">
   <link src={loginCss}/>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="logo"> <a href="#!"><img src={logoImg} width="280" height="65" alt=""/></a> </div>
+  <div className="container-fluid">
+    <div className="row">
+      <div className="col-md-6">
+        <div className="logo"> <a href="#!"><img src={logoImg} width="280" height="65" alt=""/></a> </div>
       </div>
-      <div class="col-md-6">
-        <div class="mng_col">
-          <div class="login_form">
-            <h2 class="text-white text-center pb-2">Forgot Password</h2>
-			  <p class="text-white text-center mb-5">Don't worry. Resetting your password is easy. Just tell us the email address that was used to create this account.</p>
+      <div className="col-md-6">
+        <div className="mng_col">
+          <div className="login_form">
+            <h2 className="text-white text-center pb-2">Forgot Password</h2>
+			  <p className="text-white text-center mb-5">Don't worry. Resetting your password is easy. Just tell us the email address that was used to create this account.</p>
         <Formik
           initialValues={{
             email: "",
@@ -36,19 +36,26 @@ const ForgotPassword = (props) => {
           ) => {
             setStatus();
             AuthenticationService.requestForgotPassword(email).then(
-              (res) => {
-               setSubmitting(false);
-                setStatus(res.message ? res.message : "An email with verification link sent to your registered email address, please follow the instructions in order to reset your password.")
-                window.alertTimeout(()=>{
-                  setStatus('');
-                })
+              (response) => {
+                if (!response.error) {
+                  setSubmitting(false);
+                  setStatus(response.message ? response.message : "An email with verification link sent to your registered email address, please follow the instructions in order to reset your password.")
+                  setTimeout(()=>{
+                    setStatus('');
+                  }, 9000)
+                } else if (response.error.statusCode ===  400 ) {
+                  let variant = 'error';
+                  enqueueSnackbar(response.error.message, { variant });
+                  setSubmitting(false);
+                }
+             
               },
               (error) => {
                 setSubmitting(false);
                 setStatus(error && error.message);
-                window.alertTimeout(()=>{
+                setTimeout(()=>{
                   setStatus('');
-                })
+                }, 9000)
               }
             );
           }}
@@ -83,10 +90,10 @@ const ForgotPassword = (props) => {
             </Form>
           )}
           ></Formik>
-            <div class="text-white text-center">
-              <p>Back To <a href="/authentication/login" class="text-white"><strong>Login</strong></a></p>
+            <div className="text-white text-center">
+              <p>Back To <a href="/authentication/login" className="text-white"><strong>Login</strong></a></p>
             </div>
-            <div class="bot_link">
+            <div className="bot_link">
               <p><a href="https://www.kpikarta.com/terms-of" target="_balnk">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://www.kpikarta.com/contact" target="_balnk">Contact Us</a></p>
             </div>
           </div>
