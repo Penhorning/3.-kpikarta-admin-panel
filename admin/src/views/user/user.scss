@@ -40,7 +40,7 @@
     line-height: inherit !important;
     font-family: inherit !important;
     text-transform: capitalize !important;
-    width: 230px !important;
+    width: 242px !important;
 }
 .css-1azl6jz-MuiTableCell-root{
     text-align: left !important;
@@ -54,3 +54,9 @@
     text-align: left !important;
 }
 
+.wrap_name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100px;
+}

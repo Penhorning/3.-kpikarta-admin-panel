@@ -22,6 +22,7 @@ const initialValues = {
 const ChangePassword = () => {
     const { enqueueSnackbar } = useSnackbar();
     const [isOpenBtn, setIsOpenBtn] = useState(false)
+    const [reset, setReset] = useState(null)
     const history = useHistory();
     const validationSchema = Yup.object().shape({
         oldPassword: Yup.string().required('Old password is required!'),
@@ -48,7 +49,6 @@ const ChangePassword = () => {
                         setIsOpenBtn(false)
                         return;
                     }
-              
                     let variant = "success";
                     enqueueSnackbar('Password changed successfully.', { variant });
                     setIsOpenBtn(false)
@@ -61,6 +61,8 @@ const ChangePassword = () => {
             return;
         }
     }
+
+  
     const onBackClick = () => {
         history.push('/users');
     }
@@ -79,7 +81,11 @@ const ChangePassword = () => {
                 </Toolbar>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 </Box>
-                <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema} onSubmit={onChangePassword} >
+                <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema}
+                   onSubmit={(values,{resetForm}) => {
+                    onChangePassword(values)
+                    resetForm()
+                   }} >
                     {({ errors, touched }) => (
                         <Form>
                             <Box sx={{
@@ -144,6 +150,7 @@ const ChangePassword = () => {
                                 variant="contained"
                                 type='submit' 
                                 disabled={isOpenBtn}
+                            
                             >
                                 Change password
                             </Button>

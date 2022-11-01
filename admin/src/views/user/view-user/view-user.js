@@ -21,6 +21,7 @@ import Spinner from '../../spinner-loader/spinner-loader';
 import Button from '@mui/material/Button';
 import { useParams, useHistory } from 'react-router-dom';
 import Constants from '../../../shared/_helpers/constants';
+import { height } from '@mui/system';
 
 const initialCompanyValues = {
     companyName: '',
@@ -44,6 +45,14 @@ export default function ViewUser() {
     
     useEffect(() => {
         UserService.getUserDetails(id).then(response => {
+            const { name, job_title, departmentId, employeesRangeId, logo } = response.company;
+            setCompanyPhoto(logo ? `${Constants.BASE_URL}/company/${logo}`:`${'https://i.ibb.co/wynJtDH/avatar.png'}`)
+            setCompany(response.company)
+            setCompanyID(response.id)
+            initialCompanyValues.companyName = name;
+            initialCompanyValues.companyJobTitle = job_title;
+            initialCompanyValues.companyDepartment = departmentId;
+            initialCompanyValues.companyEmployeeRange = employeesRangeId;
             setProfilephoto(response.profilePic ? `${Constants.BASE_URL}/user/${response.profilePic}`:`${'https://i.ibb.co/wynJtDH/avatar.png'}`)
             setUsers(response)
         });
@@ -52,18 +61,9 @@ export default function ViewUser() {
         })
         UserService.getEmployeeRange().then(response => {
             setEmployeeRange(response);
-        })
-        UserService.getCompanyDetails(id).then(response => {
-            setCompanyPhoto(response.logo ? `${Constants.BASE_URL}/company/${response.logo}`:`${'https://i.ibb.co/wynJtDH/avatar.png'}`)
-            setCompany(response)
-            const { name, job_title, departmentId, employeesRangeId } = response;
-            setCompanyID(response.id)
-            initialCompanyValues.companyName = name;
-            initialCompanyValues.companyJobTitle = job_title;
-            initialCompanyValues.companyDepartment = departmentId;
-            initialCompanyValues.companyEmployeeRange = employeesRangeId;
             setLoading(false)
-        });
+        })
+
     }, [id])
 
     // filter data by id
@@ -102,7 +102,14 @@ export default function ViewUser() {
                                         style={{ objectFit: 'contain' }}
                                     />
                                     <CardContent>
-                                        <Typography gutterBottom variant="h5" height={10} component="div" align="center">
+                                        <Typography gutterBottom variant="h5" height={10} component="div" align="center"
+                                          style={{ 
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
+                                          overflow: 'hidden',
+                                          height: 'auto'
+                                       }}
+                                        >
                                             {user.fullName}
                                         </Typography>
                                     </CardContent>
@@ -111,7 +118,7 @@ export default function ViewUser() {
                             {loading ? (<Spinner />) :
                                 <Grid container xs={12} md={7} lg={8} spacing={4}>
                                     <Grid xs={12} lg={12}>
-                                        <Card style={{ height: "293px" }} >
+                                        <Card style={{ height: "315px" }} >
                                             <CardContent style={{ paddingTop: '0px' }}>
                                                 <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                                                     <TableBody>
@@ -174,7 +181,14 @@ export default function ViewUser() {
                                         style={{ objectFit: 'contain' }}
                                     />
                                     <CardContent>
-                                        <Typography gutterBottom variant="h5" height={10} component="div" align="center">
+                                        <Typography gutterBottom variant="h5" height={10} component="div" align="center"
+                                            style={{ 
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                height: 'auto'
+                                             }}
+                                        >
                                             {company?.name}
                                         </Typography>
                                     </CardContent>
@@ -183,7 +197,7 @@ export default function ViewUser() {
                             {loading ? (<Spinner />) :
                                 <Grid container xs={12} md={7} lg={8} spacing={4}>
                                     <Grid xs={12} lg={12}>
-                                        <Card style={{ height: "234px" }} >
+                                        <Card style={{ height: "255px" }} >
                                             <CardContent style={{ paddingTop: '0px' }}>
                                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                                     <TableBody>

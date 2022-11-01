@@ -41,6 +41,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import { makeStyles } from '@mui/styles';
 import Spinner from '../spinner-loader/spinner-loader';
 import { useSnackbar } from 'notistack';
+import { maxWidth } from '@mui/system';
 
 
 const useStyles = makeStyles({
@@ -384,7 +385,7 @@ export default function UserTable() {
               noValidate
               autoComplete="off" >
               <Paper component="div"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 275 }}>
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 282}}>
                 <DatePicker
                   value={selectedDayRange}
                   onChange={handleDateChange}
@@ -492,7 +493,13 @@ export default function UserTable() {
                           id={labelId}
                           scope="row"
                           padding="none"
-                          style={{ paddingLeft: '25px' }}
+                          className='wrap-name'
+                          style={{ paddingLeft: '25px',
+                                    maxWidth: '100px',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden'
+                                 }}
                         >
                           {user.fullName}
                         </TableCell>
