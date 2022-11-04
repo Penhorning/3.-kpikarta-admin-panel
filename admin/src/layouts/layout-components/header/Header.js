@@ -4,7 +4,6 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Button,
   Navbar,
   NavbarBrand,
   Collapse,
@@ -13,6 +12,7 @@ import {
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
+import { useSnackbar } from 'notistack';
 import { Link } from 'react-router-dom';
 import { AuthenticationService } from "../../../shared/_services";
 import { UserService } from "../../../shared/_services";
@@ -33,6 +33,7 @@ export default () => {
   const [fullName, setFullName] = useState();
   const [email, setEmail] = useState();
   const [fileList, setFileList] = useState([{thumbUrl: ''}]);
+  const { enqueueSnackbar } = useSnackbar();
 
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -69,7 +70,7 @@ export default () => {
   };
   useEffect(() => {
     // get individula user data by passing user id
-    UserService.getUserDetails(userId).then(response => {
+    UserService.getUserDetails(userId, enqueueSnackbar).then(response => {
       setFullName(response.fullName)
       setEmail(response.email)
       setFileList({thumbUrl: response.profilePic ? `${Constants.BASE_URL}/user/${response.profilePic}` : `${'https://i.ibb.co/wynJtDH/avatar.png'}`})

@@ -18,6 +18,10 @@ const EditProfile = lazy(() => import("../views/admin/edit-profile/edit-profile"
 const ChangePassword = lazy(() => import("../views/admin/change-password/change-password"));
 
 const TransactionManagement = lazy(() => import("../views/transactions-management/transaction-management"));
+const License = lazy(() => import("../views/license/license"));
+const EditLicense = lazy(() => import("../views/license/edit-lisence/edit-license"));
+
+
 
 
 
@@ -114,6 +118,20 @@ var ThemeRoutes = [
   //   component: TransactionManagement,
   //   sideRoute: true
   // },
+  {
+    path: "/license",
+    name: "License",
+    icon: "mdi mdi-gauge",
+    component: License,
+    sideRoute: true
+  },
+  {
+    path: "/edit-license/:id",
+    name: "Edit License",
+    icon: "mdi mdi-gauge",
+    component: EditLicense,
+    sideRoute: false
+  },
   {
     path: "/",
     pathTo: "/dashboard",

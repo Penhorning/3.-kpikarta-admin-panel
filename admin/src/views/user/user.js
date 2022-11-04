@@ -41,7 +41,6 @@ import MessageIcon from '@mui/icons-material/Message';
 import { makeStyles } from '@mui/styles';
 import Spinner from '../spinner-loader/spinner-loader';
 import { useSnackbar } from 'notistack';
-import { maxWidth } from '@mui/system';
 
 
 const useStyles = makeStyles({
@@ -225,7 +224,7 @@ export default function UserTable() {
   const block = (userId, page, rowsPerPage) => {
     const result = window.confirm("Are you sure do you want to Deactivate this user?");
     if (result) {
-      UserService.blockUser(userId, page, rowsPerPage).then((res) => {
+      UserService.blockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
         if (res.status === true) {
           fetchData('paginationChange');
           unblockToast(true)
@@ -237,7 +236,7 @@ export default function UserTable() {
   const unblock = (userId, page, rowsPerPage) => {
     const result = window.confirm("Are you sure do you want to Activate this user?");
     if (result) {
-      UserService.unBlockUser(userId, page, rowsPerPage).then((res) => {
+      UserService.unBlockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
         if (res.status === true) {
           fetchData('paginationChange');
           blockToast(true)
@@ -257,7 +256,7 @@ export default function UserTable() {
       start: dateRange.from,
       end: dateRange.to,
     }
-    UserService.getAll(data).then((response) => {
+    UserService.getAll(data, enqueueSnackbar).then((response) => {
       if (!response.error) {
         setUsers(response.users[0].data);
         if (response.users[0].metadata.length > 0) {

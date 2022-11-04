@@ -21,7 +21,7 @@ import Spinner from '../../spinner-loader/spinner-loader';
 import Button from '@mui/material/Button';
 import { useParams, useHistory } from 'react-router-dom';
 import Constants from '../../../shared/_helpers/constants';
-import { height } from '@mui/system';
+import { useSnackbar } from 'notistack';
 
 const initialCompanyValues = {
     companyName: '',
@@ -42,9 +42,10 @@ export default function ViewUser() {
     const history = useHistory();
     const [profilephoto, setProfilephoto] = useState()
     const [companyPhoto, setCompanyPhoto] = useState()
+    const { enqueueSnackbar } = useSnackbar();
     
     useEffect(() => {
-        UserService.getUserDetails(id).then(response => {
+        UserService.getUserDetails(id, enqueueSnackbar).then(response => {
             const { name, job_title, departmentId, employeesRangeId, logo } = response.company;
             setCompanyPhoto(logo ? `${Constants.BASE_URL}/company/${logo}`:`${'https://i.ibb.co/wynJtDH/avatar.png'}`)
             setCompany(response.company)
@@ -56,10 +57,10 @@ export default function ViewUser() {
             setProfilephoto(response.profilePic ? `${Constants.BASE_URL}/user/${response.profilePic}`:`${'https://i.ibb.co/wynJtDH/avatar.png'}`)
             setUsers(response)
         });
-        UserService.getDepartment().then(response => {
+        UserService.getDepartment(enqueueSnackbar).then(response => {
             setDepartment(response);
         })
-        UserService.getEmployeeRange().then(response => {
+        UserService.getEmployeeRange(enqueueSnackbar).then(response => {
             setEmployeeRange(response);
             setLoading(false)
         })
