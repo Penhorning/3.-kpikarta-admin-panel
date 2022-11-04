@@ -28,10 +28,12 @@ export default function Newuser() {
   const { enqueueSnackbar } = useSnackbar();
   const [userId, setUserIds] = useState(AuthenticationService.currentUser.source._value.userId)
   const validationSchema = Yup.object().shape({
-    plan_name: Yup.string().trim().required('Plan Name is required!'),
+    plan_name: Yup.string().trim().min(1, 'Plan name must be between 1 and 255 characters.')
+    .max(255, 'Plan name must be between 1 and 255 characters.').required('Plan Name is required!'),
     amount: Yup.number().moreThan(0, 'Price should not be zero or less than zero')
     .lessThan(999999, "Price should not be more than 6 digits").required('Price is required!'),
-    description: Yup.string().trim().required('Description is required!'),
+    description: Yup.string().trim().min(1, 'Description must be between 1 and 255 characters.')
+    .max(500, 'Description must be between 1 and 500 characters.').required('Description is required!'),
     duration: Yup.number().moreThan(0, 'Duration should not be zero or less than zero')
     .lessThan(365, "Duration should not be more than 365").required('Duration is required!'),
   });
@@ -48,17 +50,13 @@ export default function Newuser() {
         userId: userId
       };
       setIsOpenBtn(true)
-      UserService.addNewPlan(data).then(response => {
+      UserService.addNewPlan(data, enqueueSnackbar).then(response => {
         if(!response.error){
           let variant = "success";
           enqueueSnackbar('New subscription plan added successfully', { variant });
           history.replace('/subscription-plans');
           setIsOpenBtn(false)
-        }else if (response.error.statusCode === 422) {
-            let variant = 'error';
-            enqueueSnackbar("Something went worng", { variant });
-            setIsOpenBtn(false)
-          }
+        }
       })
     }
   }

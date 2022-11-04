@@ -8,7 +8,6 @@ import { Alert } from 'reactstrap';
 import { useSnackbar } from 'notistack';
 
 
-
 const Login = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   return (<section id="common_sec">

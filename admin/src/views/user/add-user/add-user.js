@@ -25,10 +25,12 @@ export default function AddUser() {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const validationSchema = Yup.object().shape({
-    fullName: Yup.string().trim().required('Full Name is required!'),
+    fullName: Yup.string().trim().min(1, 'Full name must be between 1 and 255 characters.')
+    .max(255, 'Full name must be between 1 and 255 characters.').required('Full Name is required!'),
     email: Yup.string().email().required('Valid email is required!'),
     mobile: Yup.object().required('Mobile number is required!'),
-    companyName: Yup.string().trim().required('Company Name is required!'),
+    companyName: Yup.string().trim().min(1, 'Company name must be between 1 and 255 characters.')
+    .max(255, 'Organization name must be between 1 and 255 characters.').required('Organization name is required!'),
   });
 
   const onSubmit = (values) => {
@@ -40,15 +42,12 @@ export default function AddUser() {
         mobile: values.mobile,
         companyName: values.companyName,
       };
-      UserService.addUser(data).then(response => {
+      UserService.addUser(data, enqueueSnackbar).then(response => {
         if(!response.error){
           let variant = "success";
           enqueueSnackbar('New user added successfully.', { variant });
           history.replace('/users');
-        }else if (response.error.statusCode === 422 || 404 || 400 || 500) {
-            let variant = 'error';
-            enqueueSnackbar(`${response.error.message}`, { variant });
-          }
+        }
       })
     }
   }
@@ -89,7 +88,7 @@ export default function AddUser() {
                       {...field}
                       style={{ margin: '20px', marginLeft: '25px' }}
                       error={errors.fullName && touched.fullName ? true : false}
-                      helperText={(errors.fullName && touched.fullName ? 'Full Name is required!' : '')}
+                      helperText={(errors.fullName && touched.fullName ? `${errors.fullName}` : '')}
                     />
                   )}
                 </Field>
@@ -145,7 +144,7 @@ export default function AddUser() {
                       {...field}
                       style={{ margin: '20px', marginRight: '25px' }}
                       error={errors.companyName && touched.companyName ? true : false}
-                      helperText={(errors.companyName && touched.companyName ? 'Organization name is required!' : '')}
+                      helperText={(errors.companyName && touched.companyName ? `${errors.companyName}` : '')}
                     />
                   )}
                 </Field>

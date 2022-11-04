@@ -74,7 +74,8 @@ export default function EditUser() {
   ]);
 
   const validationSchema = Yup.object().shape({
-    fullName: Yup.string().trim().required('Full Name is required!'),
+    fullName: Yup.string().trim().min(1, 'Full name must be between 1 and 255 characters.')
+    .max(255, 'Full name must be between 1 and 255 characters.').required('Full Name is required!'),
     email: Yup.string().email().required('Valid email is required!'),
     mobile: Yup.object().required('Mobile number is required!')
   });
@@ -85,13 +86,22 @@ export default function EditUser() {
 
   useEffect(() => {
     // get individula user data by passing user id
-    UserService.getUserDetails(id).then(response => {
+    UserService.getUserDetails(id, enqueueSnackbar).then(response => {
+      if(!response.error){
       const { fullName, email, mobile, telephone } = response;
+      const { name, job_title, departmentId, employeesRangeId } = response.company;
       initialValues.fullName = fullName;
       initialValues.email = email;
       initialValues.mobile = response.mobile ? mobile : "";
       initialValues.telephone = response.telephone ? telephone : " ";
 
+      // Company details initial values
+      initialCompanyValues.companyName = name;
+      initialCompanyValues.companyJobTitle = job_title;
+      initialCompanyValues.companyDepartment = departmentId;
+      initialCompanyValues.companyEmployeeRange = employeesRangeId;
+      setOldCompanyLogo(response.logo);
+      setCompanyID(response.companyId)
       // set user profile picture
       setFileList(
         [
@@ -103,39 +113,28 @@ export default function EditUser() {
           },
         ]
       )
-      setLoading(false)
-    });
-
-    UserService.getDepartment().then(response => {
-      setDepartment(response);
-    })
-
-    UserService.getEmployeeRange().then(response => {
-      setEmployeeRange(response);
-    })
-
-    // get company data by passing user company ID
-    UserService.getCompanyDetails(id).then(response => {
-      const { name, job_title, departmentId, employeesRangeId } = response;
-      setCompanyID(response.id)
-      initialCompanyValues.companyName = name;
-      initialCompanyValues.companyJobTitle = job_title;
-      initialCompanyValues.companyDepartment = departmentId;
-      initialCompanyValues.companyEmployeeRange = employeesRangeId;
-      setOldCompanyLogo(response.logo);
-      // set new comapny logo on UI
       setCompFileList(
         [
           {
-            uid: response.id,
-            thumbUrl:  response.logo ? `${Constants.BASE_URL}/company/${response.logo}`:`${'https://i.ibb.co/9G3XdFq/comapny-logo.png'}` ,
+            uid: response.company.id,
+            thumbUrl:  response.company.logo ? `${Constants.BASE_URL}/company/${response.company.logo}`:`${'https://i.ibb.co/9G3XdFq/comapny-logo.png'}` ,
             status: 'done',
             url: ''
           },
         ]
       )
       setLoading(false)
+    }
     });
+
+    UserService.getDepartment(enqueueSnackbar).then(response => {
+      setDepartment(response);
+    })
+
+    UserService.getEmployeeRange(enqueueSnackbar).then(response => {
+      setEmployeeRange(response);
+    })
+
   }, [id])
 
   // user data update button
@@ -149,8 +148,8 @@ export default function EditUser() {
         telephone: values.telephone,
         profilePic: profilePic == '' ? initialValues.profilePic : profilePic,
       };
-      UserService.updateUser(id, data).then((response) => {
-        if (response = true) {
+      UserService.updateUser(id, data, enqueueSnackbar).then((response) => {
+        if (!response.error) {
           let variant = "success";
           enqueueSnackbar('User details upadated successfully.', { variant });
           history.push('/users');
@@ -172,8 +171,8 @@ export default function EditUser() {
         logo: newCompanyLogo == '' ? oldCompanyLogo : newCompanyLogo,
         oldCompanyLogo: newCompanyLogo == '' ? newCompanyLogo : oldCompanyLogo,
       };
-      UserService.upadateCompanyDetails(companyIds, data).then(response => {
-        if (response = true) {
+      UserService.upadateCompanyDetails(companyIds, data, enqueueSnackbar).then(response => {
+        if (!response.error) {
           let variant = "success";
           enqueueSnackbar('Company details upadated successfully.', { variant });
           history.push('/users');
@@ -348,6 +347,7 @@ export default function EditUser() {
                         {({ field }) => (
                           <TextField
                             label="Telephone"
+                            type='number'
                             fullWidth
                             display='flex'
                             {...field}

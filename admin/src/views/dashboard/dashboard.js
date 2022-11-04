@@ -14,7 +14,7 @@ const Dashboard = () => {
     const [count,setCount] = useState('.');
     const { enqueueSnackbar } = useSnackbar();
     function getUserCount(){
-        UserService.getUserCount().then(response => {
+        UserService.getUserCount(enqueueSnackbar).then(response => {
             if (!response.error) {
                 setCount(response.count);
               } else if (response.error.statusCode ===  400 ) {
