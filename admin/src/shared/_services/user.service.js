@@ -319,6 +319,7 @@ export function HandleErrorResponse (error) {
       error.error.message === "could not find accessToken")
   ) {
     localStorage.removeItem("currentUser");
+    window.location.reload(true);
     return 'Your session expired';
   } else if (error.error.statusCode === 401 && error.error.message === "login failed") {
     return 'Please enter correct email address or password.';

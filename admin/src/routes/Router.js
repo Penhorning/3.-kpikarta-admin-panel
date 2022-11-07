@@ -121,7 +121,7 @@ var ThemeRoutes = [
   {
     path: "/license",
     name: "License",
-    icon: "mdi mdi-gauge",
+    icon: "mdi mdi-credit-card",
     component: License,
     sideRoute: true
   },
