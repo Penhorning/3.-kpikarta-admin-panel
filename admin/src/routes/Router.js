@@ -118,13 +118,13 @@ var ThemeRoutes = [
   //   component: TransactionManagement,
   //   sideRoute: true
   // },
-  {
-    path: "/license",
-    name: "License",
-    icon: "mdi mdi-credit-card",
-    component: License,
-    sideRoute: true
-  },
+  // {
+  //   path: "/license",
+  //   name: "License",
+  //   icon: "mdi mdi-credit-card",
+  //   component: License,
+  //   sideRoute: true
+  // },
   {
     path: "/edit-license/:id",
     name: "Edit License",
