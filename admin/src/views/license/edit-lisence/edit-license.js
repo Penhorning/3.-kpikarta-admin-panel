@@ -5,7 +5,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import './edit-plan.scss';
+import './edit-license.scss';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Formik, Form, Field } from 'formik';
@@ -20,38 +20,27 @@ import Spinner from '../../spinner-loader/spinner-loader';
 
 const initialValues = {
   name: '',
-  amount: '',
-  interval_count: '',
-  description: '',
 }
 
-export default function EditPlan() {
+export default function EditLisence() {
   const [value, setValue] = useState('1');
-  const [loading, setLoading] = useState(true);
-  const [planId, setPlanId] = useState();
-  const [userId, setUserID] = useState();
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const history = useHistory();
   const [isOpenBtn, setIsOpenBtn] = useState(false)
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().min(1, 'Plan name must be between 1 and 255 characters.')
-    .max(255, 'Plan name must be between 1 and 255 characters.').required('Plan name is required!'),
-    description: Yup.string().required('Description is required!')
+    name: Yup.string().trim().min(1, 'License name must be between 1 and 255 characters.')
+    .max(255, 'License name must be between 1 and 255 characters.').required('License name is required!')
   });
 
   useEffect(() => {
     // Get individula paln by passing user id
-    UserService.getSubscriptionPlanById(id, enqueueSnackbar).then( response => {
+    UserService.getLicenseById(id, enqueueSnackbar).then( response => {
       if(!response.error){
-        const { amount, description, name, plan_id, user_id, interval_count } = response;
+        const { name } = response;
         initialValues.name = name;
-        initialValues.amount = amount;
-        initialValues.interval_count = interval_count;
-        initialValues.description = description;
-        setPlanId(plan_id);
-        setUserID(user_id)
         setLoading(false)
       }
     });
@@ -59,29 +48,22 @@ export default function EditPlan() {
 
   // Plan data update button
   const onUpdateSubmit = (values) => {
-    const result = window.confirm("Are you sure, you want to update this plan?");
+    const result = window.confirm("Are you sure, you want to update this license?");
     if (result) {
       let data = {
-        plan_name: values.name,
-        description: values.description,
-        userId: userId,
-        planId: planId
+        name: values.name
       };
       setLoading(true)
       setIsOpenBtn(true)
-      UserService.updateSubscriptionPlan(id, data, enqueueSnackbar).then(
+      UserService.updateLicensePlan(id, data, enqueueSnackbar).then(
         (response) => {
           if (!response.error) {
             let variant = "success";
-            enqueueSnackbar('Plan has upadated successfully', { variant });
-            history.push('/subscription-plans');
-            setPlanId();
-            setUserID();
+            enqueueSnackbar('License has upadated successfully', { variant });
+            history.push('/license');
             setIsOpenBtn(false)
             setLoading(false)
           } 
-            setPlanId();
-            setUserID();
             setIsOpenBtn(false)
             setLoading(false)
         }
@@ -90,7 +72,7 @@ export default function EditPlan() {
   }
 
   const onBackClick = () => {
-    history.push('/subscription-plans');
+    history.push('/license');
   }
   return (
     <Box sx={{ width: '100%' }}>
@@ -101,7 +83,7 @@ export default function EditPlan() {
             variant="h6"
             id="tableTitle"
             component="div">
-            Update Subscribtion Plan
+            Update License
           </Typography>
           <Button variant="outlined" onClick={onBackClick}>Back</Button>
         </Toolbar>
@@ -111,7 +93,7 @@ export default function EditPlan() {
           {loading ? (<Spinner />) :
             <TabPanel value="1">
               <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onUpdateSubmit} >
-                {({ errors, values, touched }) => (
+                {({ errors, touched }) => (
                   <Form>
                     <Box sx={{
                       display: 'flex',
@@ -122,65 +104,17 @@ export default function EditPlan() {
                       <Field name="name">
                         {({ field }) => (
                           <TextField
-                            label="Plan Name"
+                            label="License Name"
                             fullWidth
                             display='flex'
                             {...field ?? ''}
-                            style={{ margin: '20px', marginLeft: '25px' }}
+                            style={{ margin: '20px', marginLeft: '25px', width:450 }}
                             error={errors.name && touched.name ? true : false}
                             helperText={(errors.name && touched.name ? `${errors.name}` : '')}
                           />
                         )}
                       </Field>
-                      <Field name="amount">
-                        {({ field }) => (
-                          <TextField
-                            label="Amount"
-                            fullWidth
-                            disabled={true}
-                            display='flex'
-                            {...field}
-                            style={{ margin: '20px', marginRight: '25px' }}
-                          />
-                        )}
-                      </Field>
-                      <Field name="interval_count">
-                        {({ field }) => (
-                          <TextField
-                            label="Duration"
-                            fullWidth
-                            disabled={true}
-                            display='flex'
-                            {...field}
-                            style={{ margin: '20px', marginRight: '25px' }}
-                          />
-                        )}
-                      </Field>
-                    </Box>
-                    <Box sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      '& > :not(style)': {}
-                    }}
-                      style={{ alignSelf: 'center' }}>
-                    
-                      <Field name="description">
-                        {({ field }) => (
-                          <TextField
-                            label="Description"
-                            fullWidth
-                            multiline
-                            rows={4}
-                            display='flex'
-                            {...field}
-                            style={{ margin: '20px', marginRight: '25px' }}
-                            error={errors.description && touched.description ? true : false}
-                            helperText={(errors.description && touched.description ? `${errors.description}` : '')}
-                          />
-                        )}
-                      </Field>
-                    </Box>
-                    <Button
+                      <Button
                       style={{
                         width: 100,
                         marginLeft: '25px',
@@ -194,6 +128,8 @@ export default function EditPlan() {
                     >
                       Update
                     </Button>
+                    </Box>
+                   
                   </Form>
                 )}
               </Formik>

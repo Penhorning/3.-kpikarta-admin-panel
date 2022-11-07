@@ -17,16 +17,10 @@ import Tooltip from '@mui/material/Tooltip';
 import { visuallyHidden } from '@mui/utils';
 import Stack from '@mui/material/Stack';
 import EditIcon from '@mui/icons-material/Edit';
-import BlockIcon from '@mui/icons-material/Block';
-import Button from '@mui/material/Button';
-import './subscription-paln.scss';
+import './license.scss';
 import Divider from '@mui/material/Divider';
 import moment from "moment";
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import { Card } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Spinner from '../spinner-loader/spinner-loader';
 import { AuthenticationService } from "../../shared/_services/authentication.service"
@@ -75,31 +69,13 @@ const headCells = [
     id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'Plan Name',
-  },
-  {
-    id: 'interval_count',
-    numeric: false,
-    disablePadding: false,
-    label: 'Duration',
-  },
-  {
-    id: 'amount',
-    numeric: false,
-    disablePadding: false,
-    label: 'Price ($)',
+    label: 'License Name',
   },
   {
     id: 'createdAt',
     numeric: false,
     disablePadding: false,
     label: 'Created',
-  },
-  {
-    id: 'status',
-    numeric: false,
-    disablePadding: false,
-    label: 'Status',
   },
   {
     id: 'active',
@@ -151,17 +127,11 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const initialValue = {
-  from: "",
-  to: "",
-};
-export default function SubscriptionTable() {
+export default function License() {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
-  const [plans, setSubscriptionPlan] = useState([]);
-  const [unBlocktost, setunBlocktost] = useState(false);
-  const [blocktost, setBlocktost] = useState(false);
+  const [license, setLicense] = useState([]);
   const [loading, setLoading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
   const [adminUserId, setAdminUserIds] = useState(AuthenticationService.currentUser.source._value.userId)
@@ -170,60 +140,10 @@ export default function SubscriptionTable() {
     fetchData();
   }, []);
 
-  // Block Un-block tostaer massage handel
-  const unblockToast = () => {
-    setunBlocktost(true);
-  };
-  const blockToast = () => {
-    setBlocktost(true);
-  };
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setBlocktost(false);
-    setunBlocktost(false);
-  };
-
-  // Block the plan
-  const block = (plan) => {
-    const result = window.confirm("Are you sure do you want to Deactivate this Plan?");
-    if (result) {
-        let data = {
-            planId: plan.plan_id,
-            status: !plan.status
-        }
-      UserService.updateSubscriptionPlanStatus(data, enqueueSnackbar).then((res) => {
-        if (!res.error) {
-          fetchData();
-          unblockToast(true)
-        }
-      })
-    }
-  }
-
-  // Un-block the plan
-  const unblock = (plan) => {
-    const result = window.confirm("Are you sure do you want to Activate this Plan?");
-    if (result) {
-        let data = {
-            planId: plan.plan_id,
-            status: !plan.status
-        }
-      UserService.updateSubscriptionPlanStatus(data, enqueueSnackbar).then((res) => {
-        if (!res.error) {
-
-          fetchData();
-          blockToast(true)
-        }
-      })
-    }
-  }
-
-  // Get all data 
+  // Get all license data 
   const fetchData = async () => {
-   await UserService.getSubscriptionPlans(adminUserId, enqueueSnackbar).then((apiResponse) => {
-        setSubscriptionPlan(apiResponse);
+   await UserService.getLicense(adminUserId, enqueueSnackbar).then((response) => {
+    setLicense(response);
         setLoading(false)
       });
   }
@@ -237,7 +157,7 @@ export default function SubscriptionTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = plans.map((n) => n.name);
+      const newSelecteds = license.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -255,13 +175,10 @@ export default function SubscriptionTable() {
             variant="h6"
             id="tableTitle"
             component="div">
-            Subscription Plans
+            License
           </Typography>
           <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-              <Link to='/add-plan'>
-                <Button className="text-nowrap" variant="contained">ADD PLAN</Button>
-              </Link>
             </Stack>
           </Typography>
         </Toolbar>
@@ -278,20 +195,20 @@ export default function SubscriptionTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={plans.length}
-                key={plans.id}
+                rowCount={license.length}
+                key={license.id}
               />
               <TableBody>
-                {plans && stableSort(plans, getComparator(order, orderBy))
-                  .map((plan, index) => {
-                    const isItemSelected = isSelected(plan.id);
+                {license && stableSort(license, getComparator(order, orderBy))
+                  .map((license, index) => {
+                    const isItemSelected = isSelected(license.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
                         hover
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={plan.id}
+                        key={license.id}
                         selected={isItemSelected}
                       >
                         <TableCell
@@ -300,40 +217,16 @@ export default function SubscriptionTable() {
                           scope="row"
                           padding="none"
                           style={{ paddingLeft: '25px',
-                                    maxWidth: '100px',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden'
-                                 }}
+                          maxWidth: '100px',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden'
+                       }}
                         >
-                          {plan.name}
+                          {license.name}
                         </TableCell>
                         <TableCell>
-                        {plan.interval_count}
-                        </TableCell>
-                        <TableCell>
-                       {plan.amount}
-                        </TableCell>
-                        <TableCell>
-                          {moment(plan.createdAt).format("MM-DD-YYYY")}
-                        </TableCell>
-                        <TableCell>
-                          <Box
-                            sx={{
-                              flexWrap: 'wrap',
-                              '& > :not(style)': {
-                                width: 75,
-                                height: 20,
-                              },
-                            }}
-                          >
-                            {
-                              plan.status === false
-                                ? <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card>
-                                : <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
-
-                            }
-                          </Box>
+                          {moment(license.createdAt).format("MM-DD-YYYY")}
                         </TableCell>
                         <TableCell align="left" style={{
                           paddingTop: '15px',
@@ -342,24 +235,11 @@ export default function SubscriptionTable() {
                           paddingLeft: '15px'
                         }}
                         >
-                          {<Tooltip title="Edit-plan" className='MuiIconButton-root'>
-                            <Link to={`/edit-plan/${plan.id}`} >
+                          {<Tooltip title="Edit-license" className='MuiIconButton-root'>
+                            <Link to={`/edit-license/${license.id}`} >
                               <EditIcon style={{ color: '#0c85d0' }} />
                             </Link>
                           </Tooltip>
-                          }
-                          {plan.status === true
-                            ? <Tooltip title="Deactivate" className='MuiIconButton-root'>
-                              <BlockIcon
-                                style={{ color: 'red' }}
-                                onClick={(e) => block(plan)} />
-                            </Tooltip>
-                            :
-                            <Tooltip title="Activate" className='MuiIconButton-root'>
-                              <LockOpenIcon
-                                style={{ color: 'green' }}
-                                onClick={(e) => unblock(plan)} />
-                            </Tooltip>
                           }
                         </TableCell>
                       </TableRow>
@@ -370,26 +250,6 @@ export default function SubscriptionTable() {
           }
         </TableContainer>
       </Paper>
-      <Snackbar open={unBlocktost} autoHideDuration={3000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          Plan has deactivated successfully
-        </Alert>
-      </Snackbar>
-      <Snackbar open={blocktost} autoHideDuration={3000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          Plan has activated successfully
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

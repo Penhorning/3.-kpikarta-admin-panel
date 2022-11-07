@@ -54,11 +54,9 @@ export default function EditProfile() {
     email: Yup.string().trim().email().required('Email is required!')
   });
 
-
-
   useEffect(() => {
     // get individula user data by passing user id
-    UserService.getUserDetails(userId).then(response => {
+    UserService.getUserDetails(userId, enqueueSnackbar).then(response => {
       if (!response.error) {
         const { fullName, email, profilePic} = response;
         initialValues.fullName = fullName;
@@ -95,8 +93,8 @@ export default function EditProfile() {
         profilePic: profilePic == '' ? initialValues.profilePic : profilePic,
       };
       setIsOpenBtn(true)
-      UserService.updateUser(userId, data).then((response) => {
-        if (response) {
+      UserService.updateUser(userId, data, enqueueSnackbar).then((response) => {
+        if (!response.error) {
             let variant = "success";
             enqueueSnackbar('Admin details upadated successfully.', { variant });
             setIsOpenBtn(false)

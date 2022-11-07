@@ -1,186 +1,337 @@
-import { AuthHeader, HandleResponse, Constants } from "../_helpers";
+import { AuthHeader, Constants } from "../_helpers";
+import { AuthenticationService } from "../_services";
 
-// const getAll = async (data) => {
-//   try {
-//     const response = await axios.post(Constants.BASE_URL + `/api/users/get-all`,{
-//             page: data.page,
-//             limit: data.limit,
-//             search_query: data.search,
-//             start: data.start,
-//             end: data.end
-//           },
-//     {headers: AuthHeader()})
-//     return response.data;
-// } catch (err) {
-//     const error = handleError(err, data);
-//     console.log("⛔ Error ", err);
-//     if (error !== "Unauthorized") data.toast({ status: "error", description: error.error })
-//     return error
-// }
-// }
+import axios from 'axios';
 
-async function getAll(data) {
-  const requestOptions = {
-    method: "POST", headers: AuthHeader(), body: JSON.stringify({
+const getAll = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/users/get-all`, {
       page: data.page,
       limit: data.limit,
       searchQuery: data.search,
       start: data.start,
       end: data.end
-    })
-  };
-  return await fetch(Constants.BASE_URL + `/api/users/get-all`, requestOptions).then(HandleResponse);
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err, data);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function blockUser(userId, page, rowsPerPage) {
-  const requestOptions = {
-    method: "PUT", headers: AuthHeader(), body: JSON.stringify({
+const blockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
+  try {
+    const response = await axios.put(Constants.BASE_URL + `/api/users/block`, {
       userId: userId,
       page: page,
       limit: rowsPerPage
-
-    })
-  };
-  return await fetch(Constants.BASE_URL + `/api/users/block`, requestOptions).then(HandleResponse);
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function unBlockUser(userId, page, rowsPerPage) {
-  const requestOptions = {
-    method: "PUT", headers: AuthHeader(), body: JSON.stringify({
+const unBlockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
+  try {
+    const response = await axios.put(Constants.BASE_URL + `/api/users/unblock`, {
       userId: userId,
       page: page,
       limit: rowsPerPage
-
-    })
-  };
-  return await fetch(Constants.BASE_URL + `/api/users/unblock`, requestOptions).then(HandleResponse);
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function getUserCount() {
-  const requestOptions = { method: "POST", headers: AuthHeader() };
-  return await fetch(Constants.BASE_URL + `/api/users/count`, requestOptions).then(HandleResponse);
+const getUserCount = async (enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/users/count`, {}, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function getUserDetails(id) {
-  const requestOptions = { method: "GET", headers: AuthHeader() };
-  return await fetch(Constants.BASE_URL + `/api/users/${id}?filter[include]=company`, requestOptions).then(HandleResponse);
+const getUserDetails = async (id, enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/users/${id}?filter[include]=company`, {}, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function addUser(data) {
-  const requestOptions = {
-    method: "POST", headers: AuthHeader(), body: JSON.stringify({
+const addUser = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/users`, {
       fullName: data.fullName,
       email: data.email,
       mobile: data.mobile,
       companyName: data.companyName,
       type: "admin"
-    })
-  };
-  return await fetch(Constants.BASE_URL + `/api/users`, requestOptions).then(HandleResponse);
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function updateUser(id, data) {
-  const requestOptions = {
-    method: "PATCH", headers: AuthHeader(), body: JSON.stringify({
+const updateUser = async (id, data, enqueueSnackbar) => {
+  try {
+    const response = await axios.patch(Constants.BASE_URL + `/api/users/${id}`, {
       fullName: data.fullName,
       email: data.email,
       mobile: data.mobile,
       telephone: data.telephone,
       profilePic: data.profilePic
-    })
-  };
-  return await fetch(Constants.BASE_URL + `/api/users/${id}`, requestOptions).then(HandleResponse);
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function upadateCompanyDetails(companyIds, data) {
-  const requestOptions = {
-    method: "PATCH", headers: AuthHeader(), body: JSON.stringify({
+const upadateCompanyDetails = async (companyIds, data, enqueueSnackbar) => {
+  try {
+    const response = await axios.patch(Constants.BASE_URL + `/api/companies/${companyIds}`, {
       name: data.name,
       job_title: data.job_title,
       departmentId: data.departmentId,
       employeesRangeId: data.employeesRangeId,
       oldCompanyLogo: data.oldCompanyLogo,
-      logo: data.logo,
-    })
-  };
-  return await fetch(Constants.BASE_URL + `/api/companies/${companyIds}`, requestOptions).then(HandleResponse);
+      logo: data.logo
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function getDepartment() {
-  const requestOptions = { method: "GET", headers: AuthHeader() };
-  return await fetch(Constants.BASE_URL + `/api/departments`, requestOptions).then(HandleResponse);
+const getDepartment = async (enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/departments`, {}, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function getEmployeeRange() {
-  const requestOptions = { method: "GET", headers: AuthHeader() };
-  return await fetch(Constants.BASE_URL + `/api/employee_ranges`, requestOptions).then(HandleResponse);
+const getEmployeeRange = async (enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/employee_ranges`, {}, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function getCompanyDetails(id) {
-  const requestOptions = { method: "GET", headers: AuthHeader() };
-  return await fetch(Constants.BASE_URL + `/api/companies/findOne?filter[where][userId]=${id}`, requestOptions).then(HandleResponse);
-}
-
-async function addNewPlan(data) {
-  const requestOptions = {
-    method: "POST", headers: AuthHeader(), body: JSON.stringify({
+const addNewPlan = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/create-plan`, {
       planName: data.plan_name,
       amount: data.amount,
       description: data.description,
       duration: data.duration,
       userId: data.userId
-    })
-  };
-  return await fetch(Constants.BASE_URL + `/api/subscriptions/create-plan`, requestOptions).then(HandleResponse);
-}
-
-async function getSubscriptionPlans(userId) {
-  const data = {
-    where: {
-      user_id: userId
-    }
+    }, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
   }
-  return await fetch(Constants.BASE_URL + `/api/subscriptions?filter[order]=createdAt Desc`).then(HandleResponse);
 }
 
-async function getSubscriptionPlanById(id) {
-  return await fetch(Constants.BASE_URL + `/api/subscriptions/${id}`).then(HandleResponse);
+const getSubscriptionPlans = async (userId, enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/subscriptions?filter[order]=createdAt Desc`, {
+      where: {
+        user_id: userId
+      }
+    }, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function updateSubscriptionPlan(id, data) {
-  const requestOptions = {
-    method: "PATCH", headers: AuthHeader(), body: JSON.stringify({
+const getSubscriptionPlanById = async (id, enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/subscriptions/${id}`, {}, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const updateSubscriptionPlan = async (id, data, enqueueSnackbar) => {
+  try {
+    const response = await axios.patch(Constants.BASE_URL + `/api/subscriptions/${id}`, {
       planName: data.plan_name,
       description: data.description,
       userId: data.userId,
       planId: data.planId
-    })
-  };
-  return await fetch(Constants.BASE_URL + `/api/subscriptions/${id}`, requestOptions).then(HandleResponse);
+    }, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
-async function updateSubscriptionPlanStatus(data) {
-  const requestOptions = {
-    method: "PUT", headers: AuthHeader(), body: JSON.stringify({
+const updateSubscriptionPlanStatus = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.put(Constants.BASE_URL + `/api/subscriptions/change-plan-status`, {
       planId: data.planId,
       status: data.status
-    })
-  };
-  return await fetch(Constants.BASE_URL + `/api/subscriptions/change-plan-status`, requestOptions).then(HandleResponse);
+    }, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const getLicense = async (userId, enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/licenses?filter[active]=true`, {
+      where: {
+        user_id: userId
+      }
+    }, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const getLicenseById = async (id, enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/licenses/${id}`, {}, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const updateLicensePlan = async (id, data, enqueueSnackbar) => {
+  try {
+    const response = await axios.patch(Constants.BASE_URL + `/api/licenses/${id}`, {
+      name: data.name
+    }, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
 }
 
 const handleError = (err, data) => {
   if (err.response) {
-      // client received an error response (5xx, 4xx)
-      if (err.response.data === "Unauthorized") {
-          data.handleUnauthorized()
-      } 
-      return err.response.data
+    if (err.response.data === "Unauthorized") {
+      data.handleUnauthorized()
+    }
+    return err.response.data
   } else if (err.request) {
-      console.log("⛔ 2");
-      return { error: "Network error" }
+    return { error: "Network error" }
   }
   return err
+}
+
+export function HandleErrorResponse (error) {
+  if (error.error.statusCode === 401 &&
+    (error.error.message === "Authorization Required" ||
+      error.error.message === "could not find a valid user" ||
+      error.error.message === "could not find accessToken")
+  ) {
+    localStorage.removeItem("currentUser");
+    window.location.reload(true);
+    return 'Your session expired';
+  } else if (error.error.statusCode === 401 && error.error.message === "login failed") {
+    return 'Please enter correct email address or password.';
+  } else if (error.error.statusCode === 400 || error.error.statusCode === 404) {
+    return error.error.message ? error.error.message : 'Something went worng!';
+  } else if (error.error.statusCode >= 500 && error.error.statusCode <= 505) {
+    return 'Something went worng!';
+  }else {
+    AuthenticationService.logout();
+    window.location.reload(true);
+  }
+  return error;
 }
 
 export const UserService = {
@@ -194,10 +345,12 @@ export const UserService = {
   getDepartment,
   getEmployeeRange,
   upadateCompanyDetails,
-  getCompanyDetails,
   addNewPlan,
   getSubscriptionPlans,
   updateSubscriptionPlan,
   updateSubscriptionPlanStatus,
-  getSubscriptionPlanById
+  getSubscriptionPlanById,
+  getLicense,
+  getLicenseById,
+  updateLicensePlan
 };
