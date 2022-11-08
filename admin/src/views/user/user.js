@@ -103,6 +103,18 @@ const headCells = [
     label: 'Email',
   },
   {
+    id: 'Role',
+    numeric: false,
+    disablePadding: false,
+    label: 'Role',
+  },
+  {
+    id: 'license',
+    numeric: false,
+    disablePadding: false,
+    label: 'License',
+  },
+  {
     id: 'mobile',
     numeric: false,
     disablePadding: false,
@@ -142,7 +154,7 @@ function EnhancedTableHead(props) {
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
-            style={{ fontWeight: 'bold', paddingLeft: '25px' }}
+            style={{ fontWeight: 'bold', paddingLeft: '25px', whiteSpace: 'nowrap' }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -365,6 +377,10 @@ export default function UserTable() {
     setSearch(e.target.value)
   }
 
+ const Capitalize = (str)=> {
+    return str.replace(/^_*(.)|_+(.)/g, (s, c, d) => c ? c.toUpperCase() : ' ' + d.toUpperCase())
+    }
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -518,6 +534,12 @@ export default function UserTable() {
                           </div>
                         </TableCell>
                         <TableCell>
+                          {Capitalize(user?.Role?.name)}
+                        </TableCell>
+                        <TableCell>
+                          {Capitalize(user?.license?.name)}
+                        </TableCell>
+                        <TableCell>
                           <div style={{ display: 'flex' }}>
                             {user?.mobile?.e164Number}
                             {user?.mobile?.e164Number
@@ -561,7 +583,8 @@ export default function UserTable() {
                           paddingTop: '15px',
                           paddingRight: '15px',
                           paddingBottom: '15px',
-                          paddingLeft: '15px'
+                          paddingLeft: '15px',
+                          whiteSpace: 'nowrap'
                         }}
                         >
                           {<Tooltip title="User Suggestion" className='MuiIconButton-root'>
