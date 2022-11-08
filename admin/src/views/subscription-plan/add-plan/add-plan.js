@@ -107,6 +107,7 @@ export default function Newuser() {
                       label="Price"
                       fullWidth
                       type="number"
+                      onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault() }
                       display='flex'
                       {...field}
                       style={{ margin: '20px', marginRight: '25px' }}
@@ -121,6 +122,7 @@ export default function Newuser() {
                       label="Duration"
                       type="number"
                       fullWidth
+                      onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault() }
                       display='flex'
                       {...field}
                       style={{ margin: '20px', marginLeft: '25px' }}
