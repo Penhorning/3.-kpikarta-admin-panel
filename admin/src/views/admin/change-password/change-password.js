@@ -52,6 +52,7 @@ const ChangePassword = () => {
                     let variant = "success";
                     enqueueSnackbar('Password changed successfully.', { variant });
                     setIsOpenBtn(false)
+                    initialValues()
                 }
             );
         } else {
@@ -81,7 +82,7 @@ const ChangePassword = () => {
                 </Toolbar>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 </Box>
-                <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema}
+                <Formik enableReinitialize={true}  initialValues={initialValues} validationSchema={validationSchema}
                    onSubmit={(values,{resetForm}) => {
                     onChangePassword(values)
                     resetForm()
