@@ -13,12 +13,6 @@ import { AuthenticationService } from "../../../shared/_services";
 import {useHistory } from 'react-router-dom';
 
 
-
-const initialValues = {
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-}
 const ChangePassword = () => {
     const { enqueueSnackbar } = useSnackbar();
     const [isOpenBtn, setIsOpenBtn] = useState(false)
@@ -81,7 +75,7 @@ const ChangePassword = () => {
                 </Toolbar>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 </Box>
-                <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema}
+                <Formik enableReinitialize={true} validationSchema={validationSchema}
                    onSubmit={(values,{resetForm}) => {
                     onChangePassword(values)
                     resetForm()
