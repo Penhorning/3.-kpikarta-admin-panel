@@ -537,7 +537,7 @@ export default function UserTable() {
                           {Capitalize(user?.Role?.name)}
                         </TableCell>
                         <TableCell>
-                          {Capitalize(user?.license?.name)}
+                          {user?.license?.name}
                         </TableCell>
                         <TableCell>
                           <div style={{ display: 'flex' }}>
