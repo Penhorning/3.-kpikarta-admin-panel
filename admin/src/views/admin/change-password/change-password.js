@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -33,7 +33,6 @@ const ChangePassword = () => {
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
          "Password should contain atleast 1 number, 1 lowercase, 1 uppercase, 1 special character and must of 8 digits.")
     });
-  
     const onChangePassword = (e) => {
         if (e.oldPassword === e.newPassword) {
             let variant = "error";
@@ -52,7 +51,6 @@ const ChangePassword = () => {
                     let variant = "success";
                     enqueueSnackbar('Password changed successfully.', { variant });
                     setIsOpenBtn(false)
-                    initialValues()
                 }
             );
         } else {

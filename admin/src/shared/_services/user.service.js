@@ -92,7 +92,7 @@ const addUser = async (data, enqueueSnackbar) => {
       email: data.email,
       mobile: data.mobile,
       companyName: data.companyName,
-      type: "admin"
+      addedBy: "admin"
     },
       { headers: AuthHeader() })
     return response.data;
