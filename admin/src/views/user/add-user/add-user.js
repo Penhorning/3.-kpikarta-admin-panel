@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -23,17 +23,20 @@ const initialValues = {
 }
 export default function AddUser() {
   const history = useHistory();
+  const [valueState, setValueState] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().trim().min(1, 'Full name must be between 1 and 255 characters.')
     .max(255, 'Full name must be between 1 and 255 characters.').required('Full Name is required!'),
     email: Yup.string().email().required('Valid email is required!'),
-    mobile: Yup.object().required('Mobile number is required!'),
+    mobile: Yup.string().required('Mobile number is required!'),
     companyName: Yup.string().trim().min(1, 'Company name must be between 1 and 255 characters.')
     .max(255, 'Organization name must be between 1 and 255 characters.').required('Organization name is required!'),
   });
-
   const onSubmit = (values) => {
+   if(values.mobile.e164Number == undefined){
+    return setValueState(true)
+   }
     const result = window.confirm("Are you sure, you want to add new user?");
     if (result) {
       let data = {
@@ -52,6 +55,24 @@ export default function AddUser() {
     }
   }
   
+  // Phone number validation
+  const isValid = (value, country) => {
+      if(value?.length > 9){
+       return true
+      }
+      if (value.match(/12345/)) {
+        return 'Invalid value: '+value+', '+country.name;
+      } else if (value.match(/1234/)) {
+        return false;
+      }else if(valueState){
+     return 'Number should not blank: '+value+', '+country.name;
+      } else if(!value) {
+        return 'Number should not be blank'
+      } else{
+        return true;
+      }
+    }
+    
   const onBackClick = () => {
     history.push('/users');
 }
@@ -119,18 +140,11 @@ export default function AddUser() {
                         name: 'phone',
                         required: true,
                       }}
-                      isValid={(value, country) => {
-                        if (value.match(/12345/)) {
-                          return 'Invalid value: '+value+', '+country.name;
-                        } else if (value.match(/1234/)) {
-                          return false;
-                        } else {
-                          return true;
-                        }
-                      }}
-                      country={'us'}
+                      isValid={isValid}
                       enableSearch={true}
+                      country={'us'}
                       onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
+                      value={values.mobile.e164Number}
                       style={{ margin: '20px', marginRight: '25px' }}
                     />
                   )}
