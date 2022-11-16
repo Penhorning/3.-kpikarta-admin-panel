@@ -327,13 +327,20 @@ export function HandleErrorResponse (error) {
     return error.error.message ? error.error.message : 'Something went worng!';
   } else if (error.error.statusCode >= 500 && error.error.statusCode <= 505) {
     return 'Something went worng!';
-  }else {
+  }else if(error.error.statusCode === 422 && error?.error?.details?.codes.email[0] === "uniqueness"){
+    return 'Email is already registered, please try with a different one!';
+  } else {
     AuthenticationService.logout();
     window.location.reload(true);
   }
   return error;
 }
 
+// if (error.status === 422 && error.error.error.details.codes.email[0] === "uniqueness") {
+
+//   this._commonService.errorToaster("Email is already registered, please try with a different one");
+
+// }
 export const UserService = {
   getAll,
   getUserCount,

@@ -336,6 +336,7 @@ export default function EditUser() {
                               name: 'phone',
                               required: true,
                             }}
+                            enableSearch={true}
                             country={'us'}
                             onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
                             value={values.mobile.e164Number}
