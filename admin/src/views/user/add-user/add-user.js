@@ -14,6 +14,7 @@ import {useHistory } from 'react-router-dom';
 import './add-user.scss';
 import { UserService } from '../../../shared/_services';
 import { useSnackbar } from 'notistack';
+import { confirm } from "react-confirm-box";
 
 const initialValues = {
   fullName: '',
@@ -33,11 +34,19 @@ export default function AddUser() {
     companyName: Yup.string().trim().min(1, 'Company name must be between 1 and 255 characters.')
     .max(255, 'Organization name must be between 1 and 255 characters.').required('Organization name is required!'),
   });
-  const onSubmit = (values) => {
+
+  const options = {
+    labels: {
+      confirmable: "Yes" ,
+      cancellable: "No",
+    } 
+  }
+
+  const onSubmit = async (values) => {
    if(values.mobile.e164Number == undefined){
     return setValueState(true)
    }
-    const result = window.confirm("Are you sure, you want to add new user?");
+   const result = await confirm("Are you sure, you want to add new user?", options);
     if (result) {
       let data = {
         fullName: values.fullName,

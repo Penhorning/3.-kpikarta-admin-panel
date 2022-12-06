@@ -17,9 +17,9 @@ const EditPlan = lazy(() => import("../views/subscription-plan/edit-plan/edit-pl
 const EditProfile = lazy(() => import("../views/admin/edit-profile/edit-profile"));
 const ChangePassword = lazy(() => import("../views/admin/change-password/change-password"));
 
-const TransactionManagement = lazy(() => import("../views/transactions-management/transaction-management"));
-const License = lazy(() => import("../views/license/license"));
 const EditLicense = lazy(() => import("../views/license/edit-lisence/edit-license"));
+
+const Inventory = lazy(() => import("../views/inventory/inventory"));
 
 
 
@@ -87,7 +87,7 @@ var ThemeRoutes = [
     name: "Subscription Plans",
     icon: "mdi mdi-book-multiple",
     component: SubscriptionPlan,
-    sideRoute: true
+    sideRoute: false
   },
   {
     path: "/add-plan",
@@ -110,26 +110,18 @@ var ThemeRoutes = [
     component: EditProfile,
     sideRoute: false
   },
-  // {
-  //   title: "Transaction Management",
-  //   path: "/transaction-management",
-  //   name: "Transaction",
-  //   icon: "mdi mdi-account-switch",
-  //   component: TransactionManagement,
-  //   sideRoute: true
-  // },
-  // {
-  //   path: "/license",
-  //   name: "License",
-  //   icon: "mdi mdi-credit-card",
-  //   component: License,
-  //   sideRoute: true
-  // },
   {
     path: "/edit-license/:id",
     name: "Edit License",
     icon: "mdi mdi-gauge",
     component: EditLicense,
+    sideRoute: false
+  },
+  {
+    path: "/inventory/:id",
+    name: "Edit License",
+    icon: "mdi mdi-gauge",
+    component: Inventory,
     sideRoute: false
   },
   {

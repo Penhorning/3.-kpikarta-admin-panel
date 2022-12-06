@@ -15,7 +15,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { UserService } from '../../../shared/_services';
 import { useSnackbar } from 'notistack';
 import Spinner from '../../spinner-loader/spinner-loader';
-
+import { confirm } from "react-confirm-box";
 
 
 const initialValues = {
@@ -57,9 +57,17 @@ export default function EditPlan() {
     });
   }, [id])
 
+  const options = {
+    labels: {
+      confirmable: "Yes" ,
+      cancellable: "No",
+      
+    } 
+  }
+
   // Plan data update button
-  const onUpdateSubmit = (values) => {
-    const result = window.confirm("Are you sure, you want to update this plan?");
+  const onUpdateSubmit = async (values) => {
+    const result = await confirm("Are you sure, you want to update this plan?", options);
     if (result) {
       let data = {
         plan_name: values.name,

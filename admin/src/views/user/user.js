@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
 import { UserService } from "../../shared/_services";
+import { visuallyHidden } from '@mui/utils';
+import { useSnackbar } from 'notistack';
+import { makeStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
+import { confirm } from "react-confirm-box";
+import { styled, alpha } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -16,13 +22,11 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { visuallyHidden } from '@mui/utils';
 import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
 import Button from '@mui/material/Button';
-import './user.scss';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -33,15 +37,15 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import DatePicker from "react-modern-calendar-datepicker";
-import { Card } from '@mui/material';
-import { Link } from 'react-router-dom';
 import MessageIcon from '@mui/icons-material/Message';
-import { makeStyles } from '@mui/styles';
 import Spinner from '../spinner-loader/spinner-loader';
-import { useSnackbar } from 'notistack';
-
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import './user.scss';
 
 const useStyles = makeStyles({
   customTextField: {
@@ -49,8 +53,49 @@ const useStyles = makeStyles({
       color: 'rgb(0, 0, 0, 0.87)',
       opacity: '0.8',
     }
-  },
+  }
 });
+
+const StyledMenu = styled((props) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color:
+      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity,
+        ),
+      },
+    },
+  },
+}));
 
 function createData(name, calories, fat, carbs, protein) {
   return {
@@ -103,19 +148,19 @@ const headCells = [
     label: 'Email',
   },
   {
-    id: 'Role',
+    id: 'name',
     numeric: false,
     disablePadding: false,
-    label: 'Role',
+    label: 'Company',
   },
   {
-    id: 'license',
+    id: 'range',
     numeric: false,
     disablePadding: false,
-    label: 'License',
+    label: 'Employees',
   },
   {
-    id: 'mobile',
+    id: 'e164Number',
     numeric: false,
     disablePadding: false,
     label: 'Mobile',
@@ -139,6 +184,7 @@ const headCells = [
     label: 'Action',
   },
 ];
+
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } =
     props;
@@ -188,6 +234,7 @@ const initialValue = {
   from: "",
   to: "",
 };
+
 export default function UserTable() {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -206,6 +253,20 @@ export default function UserTable() {
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
+  const [anchorEl2, setAnchorEl2] = useState(null);
+  const [currentUID, setCurrentUID] = useState('');
+
+  const open = Boolean(anchorEl2);
+
+
+  const handleDropDownClick = (event, userId) => {
+    setCurrentUID(userId)
+    return setAnchorEl2(event.currentTarget);
+  };
+
+  const handleDropDownClose = () => {
+    setAnchorEl2(null);
+  };
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
@@ -233,8 +294,15 @@ export default function UserTable() {
     setunBlocktost(false);
   };
 
-  const block = (userId, page, rowsPerPage) => {
-    const result = window.confirm("Are you sure do you want to Deactivate this user?");
+  const options = {
+    labels: {
+      confirmable: "Yes",
+      cancellable: "No",
+
+    }
+  }
+  const block = async (userId, page, rowsPerPage) => {
+    const result = await confirm("Are you sure do you want to Deactivate this user?", options);
     if (result) {
       UserService.blockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
         if (res.status === true) {
@@ -242,11 +310,12 @@ export default function UserTable() {
           unblockToast(true)
         }
       })
+      return;
     }
   }
 
-  const unblock = (userId, page, rowsPerPage) => {
-    const result = window.confirm("Are you sure do you want to Activate this user?");
+  const unblock = async (userId, page, rowsPerPage) => {
+    const result = await confirm("Are you sure do you want to Activate this user?", options);
     if (result) {
       UserService.unBlockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
         if (res.status === true) {
@@ -277,7 +346,7 @@ export default function UserTable() {
           setTotal(0);
         }
         setLoading(false)
-      } else if (response.error.statusCode ===  400 ) {
+      } else if (response.error.statusCode === 400) {
         let variant = 'error';
         enqueueSnackbar("Something went worng", { variant });
       }
@@ -377,9 +446,6 @@ export default function UserTable() {
     setSearch(e.target.value)
   }
 
- const Capitalize = (str)=> {
-    return str.replace(/^_*(.)|_+(.)/g, (s, c, d) => c ? c.toUpperCase() : ' ' + d.toUpperCase())
-    }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -400,7 +466,7 @@ export default function UserTable() {
               noValidate
               autoComplete="off" >
               <Paper component="div"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 282}}>
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 282 }}>
                 <DatePicker
                   value={selectedDayRange}
                   onChange={handleDateChange}
@@ -509,12 +575,13 @@ export default function UserTable() {
                           scope="row"
                           padding="none"
                           className='wrap-name'
-                          style={{ paddingLeft: '25px',
-                                    maxWidth: '100px',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden'
-                                 }}
+                          style={{
+                            paddingLeft: '25px',
+                            maxWidth: '100px',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden'
+                          }}
                         >
                           {user.fullName}
                         </TableCell>
@@ -534,10 +601,10 @@ export default function UserTable() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          {Capitalize(user?.Role?.name)}
+                          {user?.company.name}
                         </TableCell>
                         <TableCell>
-                          {Capitalize(user?.license?.name)}
+                          {user?.company?.employee_range?.range ? user?.company?.employee_range?.range : "N/A"}
                         </TableCell>
                         <TableCell>
                           <div style={{ display: 'flex' }}>
@@ -571,12 +638,21 @@ export default function UserTable() {
                               },
                             }}
                           >
-                            {
-                              user.active === false
-                                ? <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card>
-                                : <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
-
-                            }
+                            <div style={{ textAlign: 'center' }}>
+                              {
+                                user.active === true
+                                  ? <span className="user_status_icon" style={{ color: 'green', textAlign: 'center' }}>
+                                    <Tooltip title="Active">
+                                      <CheckCircleIcon />
+                                    </Tooltip>
+                                  </span>
+                                  : <span className="user_status_icon text-danger">
+                                    <Tooltip title="Inactive">
+                                      <CancelIcon />
+                                    </Tooltip>
+                                  </span>
+                              }
+                            </div>
                           </Box>
                         </TableCell>
                         <TableCell align="left" style={{
@@ -587,40 +663,66 @@ export default function UserTable() {
                           whiteSpace: 'nowrap'
                         }}
                         >
-                          {<Tooltip title="User Suggestion" className='MuiIconButton-root'>
-                            <Link to={`/my-suggestion/${user._id}`}>
-                              <MessageIcon />
-                            </Link>
-                          </Tooltip>
-                          }
+                          <IconButton
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={open ? 'long-menu' : undefined}
+                            aria-expanded={open ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={(event) => handleDropDownClick(event, user._id)}
 
-                          {<Tooltip title="Edit" className='MuiIconButton-root'>
-                            <Link to={`/edit-user/${user._id}`}>
-                              <EditIcon style={{ color: '#0c85d0' }} />
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                          <StyledMenu
+                            id="demo-customized-menu"
+                            MenuListProps={{
+                              'aria-labelledby': 'demo-customized-button',
+                            }}
+                            anchorEl={user._id == currentUID && anchorEl2}
+                            open={user._id == currentUID && open}
+                            onClose={handleDropDownClose}
+                          >
+                            <Link as={Link} to={`/my-suggestion/${user._id}`}>
+                              <MenuItem onClick={handleDropDownClose} disableRipple>
+                                <MessageIcon style={{ color: "#8898aa", cursor: 'pointer' }} /><h5>Message</h5> 
+                              </MenuItem>
+                            </Link>
+                            <Link as={Link} to={`/edit-user/${user._id}`}>
+                              <MenuItem onClick={handleDropDownClose} disableRipple>
+                                <EditIcon style={{ color: "#8898aa", cursor: 'pointer' }} /> <h5>Edit</h5> 
+                              </MenuItem>
+                            </Link>
+                            <Link as={Link} to={`/view-user/${user?._id}`}>
+                              <MenuItem onClick={handleDropDownClose} disableRipple >
+                                <VisibilityIcon style={{ color: "#8898aa", cursor: 'pointer' }} /> <h5>View </h5> 
+                              </MenuItem>
+                            </Link>
+                            <Link as={Link} to={`/inventory/${user._id}`}>
+                              <MenuItem onClick={handleDropDownClose} disableRipple >
+                                <InventoryIcon style={{ color: "#8898aa", cursor: 'pointer' }} /> <h5>Inventory </h5>
+                              </MenuItem>
                             </Link>
 
-                          </Tooltip>
-                          }
-                          {
-                            <Tooltip title="View">
-                              <Link to={`/view-user/${user._id}`}>
-                                <VisibilityIcon style={{ color: "#243864", cursor: 'pointer' }} />
-                              </Link>
-                            </Tooltip>
-                          }
-                          {user.active === true
-                            ? <Tooltip title="Deactivate" className='MuiIconButton-root'>
-                              <BlockIcon
-                                style={{ color: 'red' }}
-                                onClick={(e) => block(user._id)} />
-                            </Tooltip>
-                            :
-                            <Tooltip title="Activate" className='MuiIconButton-root'>
-                              <LockOpenIcon
-                                style={{ color: 'green' }}
-                                onClick={(e) => unblock(user._id)} />
-                            </Tooltip>
-                          }
+                            <Divider sx={{ my: 0.5 }} />
+
+                            {user.active === true
+                              ?
+                              <div onClick={(e) => block(user._id)}>
+                                <MenuItem onClick={handleDropDownClose} disableRipple>
+                                  <BlockIcon style={{ color: 'red' }} /> <h5>Block</h5>
+                                </MenuItem>
+                              </div>
+
+                              :
+                              <div onClick={(e) => unblock(user._id)}>
+                                <MenuItem onClick={handleDropDownClose} disableRipple>
+                                  <LockOpenIcon style={{ color: 'green' }} /> <h5>Unblock</h5> 
+                                </MenuItem>
+                              </div>
+                            }
+
+                          </StyledMenu>
                         </TableCell>
                       </TableRow>
                     );

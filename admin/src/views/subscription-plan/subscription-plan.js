@@ -31,6 +31,7 @@ import { Link } from 'react-router-dom';
 import Spinner from '../spinner-loader/spinner-loader';
 import { AuthenticationService } from "../../shared/_services/authentication.service"
 import { useSnackbar } from 'notistack';
+import { confirm } from "react-confirm-box";
 
 
 function createData(name, calories, fat, carbs, protein) {
@@ -185,9 +186,17 @@ export default function SubscriptionTable() {
     setunBlocktost(false);
   };
 
+  const options = {
+    labels: {
+      confirmable: "Yes" ,
+      cancellable: "No",
+      
+    } 
+  }
+
   // Block the plan
-  const block = (plan) => {
-    const result = window.confirm("Are you sure do you want to Deactivate this Plan?");
+  const block = async (plan) => {
+    const result = await confirm("Are you sure do you want to Deactivate this Plan?", options);
     if (result) {
         let data = {
             planId: plan.plan_id,
@@ -203,8 +212,8 @@ export default function SubscriptionTable() {
   }
 
   // Un-block the plan
-  const unblock = (plan) => {
-    const result = window.confirm("Are you sure do you want to Activate this Plan?");
+  const unblock = async (plan) => {
+    const result = await confirm("Are you sure do you want to Activate this Plan?", options);
     if (result) {
         let data = {
             planId: plan.plan_id,

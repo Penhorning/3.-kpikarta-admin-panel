@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
-import './view-user.scss';
+import { Link } from 'react-router-dom';
 import { UserService } from '../../../shared/_services';
+import { visuallyHidden } from '@mui/utils';
+import { useSnackbar } from 'notistack';
+import { useParams, useHistory } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -17,11 +20,9 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Spinner from '../../spinner-loader/spinner-loader';
 import Button from '@mui/material/Button';
-import { useParams, useHistory } from 'react-router-dom';
 import Constants from '../../../shared/_helpers/constants';
-import { useSnackbar } from 'notistack';
 import TablePagination from '@mui/material/TablePagination';
-
+import InventoryIcon from '@mui/icons-material/Inventory';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import PropTypes from 'prop-types';
@@ -29,28 +30,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Tooltip from '@mui/material/Tooltip';
-import { visuallyHidden } from '@mui/utils';
-import Stack from '@mui/material/Stack';
-import EditIcon from '@mui/icons-material/Edit';
-import BlockIcon from '@mui/icons-material/Block';
 import Divider from '@mui/material/Divider';
 import moment from "moment";
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import { Link } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
-// import { AuthenticationService } from "../../shared/_services/authentication.service"
+import './view-user.scss';
 
-const useStyles = makeStyles({
-    customTextField: {
-        "& input::placeholder": {
-            color: 'rgb(0, 0, 0, 0.87)',
-            opacity: '0.8',
-        }
-    },
-});
 
 function createData(name, calories, fat, carbs, protein) {
     return {
@@ -115,6 +99,12 @@ const headCells = [
         label: 'License',
     },
     {
+        id: 'department',
+        numeric: false,
+        disablePadding: false,
+        label: 'Department',
+    },
+    {
         id: 'mobile',
         numeric: false,
         disablePadding: false,
@@ -132,20 +122,19 @@ const headCells = [
         disablePadding: false,
         label: 'Status',
     },
-    // {
-    //     id: 'action',
-    //     numeric: false,
-    //     disablePadding: false,
-    //     label: 'Action',
-    // },
+    {
+        id: 'action',
+        numeric: false,
+        disablePadding: false,
+        label: 'Action',
+    },
 ];
 function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } =
-        props;
+    const { order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
-    
+
     return (
         <TableHead>
             <TableRow>
@@ -185,17 +174,12 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-
 const initialCompanyValues = {
     companyName: '',
     companyJobTitle: '',
     companyDepartment: '',
     companyEmployeeRange: ''
 }
-const initialValue = {
-    from: "",
-    to: "",
-};
 
 export default function ViewUser() {
     const [value, setValue] = useState('1');
@@ -209,7 +193,6 @@ export default function ViewUser() {
     const history = useHistory();
     const [profilephoto, setProfilephoto] = useState()
     const [companyPhoto, setCompanyPhoto] = useState()
-
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [selected, setSelected] = useState([]);
@@ -218,13 +201,10 @@ export default function ViewUser() {
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [unBlocktost, setunBlocktost] = useState(false);
-    const [blocktost, setBlocktost] = useState(false);
-    const [dateRange, setDateRange] = useState(initialValue);
-    const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
-    const [isShown, setIsShown] = useState(false)
-    const [isSearchShown, setIsSearchShown] = useState(false)
     const { enqueueSnackbar } = useSnackbar();
+    const style = {
+        fontSize: 18, fontWeight: 'bold'
+      };
 
     useEffect(() => {
         UserService.getUserDetails(id, enqueueSnackbar).then(response => {
@@ -264,14 +244,12 @@ export default function ViewUser() {
             type: "members",
             userId: id
         }
-        console.log("data", data);
 
         UserService.getAllCompanyMembers(data, enqueueSnackbar).then((response) => {
-            console.log("members", response);
             if (!response.error) {
-                setCompanyUsers(response.users[0].data);
-                if (response.users[0].metadata.length > 0) {
-                    setTotal(response.users[0].metadata[0].total);
+                setCompanyUsers(response.members[0].data);
+                if (response.members[0].metadata.length > 0) {
+                    setTotal(response.members[0].metadata[0].total);
                 } else {
                     setTotal(0);
                 }
@@ -293,14 +271,6 @@ export default function ViewUser() {
     const onBackClick = () => {
         history.push('/users');
     }
-
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setBlocktost(false);
-        setunBlocktost(false);
-    };
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -327,9 +297,10 @@ export default function ViewUser() {
 
     const isSelected = (fullName) => selected.indexOf(fullName) !== -1;
 
-    const Capitalize = (str)=> {
+    const Capitalize = (str) => {
         return str.replace(/^_*(.)|_+(.)/g, (s, c, d) => c ? c.toUpperCase() : ' ' + d.toUpperCase())
-        }
+    }
+    
 
     return (
         <Box sx={{}}>
@@ -349,155 +320,123 @@ export default function ViewUser() {
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     </Box>
                     <TabPanel value="1">
-                        <Grid container spacing={1}>
-                            <Grid xs={12} md={5} lg={4}>
-                                <Card sx={{ maxWidth: 345 }}>
+                        <Grid container spacing={4}>
+                            <Grid xs={12} md={6} lg={6}>
+                                <Card>
                                     <CardMedia
                                         component="img"
-                                        height="235"
+                                        height="150"
                                         image={profilephoto}
-                                        style={{ objectFit: 'contain' }}
+                                        style={{ objectFit: 'contain', padding: '10px',  }}
                                     />
-                                    <CardContent>
+                                    <CardContent style={{ paddingBottom: '0px' }}>
                                         <Typography gutterBottom variant="h5" height={10} component="div" align="center"
                                             style={{
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap',
                                                 overflow: 'hidden',
-                                                height: 'auto'
+                                                height: 'auto',
+                                                fontWeight: 'bold'
                                             }}
                                         >
                                             {user.fullName}
                                         </Typography>
+                                        <Table ria-label="simple table" >
+                                            <TableBody>
+                                                <TableRow>
+                                                    <TableCell align="left" style={style}>Email</TableCell>
+                                                    <TableCell align="left" style={{ fontSize: 18 }}>{user?.email || 'N/A'}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left" style={style}>Mobile</TableCell>
+                                                    <TableCell align="left" style={{ fontSize: 18 }}>
+                                                        {user.mobile?.e164Number === undefined || user.mobile?.e164Number === " " ? 'N/A' : user.mobile?.e164Number}
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left" style={style}>Telephone</TableCell>
+                                                    <TableCell align="left" style={{ fontSize: 18 }}>{user?.telephone === undefined || user?.telephone === " " ? 'N/A' : user?.telephone}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left" style={style}>Address</TableCell>
+                                                    <TableCell align="left" style={{ fontSize: 18 }}>
+                                                        {user?.street && user?.city && user?.postal_code && user?.country ? (
+                                                            <>
+                                                                {user?.street === undefined || user?.street === "" ? '' : `${user?.street}, `}
+                                                                {user?.city === undefined || user?.city === "" ? '' : `${user?.city}, `}
+                                                                {user?.postal_code === undefined || user?.postal_code === "" ? '' : `${user?.postal_code}, `}
+                                                                {user?.country === undefined || user?.country === "" ? '' : `${user?.country} `}
+                                                            </>
+                                                        ) : "N/A"}
+
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
                                     </CardContent>
                                 </Card>
                             </Grid>
-                            {loading ? (<Spinner />) :
-                                <Grid container xs={12} md={7} lg={8} spacing={4}>
-                                    <Grid xs={12} lg={12}>
-                                        <Card style={{ height: "315px" }} >
-                                            <CardContent style={{ paddingTop: '0px' }}>
-                                                <Table sx={{ minWidth: 650 }} aria-label="simple table" >
-                                                    <TableBody>
-                                                        <TableRow>
-                                                            <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold', width: '30%' }}>Name</TableCell>
-                                                            <TableCell align="left" style={{ fontSize: 18 }}>{user?.fullName || 'N/A'}</TableCell>
-                                                        </TableRow>
-                                                        <TableRow>
-                                                            <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Email</TableCell>
-                                                            <TableCell align="left" style={{ fontSize: 18 }}>{user?.email || 'N/A'}</TableCell>
-                                                        </TableRow>
-                                                        <TableRow>
-                                                            <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Mobile</TableCell>
-                                                            <TableCell align="left" style={{ fontSize: 18 }}>
-                                                                {user.mobile?.e164Number === undefined || user.mobile?.e164Number === " " ? 'N/A' : user.mobile?.e164Number}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                        <TableRow>
-                                                            <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Telephone</TableCell>
-                                                            <TableCell align="left" style={{ fontSize: 18 }}>{user?.telephone === undefined || user?.telephone === " " ? 'N/A' : user?.telephone}</TableCell>
-                                                        </TableRow>
-                                                        <TableRow>
-                                                            <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Address</TableCell>
-                                                            <TableCell align="left" style={{ fontSize: 18 }}>
-                                                                {user?.street && user?.city && user?.postal_code && user?.country ? (
-                                                                    <>
-                                                                        {user?.street === undefined || user?.street === "" ? '' : `${user?.street}, `}
-                                                                        {user?.city === undefined || user?.city === "" ? '' : `${user?.city}, `}
-                                                                        {user?.postal_code === undefined || user?.postal_code === "" ? '' : `${user?.postal_code}, `}
-                                                                        {user?.country === undefined || user?.country === "" ? '' : `${user?.country} `}
-                                                                    </>
-                                                                ) : "N/A"}
 
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    </TableBody>
-                                                </Table>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>
-                                </Grid>
-                            }
-                        </Grid>
-                        <Toolbar>
-                            <Typography
-                                sx={{ flex: '1 1 20%' }}
-                                variant="h6"
-                                component="div"
-                            >
-                                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}> </Box>
-                            </Typography>
-                        </Toolbar>
-                        <Grid container spacing={1}>
-                            <Grid xs={12} md={5} lg={4}>
-                                <Card sx={{ maxWidth: 345 }}>
+                            <Grid xs={12} md={6} lg={6}>
+                                <Card >
                                     <CardMedia
                                         component="img"
-                                        height="176"
+                                        height="150"
                                         image={companyPhoto}
-                                        style={{ objectFit: 'contain' }}
+                                        style={{ objectFit: 'contain', paddingLeft: '20px', padding: '20px' }}
                                     />
-                                    <CardContent>
+                                    <CardContent style={{ paddingBottom: '0px' }}>
                                         <Typography gutterBottom variant="h5" height={10} component="div" align="center"
                                             style={{
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap',
                                                 overflow: 'hidden',
-                                                height: 'auto'
+                                                height: 'auto',
+                                                fontWeight: 'bold'
                                             }}
                                         >
                                             {company?.name}
                                         </Typography>
+                                        <Table aria-label="simple table">
+                                            <TableBody>
+                                                <TableRow>
+                                                    <TableCell align="left" style={style}>Company Name</TableCell>
+                                                    <TableCell align="left" style={{ fontSize: 18 }}> {company?.name || 'N/A'}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left" style={style}>Job Title</TableCell>
+                                                    <TableCell align="left" style={{ fontSize: 18 }}> {company?.job_title || 'N/A'}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left" style={style}>Employees Range</TableCell>
+                                                    {employFiled.length > 0 ? employFiled.map((option) => (
+                                                        <TableCell align="left" style={{ fontSize: 18 }} key={option?.id} >
+                                                            {option?.range ? option?.range : 'N/A'}
+                                                        </TableCell>
+                                                    )) : (
+                                                        <TableCell align="left" style={{ fontSize: 18 }}>
+                                                            {'N/A'}
+                                                        </TableCell>
+                                                    )}
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left" style={style}>Department</TableCell>
+                                                    {deptField.length > 0 ? deptField.map((option) => (
+                                                        <TableCell align="left" style={{ fontSize: 18 }} key={option?.id} >
+                                                            {option?.name ? option?.name : 'N/A'}
+                                                        </TableCell>
+                                                    )
+                                                    ) : (
+                                                        <TableCell align="left" style={{ fontSize: 18 }} >
+                                                            {'N/A'}
+                                                        </TableCell>
+                                                    )}
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
                                     </CardContent>
                                 </Card>
                             </Grid>
-                            {loading ? (<Spinner />) :
-                                <Grid container xs={12} md={7} lg={8} spacing={4}>
-                                    <Grid xs={12} lg={12}>
-                                        <Card style={{ height: "255px" }} >
-                                            <CardContent style={{ paddingTop: '0px' }}>
-                                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                                    <TableBody>
-                                                        <TableRow>
-                                                            <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold', width: '30%' }}>Company Name</TableCell>
-                                                            <TableCell align="left" style={{ fontSize: 18 }}>{company?.name || 'N/A'}</TableCell>
-                                                        </TableRow>
-                                                        <TableRow>
-                                                            <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Job Title</TableCell>
-                                                            <TableCell align="left" style={{ fontSize: 18 }}> {company?.job_title || 'N/A'}</TableCell>
-                                                        </TableRow>
-                                                        <TableRow>
-                                                            <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Employees Range</TableCell>
-                                                            {employFiled.length > 0 ? employFiled.map((option) => (
-                                                                <TableCell align="left" style={{ fontSize: 18 }} key={option?.id} >
-                                                                    {option?.range ? option?.range : 'N/A'}
-                                                                </TableCell>
-                                                            )) : (
-                                                                <TableCell align="left" style={{ fontSize: 18 }}>
-                                                                    {'N/A'}
-                                                                </TableCell>
-                                                            )}
-                                                        </TableRow>
-                                                        <TableRow>
-                                                            <TableCell align="left" style={{ fontSize: 18, fontWeight: 'bold' }}>Department</TableCell>
-                                                            {deptField.length > 0 ? deptField.map((option) => (
-                                                                <TableCell align="left" style={{ fontSize: 18 }} key={option?.id} >
-                                                                    {option?.name ? option?.name : 'N/A'}
-                                                                </TableCell>
-                                                            )
-                                                            ) : (
-                                                                <TableCell align="left" style={{ fontSize: 18 }} >
-                                                                    {'N/A'}
-                                                                </TableCell>
-                                                            )}
-                                                        </TableRow>
-                                                    </TableBody>
-                                                </Table>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>
-                                </Grid>
-                            }
                         </Grid>
                     </TabPanel>
                 </TabContext>
@@ -513,13 +452,6 @@ export default function ViewUser() {
                             component="div">
                             Members
                         </Typography>
-                        {/* <Typography component="div">
-                            <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-                                <Link to='/add-plan'>
-                                    <Button className="text-nowrap" variant="contained">ADD PLAN</Button>
-                                </Link>
-                            </Stack>
-                        </Typography> */}
                     </Toolbar>
                     <Divider sx={{ m: 1.0 }} orientation="horizontal" />
                     <TableContainer>
@@ -581,21 +513,20 @@ export default function ViewUser() {
                                                         </div>
                                                     </TableCell>
                                                     <TableCell>
-                                                        {/* {Capitalize(user?.Role?.name)} */}
-                                                        {companyUser?.Role?.name}
-
+                                                        {Capitalize(companyUser?.Role?.name)}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {/* {Capitalize(user?.license?.name)} */}
-                                                        {companyUser?.license?.name}
-
+                                                        {companyUser?.license?.name ? companyUser?.license?.name : 'N/A'}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {companyUser?.department?.name ? companyUser?.department?.name : 'N/A'}
                                                     </TableCell>
                                                     <TableCell>
                                                         <div style={{ display: 'flex' }}>
                                                             {companyUser?.mobile?.e164Number}
                                                             {companyUser?.mobile?.e164Number
                                                                 ? companyUser.mobileVerified === true
-                                                                    ? <span className="status_icon" style={{ color: 'green', textAlign: 'center' }}>
+                                                                    ? <span className="status_icon" style={{ color: 'green', textAlign: 'center', fontSize: 'large' }}>
                                                                         <Tooltip title="Verified">
                                                                             <CheckCircleIcon />
                                                                         </Tooltip>
@@ -622,43 +553,34 @@ export default function ViewUser() {
                                                                 },
                                                             }}
                                                         >
-                                                            {
-                                                                companyUser.status === false
-                                                                    ? <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card>
-                                                                    : <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
-
-                                                            }
+                                                            <div style={{ textAlign: 'center' }}>
+                                                                {
+                                                                    companyUser.active === true
+                                                                        ? <span className="view_status_icon" style={{ color: 'green', textAlign: 'center' }}>
+                                                                            <Tooltip title="Active">
+                                                                                <CheckCircleIcon />
+                                                                            </Tooltip>
+                                                                        </span>
+                                                                        : <span className="view_status_icon text-danger">
+                                                                            <Tooltip title="Inactive">
+                                                                                <CancelIcon />
+                                                                            </Tooltip>
+                                                                        </span>
+                                                                }
+                                                            </div>
                                                         </Box>
                                                     </TableCell>
-                                                    {/* <TableCell align="left" style={{
-                                                        paddingTop: '15px',
-                                                        paddingRight: '15px',
-                                                        paddingBottom: '15px',
-                                                        paddingLeft: '15px'
-                                                    }}
-                                                    >
-                                                        {<Tooltip title="Edit-plan" className='MuiIconButton-root'>
-                                                            <Link to={`/edit-plan/${companyUser.id}`} >
-                                                                <EditIcon style={{ color: '#0c85d0' }} />
-                                                            </Link>
-                                                        </Tooltip>
+                                                    <TableCell>
+                                                        {
+                                                            <div style={{ textAlign: 'center' }}>
+                                                                <Tooltip title="Inventory">
+                                                                    <Link to={`/inventory/${companyUser._id}`}>
+                                                                        <InventoryIcon style={{ color: "#243864", cursor: 'pointer' }} />
+                                                                    </Link>
+                                                                </Tooltip>
+                                                            </div>
                                                         }
-                                                        {companyUser.status === true
-                                                            ? <Tooltip title="Deactivate" className='MuiIconButton-root'>
-                                                                <BlockIcon
-                                                                    style={{ color: 'red' }}
-                                                                // onClick={(e) => block(plan)} 
-                                                                />
-                                                            </Tooltip>
-                                                            :
-                                                            <Tooltip title="Activate" className='MuiIconButton-root'>
-                                                                <LockOpenIcon
-                                                                    style={{ color: 'green' }}
-                                                                // onClick={(e) => unblock(plan)}
-                                                                />
-                                                            </Tooltip>
-                                                        }
-                                                    </TableCell> */}
+                                                    </TableCell>
                                                 </TableRow>
                                             );
                                         })}
@@ -678,7 +600,7 @@ export default function ViewUser() {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </Paper>
-                <Snackbar open={unBlocktost} autoHideDuration={3000} onClose={handleClose}>
+                {/* <Snackbar open={unBlocktost} autoHideDuration={3000} onClose={handleClose}>
                     <Alert
                         onClose={handleClose}
                         severity="success"
@@ -687,8 +609,8 @@ export default function ViewUser() {
                     >
                         Plan has deactivated successfully
                     </Alert>
-                </Snackbar>
-                <Snackbar open={blocktost} autoHideDuration={3000} onClose={handleClose}>
+                </Snackbar> */}
+                {/* <Snackbar open={blocktost} autoHideDuration={3000} onClose={handleClose}>
                     <Alert
                         onClose={handleClose}
                         severity="success"
@@ -697,7 +619,7 @@ export default function ViewUser() {
                     >
                         Plan has activated successfully
                     </Alert>
-                </Snackbar>
+                </Snackbar> */}
             </Box>
         </Box>
     )

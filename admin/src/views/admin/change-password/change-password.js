@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -13,16 +13,15 @@ import { AuthenticationService } from "../../../shared/_services";
 import {useHistory } from 'react-router-dom';
 
 
-
 const initialValues = {
     oldPassword: '',
     newPassword: '',
     confirmPassword: ''
 }
+
 const ChangePassword = () => {
     const { enqueueSnackbar } = useSnackbar();
     const [isOpenBtn, setIsOpenBtn] = useState(false)
-    const [reset, setReset] = useState(null)
     const history = useHistory();
     const validationSchema = Yup.object().shape({
         oldPassword: Yup.string().required('Old password is required!'),
@@ -61,10 +60,10 @@ const ChangePassword = () => {
         }
     }
 
-  
     const onBackClick = () => {
         history.push('/users');
     }
+
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
@@ -141,7 +140,6 @@ const ChangePassword = () => {
                             </Box>
                             <Button
                                 style={{
-                                    // width: 100,
                                     marginLeft: '25px',
                                     marginTop: '25px',
                                     marginBottom: '25px'

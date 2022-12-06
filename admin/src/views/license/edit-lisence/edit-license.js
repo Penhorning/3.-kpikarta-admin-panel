@@ -15,6 +15,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { UserService } from '../../../shared/_services';
 import { useSnackbar } from 'notistack';
 import Spinner from '../../spinner-loader/spinner-loader';
+import { confirm } from "react-confirm-box";
 
 
 
@@ -46,9 +47,17 @@ export default function EditLisence() {
     });
   }, [id])
 
+  const options = {
+    labels: {
+      confirmable: "Yes" ,
+      cancellable: "No",
+      
+    } 
+  }
+
   // Plan data update button
-  const onUpdateSubmit = (values) => {
-    const result = window.confirm("Are you sure, you want to update this license?");
+  const onUpdateSubmit = async (values) => {
+    const result = await confirm("Are you sure, you want to update this license?", options);
     if (result) {
       let data = {
         name: values.name

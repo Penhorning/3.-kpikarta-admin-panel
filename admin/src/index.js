@@ -13,7 +13,7 @@ const App = lazy(
 
 ReactDOM.render(
   <Suspense fallback={<Spinner />}>
-    <SnackbarProvider maxSnack={3}>
+    <SnackbarProvider maxSnack={1}>
     <App />
   </SnackbarProvider>
   </Suspense>,

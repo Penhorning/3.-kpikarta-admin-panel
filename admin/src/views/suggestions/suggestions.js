@@ -20,7 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useSnackbar } from 'notistack';
 import Spinner from '../spinner-loader/spinner-loader';
-
+import { confirm } from "react-confirm-box";
 
 
 export default function Suggestion() {
@@ -73,9 +73,16 @@ export default function Suggestion() {
 
  
 
+  const options = {
+    labels: {
+      confirmable: "Yes" ,
+      cancellable: "No",
+      
+    } 
+  }
 
-  const onSubmit = (values) => {
-    const result = window.confirm("Are you sure do you want to update this suggestion?");
+  const onSubmit = async (values) => {
+    const result = await confirm("Are you sure do you want to update this suggestion?", options);
    if(result){
     setSubmitting(true);
     let suggestionId = values.id;
