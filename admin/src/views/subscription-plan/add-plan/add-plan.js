@@ -13,7 +13,7 @@ import './add-plan.scss';
 import { UserService } from '../../../shared/_services';
 import { useSnackbar } from 'notistack';
 import { AuthenticationService } from "../../../shared/_services"
-
+import { confirm } from "react-confirm-box";
 
 
 const initialValues = {
@@ -38,9 +38,17 @@ export default function Newuser() {
     .lessThan(365, "Duration should not be more than 365").required('Duration is required!'),
   });
 
+ const options = {
+    labels: {
+      confirmable: "Yes" ,
+      cancellable: "No",
+      
+    } 
+  }
+
   // Submit plan function
-  const onSubmit = (values) => {
-    const result = window.confirm("Are you sure, you want to add new plan?");
+  const onSubmit = async (values) => {
+    const result = await confirm("Are you sure, you want to add new plan?", options);
     if (result) {
       let data = {
         plan_name: values.plan_name,
@@ -55,6 +63,8 @@ export default function Newuser() {
           let variant = "success";
           enqueueSnackbar('New subscription plan added successfully', { variant });
           history.replace('/subscription-plans');
+          setIsOpenBtn(false)
+        }else {
           setIsOpenBtn(false)
         }
       })

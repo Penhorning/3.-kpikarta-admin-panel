@@ -21,6 +21,7 @@ import Constants from '../../../shared/_helpers/constants';
 import {useHistory } from 'react-router-dom';
 import { AuthenticationService } from '../../../shared/_services';
 import { UserService } from '../../../shared/_services';
+import { confirm } from "react-confirm-box";
 
 
 
@@ -81,9 +82,17 @@ export default function EditProfile() {
 
   }, [userId])
 
+  const options = {
+    labels: {
+      confirmable: "Yes" ,
+      cancellable: "No",
+      
+    } 
+  }
+
   // user data update button
-  const onUpdateSubmit = (values) => {
-    const result = window.confirm("Are you sure, you want to update profile?");
+  const onUpdateSubmit = async (values) => {
+    const result = await confirm("Are you sure, you want to update profile?", options);
     if (result) {
       let data = {
         fullName: values.fullName,

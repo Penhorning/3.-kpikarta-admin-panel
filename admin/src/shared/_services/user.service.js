@@ -23,6 +23,46 @@ const getAll = async (data, enqueueSnackbar) => {
   }
 }
 
+const getInventory = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/karta_catalogs/get-all`, {
+      page: data.page,
+      limit: data.limit,
+      searchQuery: data.search,
+      nodeType: [],
+      userId: data.userId
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err, data);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const getAllCompanyMembers = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/users/get-all-members`, {
+      page: data.page,
+      limit: data.limit,
+      searchQuery: data.search,
+      type: "members",
+      userId: data.userId
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err, data);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
 const blockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
   try {
     const response = await axios.put(Constants.BASE_URL + `/api/users/block`, {
@@ -343,6 +383,7 @@ export function HandleErrorResponse (error) {
 // }
 export const UserService = {
   getAll,
+  getAllCompanyMembers,
   getUserCount,
   blockUser,
   unBlockUser,
@@ -359,5 +400,6 @@ export const UserService = {
   getSubscriptionPlanById,
   getLicense,
   getLicenseById,
-  updateLicensePlan
+  updateLicensePlan,
+  getInventory
 };
