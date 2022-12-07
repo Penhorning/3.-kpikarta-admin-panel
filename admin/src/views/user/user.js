@@ -212,7 +212,7 @@ export default function UserTable() {
     }
   }
   const block = async (userId, page, rowsPerPage) => {
-    const result = await confirm("Are you sure do you want to Deactivate this user?", options);
+    const result = await confirm("Are you sure, Do you want to Deactivate this user?", options);
     if (result) {
       UserService.blockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
         if (res.status === true) {
@@ -225,7 +225,7 @@ export default function UserTable() {
   }
 
   const unblock = async (userId, page, rowsPerPage) => {
-    const result = await confirm("Are you sure do you want to Activate this user?", options);
+    const result = await confirm("Are you sure, Do you want to Activate this user?", options);
     if (result) {
       UserService.unBlockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
         if (res.status === true) {
