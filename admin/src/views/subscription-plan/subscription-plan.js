@@ -196,7 +196,7 @@ export default function SubscriptionTable() {
 
   // Block the plan
   const block = async (plan) => {
-    const result = await confirm("Are you sure do you want to Deactivate this Plan?", options);
+    const result = await confirm("Are you sure, Do you want to Deactivate this Plan?", options);
     if (result) {
         let data = {
             planId: plan.plan_id,
@@ -213,7 +213,7 @@ export default function SubscriptionTable() {
 
   // Un-block the plan
   const unblock = async (plan) => {
-    const result = await confirm("Are you sure do you want to Activate this Plan?", options);
+    const result = await confirm("Are you sure, Do you want to Activate this Plan?", options);
     if (result) {
         let data = {
             planId: plan.plan_id,
