@@ -174,6 +174,9 @@ export default function UserTable() {
   const handleDropDownClose = () => {
     setAnchorEl2(null);
   };
+  const style = {
+    color: "#8898aa", cursor: 'pointer'
+  };
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
@@ -591,22 +594,22 @@ export default function UserTable() {
                           >
                             <Link as={Link} to={`/my-suggestion/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple>
-                                <MessageIcon style={{ color: "#8898aa", cursor: 'pointer' }} /><h5>Message</h5> 
+                                <MessageIcon style={style} /><h5>Message</h5> 
                               </MenuItem>
                             </Link>
                             <Link as={Link} to={`/edit-user/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple>
-                                <EditIcon style={{ color: "#8898aa", cursor: 'pointer' }} /> <h5>Edit</h5> 
+                                <EditIcon style={style} /> <h5>Edit</h5> 
                               </MenuItem>
                             </Link>
                             <Link as={Link} to={`/view-user/${user?._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple >
-                                <VisibilityIcon style={{ color: "#8898aa", cursor: 'pointer' }} /> <h5>View </h5> 
+                                <VisibilityIcon style={style} /> <h5>View </h5> 
                               </MenuItem>
                             </Link>
                             <Link as={Link} to={`/inventory/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple >
-                                <InventoryIcon style={{ color: "#8898aa", cursor: 'pointer' }} /> <h5>Inventory </h5>
+                                <InventoryIcon style={style} /> <h5>Inventory </h5>
                               </MenuItem>
                             </Link>
 
