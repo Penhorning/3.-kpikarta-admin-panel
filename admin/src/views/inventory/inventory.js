@@ -1,36 +1,37 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
+import { makeStyles } from '@mui/styles';
+import { useSnackbar } from 'notistack';
+import { useParams } from 'react-router-dom';
 import { UserService } from "../../shared/_services";
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
+import CardMedia from '@mui/material/CardMedia';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { visuallyHidden } from '@mui/utils';
 import SearchIcon from '@mui/icons-material/Search';
-import './inventory.scss';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import ClearIcon from '@mui/icons-material/Clear';
 import moment from "moment";
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import { makeStyles } from '@mui/styles';
 import Spinner from '../spinner-loader/spinner-loader';
-import { useSnackbar } from 'notistack';
-import { useParams } from 'react-router-dom';
-import CardMedia from '@mui/material/CardMedia';
+import EnhancedTableHead from '../user/TableHead/inventoryTableHead/EnhancedTableHead'
 import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import './inventory.scss';
 
 const style = {
     position: 'absolute',
@@ -91,88 +92,6 @@ function stableSort(array, comparator) {
     });
     return stabilizedThis.map((el) => el[0]);
 }
-const headCells = [
-    {
-        id: 'name',
-        numeric: false,
-        disablePadding: true,
-        label: 'Karta Name',
-    },
-    {
-        id: 'type',
-        numeric: false,
-        disablePadding: false,
-        label: 'Type',
-    },
-    {
-        id: 'node_type',
-        numeric: false,
-        disablePadding: false,
-        label: 'Node Type',
-    },
-    {
-        id: 'createdAt',
-        numeric: false,
-        disablePadding: false,
-        label: 'Created',
-    },
-    {
-        id: 'sharedTo',
-        numeric: false,
-        disablePadding: false,
-        label: 'Share',
-    },
-    {
-        id: 'action',
-        numeric: false,
-        disablePadding: false,
-        label: 'Action',
-    },
-];
-function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } =
-        props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
-    return (
-        <TableHead>
-            <TableRow>
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                        style={{ fontWeight: 'bold', paddingLeft: '25px', whiteSpace: 'nowrap' }}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id
-                                ? (<Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>)
-                                : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
-}
-
-EnhancedTableHead.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-    onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
-};
 
 const initialValue = {
     from: "",
@@ -190,9 +109,20 @@ export default function Inventory() {
     const [dateRange, setDateRange] = useState(initialValue);
     const [isSearchShown, setIsSearchShown] = useState(false)
     const [loading, setLoading] = useState(true);
-    const classes = useStyles();
-    const { id } = useParams();
+    const [open, setOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
     const { enqueueSnackbar } = useSnackbar();
+    const { id } = useParams();
+    const classes = useStyles();
+    const handleOpenModal = () => setOpen(true);
+    const handleCloseModal = () => setOpen(false);
+    const openFilter = Boolean(anchorEl);
+    const handleFilterClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleFilterClose = () => {
+        setAnchorEl(null);
+    };
 
     useEffect(() => {
         if (dateRange.from && dateRange.to) {
@@ -203,10 +133,6 @@ export default function Inventory() {
     useEffect(() => {
         fetchData('paginationChange');
     }, [page, rowsPerPage]);
-
-    const [open, setOpen] = React.useState(false);
-    const handleOpenModal = () => setOpen(true);
-    const handleCloseModal = () => setOpen(false);
 
     const fetchData = (param) => {
         let searchData;
@@ -306,6 +232,31 @@ export default function Inventory() {
                             autoComplete="off" >
                         </Box>
                     </Typography>
+                    {/* <Typography
+                        component="div">
+                        <Button
+                            id="basic-button"
+                            aria-controls={openFilter ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={openFilter ? 'true' : undefined}
+                            onClick={handleFilterClick}
+                        >
+                            < FilterAltIcon style={{ color: 'rgb(36, 56, 100)' }} />
+                        </Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={openFilter}
+                            onClose={handleFilterClose}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuItem >Profile</MenuItem>
+                            <MenuItem >My account</MenuItem>
+                            <MenuItem >Logout</MenuItem>
+                        </Menu>
+                    </Typography> */}
                     <Typography
                         sx={{ flex: '1 1 5%' }}
                         component="div">
@@ -377,22 +328,22 @@ export default function Inventory() {
                                                 key={user._id}
                                                 selected={isItemSelected}
                                             >
-                                                <TableCell>
+                                                <TableCell style={{paddingLeft: 22 }} >
                                                     {user?.name}
                                                 </TableCell>
-                                                <TableCell style={{ textTransform: "capitalize" }}>
+                                                <TableCell style={{ textTransform: "capitalize", paddingLeft: 22 }}>
                                                     {user?.type}
                                                 </TableCell>
-                                                <TableCell style={{ textTransform: "capitalize" }}>
+                                                <TableCell style={{ textTransform: "capitalize", paddingLeft: 22 }}>
                                                     {user?.node_type}
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell style={{paddingLeft: 22 }}>
                                                     {moment(user.createdAt).format("MM-DD-YYYY")}
                                                 </TableCell>
-                                                <TableCell style={{ verticalAlign: 'top', paddingLeft: 30 }}>
+                                                <TableCell style={{ verticalAlign: 'top', paddingLeft: 26 }}>
                                                     {user?.sharedTo?.length ? user?.sharedTo?.length : "0"}
                                                 </TableCell>
-                                                <TableCell colSpan={1} style={{ verticalAlign: 'top', paddingLeft: 30 }}>
+                                                <TableCell colSpan={1} style={{ verticalAlign: 'top', paddingLeft: 34 }}>
                                                     {
                                                         <Tooltip title="View Inventory" onClick={handleOpenModal}>
                                                             <VisibilityIcon style={{ color: "#243864", cursor: 'pointer' }} />

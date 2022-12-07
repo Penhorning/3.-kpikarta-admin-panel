@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
 import { UserService } from "../../shared/_services";
-import { visuallyHidden } from '@mui/utils';
 import { useSnackbar } from 'notistack';
 import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import { confirm } from "react-confirm-box";
 import { styled, alpha } from '@mui/material/styles';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -44,6 +42,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import EnhancedTableHead from './TableHead/uesrTableHead/EnhancedTableHead'
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import './user.scss';
 
@@ -114,9 +113,13 @@ function descendingComparator(a, b, orderBy) {
   if (b[orderBy] > a[orderBy]) {
     return 1;
   }
+  if (orderBy == 'company'){
+    a = a['company']['name'].toLowerCase();
+    b = b['company']['name'].toLowerCase();
+    return a.localeCompare(b) * 1
+  } 
   return 0;
 }
-
 function getComparator(order, orderBy) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -134,101 +137,8 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-const headCells = [
-  {
-    id: 'fullName',
-    numeric: false,
-    disablePadding: true,
-    label: 'Full Name',
-  },
-  {
-    id: 'email',
-    numeric: false,
-    disablePadding: false,
-    label: 'Email',
-  },
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: false,
-    label: 'Company',
-  },
-  {
-    id: 'range',
-    numeric: false,
-    disablePadding: false,
-    label: 'Employees',
-  },
-  {
-    id: 'e164Number',
-    numeric: false,
-    disablePadding: false,
-    label: 'Mobile',
-  },
-  {
-    id: 'createdAt',
-    numeric: false,
-    disablePadding: false,
-    label: 'Created',
-  },
-  {
-    id: 'active',
-    numeric: false,
-    disablePadding: false,
-    label: 'Status',
-  },
-  {
-    id: 'action',
-    numeric: false,
-    disablePadding: false,
-    label: 'Action',
-  },
-];
 
-function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } =
-    props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-            style={{ fontWeight: 'bold', paddingLeft: '25px', whiteSpace: 'nowrap' }}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id
-                ? (<Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>)
-                : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
 
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
 
 const initialValue = {
   from: "",
@@ -251,17 +161,14 @@ export default function UserTable() {
   const [isShown, setIsShown] = useState(false)
   const [isSearchShown, setIsSearchShown] = useState(false)
   const [loading, setLoading] = useState(true);
-  const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
   const [anchorEl2, setAnchorEl2] = useState(null);
   const [currentUID, setCurrentUID] = useState('');
-
+  const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const open = Boolean(anchorEl2);
-
-
   const handleDropDownClick = (event, userId) => {
-    setCurrentUID(userId)
-    return setAnchorEl2(event.currentTarget);
+    setCurrentUID(userId) 
+    return setAnchorEl2(event.currentTarget); 
   };
 
   const handleDropDownClose = () => {
@@ -670,7 +577,6 @@ export default function UserTable() {
                             aria-expanded={open ? 'true' : undefined}
                             aria-haspopup="true"
                             onClick={(event) => handleDropDownClick(event, user._id)}
-
                           >
                             <MoreVertIcon />
                           </IconButton>

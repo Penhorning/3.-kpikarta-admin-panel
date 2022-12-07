@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { UserService } from '../../../shared/_services';
-import { visuallyHidden } from '@mui/utils';
 import { useSnackbar } from 'notistack';
 import { useParams, useHistory } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -25,13 +24,11 @@ import TablePagination from '@mui/material/TablePagination';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import PropTypes from 'prop-types';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 import moment from "moment";
+import EnhancedTableHead from '../TableHead/memberTableHead/EnhancedTableHead'
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import './view-user.scss';
 
@@ -53,6 +50,15 @@ function descendingComparator(a, b, orderBy) {
     if (b[orderBy] > a[orderBy]) {
         return 1;
     }
+    if(orderBy == 'Role'){
+        a = a['Role']['name'].toLowerCase();
+        b = b['Role']['name'].toLowerCase();
+        return a.localeCompare(b) * 1
+    } else if(orderBy == 'license'){
+        a = a['license']['name'].toLowerCase();
+        b = b['license']['name'].toLowerCase();
+        return a.localeCompare(b) * 1
+    }
     return 0;
 }
 
@@ -73,106 +79,6 @@ function stableSort(array, comparator) {
     });
     return stabilizedThis.map((el) => el[0]);
 }
-const headCells = [
-    {
-        id: 'fullName',
-        numeric: false,
-        disablePadding: true,
-        label: 'Full Name',
-    },
-    {
-        id: 'email',
-        numeric: false,
-        disablePadding: false,
-        label: 'Email',
-    },
-    {
-        id: 'Role',
-        numeric: false,
-        disablePadding: false,
-        label: 'Role',
-    },
-    {
-        id: 'license',
-        numeric: false,
-        disablePadding: false,
-        label: 'License',
-    },
-    {
-        id: 'department',
-        numeric: false,
-        disablePadding: false,
-        label: 'Department',
-    },
-    {
-        id: 'mobile',
-        numeric: false,
-        disablePadding: false,
-        label: 'Mobile',
-    },
-    {
-        id: 'createdAt',
-        numeric: false,
-        disablePadding: false,
-        label: 'Created',
-    },
-    {
-        id: 'active',
-        numeric: false,
-        disablePadding: false,
-        label: 'Status',
-    },
-    {
-        id: 'action',
-        numeric: false,
-        disablePadding: false,
-        label: 'Action',
-    },
-];
-function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } = props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
-
-    return (
-        <TableHead>
-            <TableRow>
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                        style={{ fontWeight: 'bold', paddingLeft: '25px', whiteSpace: 'nowrap' }}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id
-                                ? (<Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>)
-                                : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
-}
-
-EnhancedTableHead.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-    onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
-};
 
 const initialCompanyValues = {
     companyName: '',
