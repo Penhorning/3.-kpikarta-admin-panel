@@ -83,7 +83,7 @@ export default function MySuggestion() {
   }
 
   const onSubmit = async (values) => {
-    const result = await confirm("Are you sure do you want to update this suggestion?", options);
+    const result = await confirm("Are you sure, Do you want to update this suggestion?", options);
     if (result) {
       setSubmitting(true);
 

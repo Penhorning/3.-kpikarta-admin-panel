@@ -59,6 +59,21 @@ function descendingComparator(a, b, orderBy) {
         b = b['license']['name'].toLowerCase();
         return a.localeCompare(b) * 1
     }
+    // else if(orderBy == 'department'){
+    //     if(a.hasOwnProperty(['department']['name']) && b.hasOwnProperty(['department']['name'])){
+    //     a = a['department']['name'].toLowerCase();
+    //     b = b['department']['name'].toLowerCase();
+    //         return a.localeCompare(b) * 1
+    //     }else {
+    //        a['department']['name'] , 
+    //        b['department']['name']
+    //        a = a['department']['name'].toLowerCase();
+    //        b = b['department']['name'].toLowerCase();
+    //            return a.localeCompare(b) * 1
+    //     return 0;
+    //     }
+       
+    // }
     return 0;
 }
 
