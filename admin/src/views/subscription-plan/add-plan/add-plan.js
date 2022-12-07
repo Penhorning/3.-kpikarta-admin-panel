@@ -48,7 +48,7 @@ export default function Newuser() {
 
   // Submit plan function
   const onSubmit = async (values) => {
-    const result = await confirm("Are you sure, you want to add new plan?", options);
+    const result = await confirm("Are you sure, Do you want to add new plan?", options);
     if (result) {
       let data = {
         plan_name: values.plan_name,

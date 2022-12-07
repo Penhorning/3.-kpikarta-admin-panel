@@ -67,7 +67,7 @@ export default function EditPlan() {
 
   // Plan data update button
   const onUpdateSubmit = async (values) => {
-    const result = await confirm("Are you sure, you want to update this plan?", options);
+    const result = await confirm("Are you sure, Do you want to update this plan?", options);
     if (result) {
       let data = {
         plan_name: values.name,

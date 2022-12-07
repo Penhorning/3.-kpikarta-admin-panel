@@ -220,7 +220,7 @@ export default function TransactionTable() {
   };
 
   const block = (userId, page, rowsPerPage) => {
-    const result = window.confirm("Are you sure do you want to Deactivate this user?");
+    const result = window.confirm("Are you sure, Do you want to Deactivate this user?");
     if (result) {
       UserService.blockUser(userId, page, rowsPerPage).then((res) => {
         if (res.status === true) {
@@ -232,7 +232,7 @@ export default function TransactionTable() {
   }
 
   const unblock = (userId, page, rowsPerPage) => {
-    const result = window.confirm("Are you sure do you want to Activate this user?");
+    const result = window.confirm("Are you sure, Do you want to Activate this user?");
     if (result) {
       UserService.unBlockUser(userId, page, rowsPerPage).then((res) => {
         if (res.status === true) {
