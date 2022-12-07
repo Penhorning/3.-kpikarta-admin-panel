@@ -92,7 +92,7 @@ export default function EditProfile() {
 
   // user data update button
   const onUpdateSubmit = async (values) => {
-    const result = await confirm("Are you sure, you want to update profile?", options);
+    const result = await confirm("Are you sure, Do you want to update profile?", options);
     if (result) {
       let data = {
         fullName: values.fullName,

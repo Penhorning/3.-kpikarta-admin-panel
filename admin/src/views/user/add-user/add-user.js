@@ -46,7 +46,7 @@ export default function AddUser() {
    if(values.mobile.e164Number == undefined){
     return setValueState(true)
    }
-   const result = await confirm("Are you sure, you want to add new user?", options);
+   const result = await confirm("Are you sure, Do you want to add new user?", options);
     if (result) {
       let data = {
         fullName: values.fullName,
