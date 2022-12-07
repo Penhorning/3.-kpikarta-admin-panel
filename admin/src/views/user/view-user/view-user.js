@@ -111,6 +111,9 @@ export default function ViewUser() {
     const style = {
         fontSize: 18, fontWeight: 'bold'
       };
+      const fontStyle = {
+        fontSize: 18
+      };
 
     useEffect(() => {
         UserService.getUserDetails(id, enqueueSnackbar).then(response => {
@@ -251,21 +254,21 @@ export default function ViewUser() {
                                             <TableBody>
                                                 <TableRow>
                                                     <TableCell align="left" style={style}>Email</TableCell>
-                                                    <TableCell align="left" style={{ fontSize: 18 }}>{user?.email || 'N/A'}</TableCell>
+                                                    <TableCell align="left" style={fontStyle}>{user?.email || 'N/A'}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left" style={style}>Mobile</TableCell>
-                                                    <TableCell align="left" style={{ fontSize: 18 }}>
+                                                    <TableCell align="left" style={fontStyle}>
                                                         {user.mobile?.e164Number === undefined || user.mobile?.e164Number === " " ? 'N/A' : user.mobile?.e164Number}
                                                     </TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left" style={style}>Telephone</TableCell>
-                                                    <TableCell align="left" style={{ fontSize: 18 }}>{user?.telephone === undefined || user?.telephone === " " ? 'N/A' : user?.telephone}</TableCell>
+                                                    <TableCell align="left" style={fontStyle}>{user?.telephone === undefined || user?.telephone === " " ? 'N/A' : user?.telephone}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left" style={style}>Address</TableCell>
-                                                    <TableCell align="left" style={{ fontSize: 18 }}>
+                                                    <TableCell align="left" style={fontStyle}>
                                                         {user?.street && user?.city && user?.postal_code && user?.country ? (
                                                             <>
                                                                 {user?.street === undefined || user?.street === "" ? '' : `${user?.street}, `}
@@ -307,20 +310,20 @@ export default function ViewUser() {
                                             <TableBody>
                                                 <TableRow>
                                                     <TableCell align="left" style={style}>Company Name</TableCell>
-                                                    <TableCell align="left" style={{ fontSize: 18 }}> {company?.name || 'N/A'}</TableCell>
+                                                    <TableCell align="left" style={fontStyle}> {company?.name || 'N/A'}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left" style={style}>Job Title</TableCell>
-                                                    <TableCell align="left" style={{ fontSize: 18 }}> {company?.job_title || 'N/A'}</TableCell>
+                                                    <TableCell align="left" style={fontStyle}> {company?.job_title || 'N/A'}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left" style={style}>Employees Range</TableCell>
                                                     {employFiled.length > 0 ? employFiled.map((option) => (
-                                                        <TableCell align="left" style={{ fontSize: 18 }} key={option?.id} >
+                                                        <TableCell align="left" style={fontStyle} key={option?.id} >
                                                             {option?.range ? option?.range : 'N/A'}
                                                         </TableCell>
                                                     )) : (
-                                                        <TableCell align="left" style={{ fontSize: 18 }}>
+                                                        <TableCell align="left" style={fontStyle}>
                                                             {'N/A'}
                                                         </TableCell>
                                                     )}
@@ -328,12 +331,12 @@ export default function ViewUser() {
                                                 <TableRow>
                                                     <TableCell align="left" style={style}>Department</TableCell>
                                                     {deptField.length > 0 ? deptField.map((option) => (
-                                                        <TableCell align="left" style={{ fontSize: 18 }} key={option?.id} >
+                                                        <TableCell align="left" style={fontStyle} key={option?.id} >
                                                             {option?.name ? option?.name : 'N/A'}
                                                         </TableCell>
                                                     )
                                                     ) : (
-                                                        <TableCell align="left" style={{ fontSize: 18 }} >
+                                                        <TableCell align="left" style={fontStyle} >
                                                             {'N/A'}
                                                         </TableCell>
                                                     )}
