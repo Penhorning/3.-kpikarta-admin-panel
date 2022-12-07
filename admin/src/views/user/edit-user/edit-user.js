@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import * as Yup from 'yup';
+import { Formik, Form, Field } from 'formik';
+import { message, Upload } from 'antd';
+import { useParams, useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import { UserService } from '../../../shared/_services';
+import { confirm } from "react-confirm-box";
+import Constants from '../../../shared/_helpers/constants';
+import Spinner from '../../spinner-loader/spinner-loader';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -7,24 +16,16 @@ import TabPanel from '@mui/lab/TabPanel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import './edit-user.scss';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import 'intl-tel-input/build/css/intlTelInput.css';
 import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/material.css';
-import { useParams, useHistory } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
-import { UserService } from '../../../shared/_services';
-import { useSnackbar } from 'notistack';
-import Spinner from '../../spinner-loader/spinner-loader';
 import Grid from '@mui/material/Grid';
-import 'antd/dist/antd.css';
-import { message, Upload } from 'antd';
 import ImgCrop from 'antd-img-crop';
-import Constants from '../../../shared/_helpers/constants';
+import 'react-phone-input-2/lib/material.css';
+import 'antd/dist/antd.css';
+import 'intl-tel-input/build/css/intlTelInput.css';
+import './edit-user.scss';
 
 const initialValues = {
   fullName: '',
@@ -137,9 +138,17 @@ export default function EditUser() {
 
   }, [id])
 
+  const options = {
+    labels: {
+      confirmable: "Yes" ,
+      cancellable: "No",
+      
+    } 
+  }
+
   // user data update button
-  const onUpdateSubmit = (values) => {
-    const result = window.confirm("Are you sure, you want to update profile?");
+  const onUpdateSubmit = async (values) => {
+    const result = await confirm("Are you sure, you want to update profile?", options);
     if (result) {
       let data = {
         fullName: values.fullName,
@@ -159,8 +168,8 @@ export default function EditUser() {
   }
 
   // company data upadate button
-  const onCompanySubmit = (values) => {
-    const result = window.confirm("Are you sure, you want to update company details?");
+  const onCompanySubmit = async (values) => {
+    const result = await confirm("Are you sure, you want to update company details?", options);
     if (result) {
       let companyIds = companyId;
       let data = {
@@ -336,6 +345,7 @@ export default function EditUser() {
                               name: 'phone',
                               required: true,
                             }}
+                            enableSearch={true}
                             country={'us'}
                             onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
                             value={values.mobile.e164Number}

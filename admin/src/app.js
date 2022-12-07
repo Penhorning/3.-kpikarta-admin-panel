@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import indexRoutes from "./routes/";
 import { Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -8,6 +9,11 @@ import { PrivateRoute } from "./routes/PrivateRoutes";
 import BlankLayout from "./layouts/BlankLayout";
 
 const App = () => {
+  useEffect(() => {
+    window.process = {
+      ...window.process,
+    };
+  }, []);
   return (
     <Provider store={configureStore()}>
       <Router history={History}>

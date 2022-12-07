@@ -23,6 +23,46 @@ const getAll = async (data, enqueueSnackbar) => {
   }
 }
 
+const getInventory = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/karta_catalogs/get-all`, {
+      page: data.page,
+      limit: data.limit,
+      searchQuery: data.search,
+      nodeType: [],
+      userId: data.userId
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err, data);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const getAllCompanyMembers = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/users/get-all-members`, {
+      page: data.page,
+      limit: data.limit,
+      searchQuery: data.search,
+      type: "members",
+      userId: data.userId
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err, data);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
 const blockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
   try {
     const response = await axios.put(Constants.BASE_URL + `/api/users/block`, {
@@ -92,7 +132,7 @@ const addUser = async (data, enqueueSnackbar) => {
       email: data.email,
       mobile: data.mobile,
       companyName: data.companyName,
-      type: "admin"
+      addedBy: "admin"
     },
       { headers: AuthHeader() })
     return response.data;
@@ -327,15 +367,23 @@ export function HandleErrorResponse (error) {
     return error.error.message ? error.error.message : 'Something went worng!';
   } else if (error.error.statusCode >= 500 && error.error.statusCode <= 505) {
     return 'Something went worng!';
-  }else {
+  }else if(error.error.statusCode === 422 && error?.error?.details?.codes.email[0] === "uniqueness"){
+    return 'Email is already registered, please try with a different one!';
+  } else {
     AuthenticationService.logout();
     window.location.reload(true);
   }
   return error;
 }
 
+// if (error.status === 422 && error.error.error.details.codes.email[0] === "uniqueness") {
+
+//   this._commonService.errorToaster("Email is already registered, please try with a different one");
+
+// }
 export const UserService = {
   getAll,
+  getAllCompanyMembers,
   getUserCount,
   blockUser,
   unBlockUser,
@@ -352,5 +400,6 @@ export const UserService = {
   getSubscriptionPlanById,
   getLicense,
   getLicenseById,
-  updateLicensePlan
+  updateLicensePlan,
+  getInventory
 };
