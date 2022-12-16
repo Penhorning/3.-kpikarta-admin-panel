@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import 'intl-tel-input/build/css/intlTelInput.css';
+// import 'intl-tel-input/build/css/intlTelInput.css';
 import { useSnackbar } from 'notistack';
 import Spinner from '../../spinner-loader/spinner-loader';
 import Grid from '@mui/material/Grid';
