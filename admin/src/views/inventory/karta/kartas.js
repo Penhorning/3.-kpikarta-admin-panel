@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
-import { makeStyles } from '@mui/styles';
+import { UserService } from "../../../shared/_services";
 import { useSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
-import { UserService } from "../../shared/_services";
+import { makeStyles } from '@mui/styles';
+import Constants from '../../../shared/_helpers/kartaUrl';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,7 +12,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import CardMedia from '@mui/material/CardMedia';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -21,33 +21,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import ClearIcon from '@mui/icons-material/Clear';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 import moment from "moment";
+import Spinner from '../../spinner-loader/spinner-loader';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import Spinner from '../spinner-loader/spinner-loader';
-import EnhancedTableHead from '../user/TableHead/inventoryTableHead/EnhancedTableHead'
-import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import Popper from '@mui/material/Popper';
-import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
-import Fade from '@mui/material/Fade';
-import Checkbox from '@mui/material/Checkbox';
+import EnhancedTableHead from '../../user/TableHead/kartasTableHead/EnhancedTableHead'
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import './inventory.scss';
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 1000,
-    height: 500,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
+import './kartas.scss';
 
 const useStyles = makeStyles({
     customTextField: {
@@ -55,7 +36,7 @@ const useStyles = makeStyles({
             color: 'rgb(0, 0, 0, 0.87)',
             opacity: '0.8',
         }
-    },
+    }
 });
 
 function createData(name, calories, fat, carbs, protein) {
@@ -74,6 +55,11 @@ function descendingComparator(a, b, orderBy) {
     }
     if (b[orderBy] > a[orderBy]) {
         return 1;
+    }
+    if (orderBy == 'company') {
+        a = a['company']['name'].toLowerCase();
+        b = b['company']['name'].toLowerCase();
+        return a.localeCompare(b) * 1
     }
     return 0;
 }
@@ -96,57 +82,28 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const initialValue = {
-    from: "",
-    to: "",
-};
 
-export default function Inventory() {
+export default function KartasTable() {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [selected, setSelected] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [kartas, setKartas] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [dateRange, setDateRange] = useState(initialValue);
     const [isSearchShown, setIsSearchShown] = useState(false)
     const [loading, setLoading] = useState(true);
-    const [open, setOpen] = useState(false);
-    const { enqueueSnackbar } = useSnackbar();
-    const { id } = useParams();
     const classes = useStyles();
-    const [currentUID, setCurrentUID] = useState('');
-    const handleCloseModal = () => setOpen(false);
-    const [nodeTypeFilter, setNodeTypeFilter] = useState([]);
-
-    const handleOpenModal = (event, userId) => {
-        setCurrentUID(userId)
-        return setOpen(true);
-    };
-
-    const [valueList, setValueList] = useState([
-        { name: "Branches", value: "branch" },
-        { name: "Measures", value: "measure" },
-        { name: "Metrics", value: "metrics" }
-    ]);
+    const { id } = useParams();
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        if (dateRange.from && dateRange.to) {
-            fetchData();
-        }
-    }, [dateRange.to]);
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        if (dateRange.from && dateRange.to) {
-            fetchData();
-        }
-    }, [dateRange.to]);
+        fetchData('paginationChange');
+        return () => {
+            setKartas({}); 
+          };
+    }, [page, rowsPerPage]);
 
     const fetchData = (param) => {
         let searchData;
@@ -156,15 +113,14 @@ export default function Inventory() {
             page: page + 1,
             limit: rowsPerPage,
             search: searchData,
-            userId: id,
-            nodeType: nodeTypeFilter
+            findBy: id
+
         }
-        setLoading(true)
-        UserService.getInventory(data, enqueueSnackbar).then((response) => {
+        UserService.getAllKartas(data, enqueueSnackbar).then((response) => {
             if (!response.error) {
-                setUsers(response.catalogs[0].data);
-                if (response.catalogs[0].metadata.length > 0) {
-                    setTotal(response.catalogs[0].metadata[0].total);
+                setKartas(response.kartas[0].data);
+                if (response.kartas[0].metadata.length > 0) {
+                    setTotal(response.kartas[0].metadata[0].total);
                 } else {
                     setTotal(0);
                 }
@@ -178,7 +134,6 @@ export default function Inventory() {
             setPage(0);
         }
     }
-
 
     // SEARCH CODES    
     const handleSearch = (event) => {
@@ -201,7 +156,7 @@ export default function Inventory() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = users.map((n) => n.fullName);
+            const newSelecteds = kartas.map((n) => n.name);
             setSelected(newSelecteds);
             return;
         }
@@ -217,7 +172,7 @@ export default function Inventory() {
         setPage(0);
     };
 
-    const isSelected = (name) => selected.indexOf(name) !== -1;
+    const isSelected = (fullName) => selected.indexOf(fullName) !== -1;
 
     const onInputChnage = (e) => {
         if (e.target.value === '') {
@@ -226,31 +181,6 @@ export default function Inventory() {
             setIsSearchShown(true)
         }
         setSearch(e.target.value)
-    }
-
-    const handleChangeFilter = (e) => {
-        const { checked, value } = e.target;
-        var temp = nodeTypeFilter;
-        if (e.target.checked) {
-            let tempUser = valueList.map((item) =>
-                item.value === value ? { ...item, isChecked: checked } : item
-            );
-            setNodeTypeFilter([...nodeTypeFilter, e.target.value])
-            setValueList(tempUser);
-        } else {
-            let tempUser = valueList.map((item) =>
-                item.value === value ? { ...item, isChecked: checked } : item
-            );
-            temp = temp.filter((a) => {
-                return a != e.target.value;
-            });
-            setNodeTypeFilter([...temp])
-            setValueList(tempUser);
-        }
-    }
-
-    const applyFilter = () => {
-        fetchData(nodeTypeFilter);
     }
 
     return (
@@ -262,45 +192,11 @@ export default function Inventory() {
                         variant="h6"
                         id="tableTitle"
                         component="div">
-                        Inventory
+                        Kartas
                     </Typography>
                     <Typography
                         sx={{ flex: '1 1', zIndex: 1 }}
                         component="div">
-                        <Box component="form"
-                            sx={{ '& > :not(style)': {} }}
-                            noValidate
-                            autoComplete="off" >
-                        </Box>
-                    </Typography>
-                    <Typography
-                        component="div">
-                        <PopupState variant="popper" popupId="demo-popup-popper">
-                            {(popupState) => (
-                                <div>
-                                    <IconButton variant="contained" {...bindToggle(popupState)}>
-                                        <FilterAltIcon style={{ color: "#243864", cursor: 'pointer' }} />
-                                    </IconButton>
-                                    <Popper {...bindPopper(popupState)} transition>
-                                        {({ TransitionProps }) => (
-                                            <Fade {...TransitionProps} timeout={350}>
-                                                <Paper>
-                                                    <Typography sx={{ p: 2 }} component={'div'}>
-                                                        {valueList.map((item, index) => {
-                                                            return <MenuItem key={index} style={{ padding: '0px' }}> <Checkbox checked={item?.isChecked || false} value={item.value} onChange={handleChangeFilter} />  {item.name} </MenuItem>
-
-                                                        })}
-                                                        <div style={{ display: 'grid' }}>
-                                                            <Button variant="contained" size="small" onClick={applyFilter} >Apply</Button>
-                                                        </div>
-                                                    </Typography>
-                                                </Paper>
-                                            </Fade>
-                                        )}
-                                    </Popper>
-                                </div>
-                            )}
-                        </PopupState>
                     </Typography>
                     <Typography
                         sx={{ flex: '1 1 5%' }}
@@ -357,61 +253,54 @@ export default function Inventory() {
                                 orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
                                 onRequestSort={handleRequestSort}
-                                rowCount={users.length}
-                                key={users._id}
+                                rowCount={kartas.length}
+                                key={kartas._id}
                             />
                             <TableBody>
-                                {users && stableSort(users, getComparator(order, orderBy))
-                                    .map((inventory, index) => {
-                                        const isItemSelected = isSelected(inventory._id);
+                                {kartas && stableSort(kartas, getComparator(order, orderBy))
+                                    .map((user, index) => {
+                                        const isItemSelected = isSelected(user._id);
                                         const labelId = `enhanced-table-checkbox-${index}`;
                                         return (
                                             <TableRow
                                                 hover
                                                 aria-checked={isItemSelected}
                                                 tabIndex={-1}
-                                                key={inventory._id}
+                                                key={user._id}
                                                 selected={isItemSelected}
                                             >
-                                                <TableCell style={{ paddingLeft: 22 }} >
-                                                    {inventory?.name}
+                                                <TableCell
+                                                    component="td"
+                                                    id={labelId}
+                                                    scope="row"
+                                                    padding="none"
+                                                    className='wrap-name'
+                                                    style={{
+                                                        paddingLeft: '25px',
+                                                        maxWidth: '100px',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        overflow: 'hidden'
+                                                    }}
+                                                >
+                                                    {user.name}
                                                 </TableCell>
-                                                <TableCell style={{ textTransform: "capitalize", paddingLeft: 22 }}>
-                                                    {inventory?.type}
+                                                <TableCell style={{ verticalAlign: 'top', paddingLeft: 26, textTransform: "capitalize" }}>
+                                                    {user.type}
                                                 </TableCell>
-                                                <TableCell style={{ textTransform: "capitalize", paddingLeft: 22 }}>
-                                                    {inventory?.node_type}
-                                                </TableCell>
-                                                <TableCell style={{ paddingLeft: 22 }}>
-                                                    {moment(inventory.createdAt).format("MM-DD-YYYY")}
+                                                <TableCell>
+                                                    {moment(user.createdAt).format("MM-DD-YYYY")}
                                                 </TableCell>
                                                 <TableCell style={{ verticalAlign: 'top', paddingLeft: 26 }}>
-                                                    {inventory?.sharedTo?.length ? inventory?.sharedTo?.length : "0"}
+                                                    {user?.sharedTo?.length ? user?.sharedTo?.length : "0"}
                                                 </TableCell>
-                                                <TableCell colSpan={1} style={{ verticalAlign: 'top', paddingLeft: 34 }}>
-                                                    {
-                                                        <Tooltip title="View Inventory" onClick={(event) => handleOpenModal(event, inventory._id)}>
-                                                            <VisibilityIcon style={{ color: "#243864", cursor: 'pointer' }} />
-                                                        </Tooltip>
-                                                    }
-                                                    <Modal
-                                                        open={inventory._id == currentUID && open}
-                                                        onClose={handleCloseModal}
-                                                        aria-labelledby="modal-modal-title"
-                                                        aria-describedby="modal-modal-description"
-                                                    >
-                                                        {
-                                                            <Box sx={style}>
-                                                                <Typography id="modal-modal-title" variant="h6" component="h2">
-                                                                    <CardMedia
-                                                                        component="img"
-                                                                        height="400"
-                                                                        image={`${inventory.thumbnail}`}
-                                                                    />
-                                                                </Typography>
-                                                            </Box>
-                                                        }
-                                                    </Modal>
+                                                <TableCell style={{ verticalAlign: 'top', paddingLeft: 26 }}>
+                                                    <a target="_blank" href={`${Constants.BASE_URL}/karta/edit/${user._id}`}>
+
+                                                    <Tooltip title="View Karta"  >
+                                                        <VisibilityIcon style={{ color: "#243864", cursor: 'pointer' }} />
+                                                    </Tooltip>
+                                                    </a>
                                                 </TableCell>
                                             </TableRow>
                                         );
@@ -435,7 +324,6 @@ export default function Inventory() {
         </Box>
     );
 }
-
 
 
 

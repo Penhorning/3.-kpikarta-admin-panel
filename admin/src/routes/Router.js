@@ -21,6 +21,10 @@ const EditLicense = lazy(() => import("../views/license/edit-lisence/edit-licens
 
 const Inventory = lazy(() => import("../views/inventory/inventory"));
 
+// const AddPlan = lazy(() => import("../views/subscription-plan/add-plan/add-plan"));
+
+const Tab = lazy(() => import("../views/inventory/tab/tab"))
+
 
 
 
@@ -80,7 +84,7 @@ var ThemeRoutes = [
     name: "Settings",
     icon: "mdi mdi-settings",
     component: ChangePassword,
-    sideRoute: true
+    sideRoute: false
   },
   {
     path: "/subscription-plans",
@@ -121,7 +125,7 @@ var ThemeRoutes = [
     path: "/inventory/:id",
     name: "Edit License",
     icon: "mdi mdi-gauge",
-    component: Inventory,
+    component: Tab,
     sideRoute: false
   },
   {
