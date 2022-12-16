@@ -7,7 +7,7 @@ export default {
 }
 
 export const kpikartaUrl = {
-  // BASE_URL:'https://dev-app.kpikarta.com'
   BASE_URL:'https://dev-app.kpikarta.com'
+  // BASE_URL:'https://dev-app.kpikarta.com'
 
  }
