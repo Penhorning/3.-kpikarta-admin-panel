@@ -178,6 +178,10 @@ export default function UserTable() {
     color: "#8898aa", cursor: 'pointer'
   };
 
+  const titleStyle = {
+    marginTop:'6px'
+  };
+
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
       fetchData();
@@ -538,7 +542,7 @@ export default function UserTable() {
                         <TableCell>
                           {moment(user.createdAt).format("MM-DD-YYYY")}
                         </TableCell>
-                        <TableCell>
+                        <TableCell >
                           <Box
                             sx={{
                               flexWrap: 'wrap',
@@ -565,13 +569,7 @@ export default function UserTable() {
                             </div>
                           </Box>
                         </TableCell>
-                        <TableCell align="left" style={{
-                          paddingTop: '15px',
-                          paddingRight: '15px',
-                          paddingBottom: '15px',
-                          paddingLeft: '15px',
-                          whiteSpace: 'nowrap'
-                        }}
+                        <TableCell align="left" style={{ verticalAlign: 'top', paddingLeft: 30 }}
                         >
                           <IconButton
                             aria-label="more"
@@ -594,43 +592,39 @@ export default function UserTable() {
                           >
                             <Link as={Link} to={`/my-suggestion/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple>
-                                <MessageIcon style={style} /><h5>Message</h5> 
+                                <MessageIcon style={style} /><h5 style={titleStyle}>Suggestions</h5> 
                               </MenuItem>
                             </Link>
                             <Link as={Link} to={`/edit-user/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple>
-                                <EditIcon style={style} /> <h5>Edit</h5> 
+                                <EditIcon style={style} /> <h5 style={titleStyle}>Edit</h5> 
                               </MenuItem>
                             </Link>
                             <Link as={Link} to={`/view-user/${user?._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple >
-                                <VisibilityIcon style={style} /> <h5>View </h5> 
+                                <VisibilityIcon style={style} /> <h5 style={titleStyle}>View </h5> 
                               </MenuItem>
                             </Link>
                             <Link as={Link} to={`/inventory/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple >
-                                <InventoryIcon style={style} /> <h5>Inventory </h5>
+                                <InventoryIcon style={style} /> <h5 style={titleStyle}>Inventory </h5>
                               </MenuItem>
                             </Link>
-
                             <Divider sx={{ my: 0.5 }} />
-
                             {user.active === true
                               ?
                               <div onClick={(e) => block(user._id)}>
                                 <MenuItem onClick={handleDropDownClose} disableRipple>
-                                  <BlockIcon style={{ color: 'red' }} /> <h5>Block</h5>
+                                  <BlockIcon style={{ color: 'red' }} /> <h5 style={titleStyle}>Block</h5>
                                 </MenuItem>
                               </div>
-
                               :
                               <div onClick={(e) => unblock(user._id)}>
                                 <MenuItem onClick={handleDropDownClose} disableRipple>
-                                  <LockOpenIcon style={{ color: 'green' }} /> <h5>Unblock</h5> 
+                                  <LockOpenIcon style={{ color: 'green' }} /> <h5 style={titleStyle}>Unblock</h5> 
                                 </MenuItem>
                               </div>
                             }
-
                           </StyledMenu>
                         </TableCell>
                       </TableRow>

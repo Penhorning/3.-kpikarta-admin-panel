@@ -2,7 +2,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Header from "./layout-components/header/Header";
-import Sidebar from "./layout-components/sidebar/Sidebar";
+import Sidebar from "./layout-components/sidebar/sidebarlist";
 import Footer from "./layout-components/footer/Footer";
 import ThemeRoutes from "../routes/Router";
 import Spinner from "../views/spinner-loader/spinner-loader";

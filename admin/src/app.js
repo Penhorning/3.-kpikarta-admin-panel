@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "./redux/Store";
 import { History } from "./shared/_helpers";
 import { PrivateRoute } from "./routes/PrivateRoutes";
-import BlankLayout from "./layouts/BlankLayout";
+import BlankLayout from "./layouts/blankLayout";
 
 const App = () => {
   useEffect(() => {
