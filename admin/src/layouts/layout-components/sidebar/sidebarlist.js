@@ -3,7 +3,15 @@ import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { Nav, Collapse } from "reactstrap";
 import PerfectScrollbar from "react-perfect-scrollbar";
-
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 const mapStateToProps = (state) => ({
   ...state,
 });
@@ -47,10 +55,24 @@ class Sidebar extends React.Component {
         onMouseEnter={this.expandLogo}
         onMouseLeave={this.expandLogo}
       >
-        <div className="scroll-sidebar">
-          <PerfectScrollbar className="sidebar-nav">
+
+        {/* <List>
+        {['Inbox', 'Starred', 'Sends email', 'Drafts'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List> */}
+
+        <div className="scroll-sidebar" >
+          <PerfectScrollbar className="sidebar-nav" >
             {/*--------------------------------------------------------------------------------*/}
-            {/* Sidebar Menus will go here                                                */}
+            {/* Sidebar Menus will go here                                                     */}
             {/*--------------------------------------------------------------------------------*/}
             <Nav id="sidebarnav">
               {this.props.routes.filter(item => item.sideRoute === true).map((prop, key) => {
@@ -60,6 +82,7 @@ class Sidebar extends React.Component {
                   return (
                     <li className="nav-small-cap" key={key}>
                       <i className={prop.icon}></i>
+                      <ListItem className="hide-menu">{prop.name}</ListItem>
                       <span className="hide-menu">{prop.name}</span>
                     </li>
                   );
@@ -81,6 +104,7 @@ class Sidebar extends React.Component {
                         onClick={() => this.setState(firstdd)}
                       >
                         <i className={prop.icon} />
+                        <ListItem className="hide-menu">{prop.name}</ListItem>
                         <span className="hide-menu">{prop.name}</span>
                       </span>
                       {/*--------------------------------------------------------------------------------*/}
@@ -108,6 +132,7 @@ class Sidebar extends React.Component {
                                     onClick={() => this.setState(seconddd)}
                                   >
                                     <i className={prop.icon} />
+                                    <ListItem className="hide-menu">{prop.name}</ListItem>
                                     <span className="hide-menu">
                                       {prop.name}
                                     </span>
@@ -121,10 +146,7 @@ class Sidebar extends React.Component {
                                         if (prop.redirect) return null;
                                         return (
                                           <li
-                                            className={
-                                              this.activeRoute(prop.path) +
-                                              " sidebar-item"
-                                            }
+                                            className={ this.activeRoute(prop.path) + " sidebar-item" }
                                             key={key}
                                           >
                                             <NavLink
@@ -150,11 +172,7 @@ class Sidebar extends React.Component {
                               /* Adding Sidebar Item                                                            */
                               /*--------------------------------------------------------------------------------*/
                               <li
-                                className={
-                                  this.activeRoute(prop.path) +
-                                  (prop.pro ? " active active-pro" : "") +
-                                  " sidebar-item"
-                                }
+                                className={ this.activeRoute(prop.path) + (prop.pro ? " active active-pro" : "") + " sidebar-item" }
                                 key={key}
                               >
                                 <NavLink
@@ -163,6 +181,7 @@ class Sidebar extends React.Component {
                                   activeClassName="active"
                                 >
                                   <i className={prop.icon} />
+                                  <ListItem className="hide-menu">{prop.name}</ListItem>
                                   <span className="hide-menu">{prop.name}</span>
                                 </NavLink>
                               </li>
@@ -177,12 +196,9 @@ class Sidebar extends React.Component {
                     /*--------------------------------------------------------------------------------*/
                     /* Adding Sidebar Item                                                            */
                     /*--------------------------------------------------------------------------------*/
-                    <li
-                      className={
-                        this.activeRoute(prop.path) +
-                        (prop.pro ? " active active-pro" : "") +
-                        " sidebar-item"
-                      }
+                    <List
+                      className={ this.activeRoute(prop.path) + (prop.pro ? " active active-pro" : "") + " sidebar-item" }
+                      style={{ padding: '5px' }}
                       key={key}
                     >
                       <NavLink
@@ -190,10 +206,14 @@ class Sidebar extends React.Component {
                         className="sidebar-link"
                         activeClassName="active"
                       >
-                        <i className={prop.icon} />
-                        <span className="hide-menu">{prop.name}</span>
+                        <ListItem key={key} style={{ paddingLeft: 0, paddingRight: 2, paddingTop: 0, paddingBottom: 0 }}>
+                          <ListItemIcon>
+                            <i className={prop.icon} />
+                          </ListItemIcon>
+                          <ListItemText style={{color:'white'}} primary={prop.name} />
+                        </ListItem>
                       </NavLink>
-                    </li>
+                    </List >
                   );
                 }
               })}

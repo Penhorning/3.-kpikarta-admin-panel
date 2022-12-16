@@ -24,7 +24,7 @@ import Grid from '@mui/material/Grid';
 import ImgCrop from 'antd-img-crop';
 import 'react-phone-input-2/lib/material.css';
 import 'antd/dist/antd.css';
-import 'intl-tel-input/build/css/intlTelInput.css';
+// import 'intl-tel-input/build/css/intlTelInput.css';
 import './edit-user.scss';
 
 const initialValues = {

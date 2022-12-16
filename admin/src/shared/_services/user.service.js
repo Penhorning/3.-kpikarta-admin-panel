@@ -23,14 +23,34 @@ const getAll = async (data, enqueueSnackbar) => {
   }
 }
 
+const getAllKartas = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/karta/get-all`, {
+      page: data.page,
+      limit: data.limit,
+      searchQuery: data.search,
+      findBy: data.findBy
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err, data);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
 const getInventory = async (data, enqueueSnackbar) => {
   try {
     const response = await axios.post(Constants.BASE_URL + `/api/karta_catalogs/get-all`, {
       page: data.page,
       limit: data.limit,
       searchQuery: data.search,
-      nodeType: [],
-      userId: data.userId
+      nodeTypes: data.nodeType,
+      userId: data.userId,
+      type: "owned"
     },
       { headers: AuthHeader() })
     return response.data;
@@ -401,5 +421,6 @@ export const UserService = {
   getLicense,
   getLicenseById,
   updateLicensePlan,
-  getInventory
+  getInventory,
+  getAllKartas
 };
