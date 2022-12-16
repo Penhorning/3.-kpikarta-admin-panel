@@ -97,7 +97,6 @@ export default function Chart() {
     {time: '07/05/1996', amount: 200},
 
   ])
-console.log("data", data)
   const handleDateChange = async (event) => {
     setIsShown(true)
     setSelectedDayRange(event);
@@ -125,14 +124,11 @@ console.log("data", data)
       salesChartDatDateObject.push(moment(end).subtract(difference, "days").format());
       difference--;
     }
-    console.log("salesChartDatDateObject", salesChartDatDateObject)
-    console.log("salesChartDataDates", salesChartDataDates)
 
     salesChartDataDates.map((item, idx)=>{
       // setData(Object.assign({['time']: e}))
       let floors = [];
       floors.push({ time: item, amount: idx });
-      console.log("tete", floors )
       setData(floors)
      return
     })

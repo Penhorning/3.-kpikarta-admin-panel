@@ -20,7 +20,6 @@ const Countcard = () => {
         })
     }
 
-    console.log("count", count)
     useEffect(() => {
         getUserCount();
     }, [])
