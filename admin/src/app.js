@@ -1,12 +1,12 @@
 import React from "react";
 import { useEffect } from "react";
+import BlankLayout from "./layouts/blankLayout";
 import indexRoutes from "./routes/";
 import { Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "./redux/Store";
 import { History } from "./shared/_helpers";
 import { PrivateRoute } from "./routes/PrivateRoutes";
-import BlankLayout from "./layouts/blankLayout";
 
 const App = () => {
   useEffect(() => {

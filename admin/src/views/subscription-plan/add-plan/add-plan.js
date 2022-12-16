@@ -58,7 +58,6 @@ export default function Addplan() {
         duration: values.duration,
         userId: userId
       };
-      console.log("data", data)
       // setIsOpenBtn(true)
       // UserService.addNewPlan(data, enqueueSnackbar).then(response => {
       //   if(!response.error){
