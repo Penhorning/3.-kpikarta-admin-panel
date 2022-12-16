@@ -7,7 +7,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
-import 'intl-tel-input/build/css/intlTelInput.css';
+// import 'intl-tel-input/build/css/intlTelInput.css';
 import { useHistory } from 'react-router-dom';
 import './add-plan.scss';
 import { UserService } from '../../../shared/_services';
