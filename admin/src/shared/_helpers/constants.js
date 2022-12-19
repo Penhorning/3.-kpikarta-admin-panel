@@ -12,3 +12,4 @@ export const kpikartaUrl = {
   // BASE_URL: 'https://prod-app.kpikarta.com'
     BASE_URL: 'https://qa-app.kpikarta.com'
  }
+//  BASE_URL: 'https://qa-app.kpikarta.com'
