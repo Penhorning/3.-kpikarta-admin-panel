@@ -21,8 +21,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import ClearIcon from '@mui/icons-material/Clear';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
 import moment from "moment";
 import Spinner from '../../spinner-loader/spinner-loader';
 import VisibilityIcon from '@mui/icons-material/Visibility';
