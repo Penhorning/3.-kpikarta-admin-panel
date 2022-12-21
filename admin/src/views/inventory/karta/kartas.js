@@ -4,7 +4,7 @@ import { UserService } from "../../../shared/_services";
 import { useSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
-import Constants from '../../../shared/_helpers/kartaUrl';
+import Constants from '../../../shared/_helpers/constants';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -293,7 +293,7 @@ export default function KartasTable() {
                                                     {user?.sharedTo?.length ? user?.sharedTo?.length : "0"}
                                                 </TableCell>
                                                 <TableCell style={{ verticalAlign: 'top', paddingLeft: 26 }}>
-                                                    <a target="_blank" href={`${Constants.BASE_URL}/karta/edit/${user._id}`}>
+                                                    <a target="_blank" href={`${Constants.KARTA_URL}/karta/edit/${user._id}`}>
 
                                                     <Tooltip title="View Karta"  >
                                                         <VisibilityIcon style={{ color: "#243864", cursor: 'pointer' }} />

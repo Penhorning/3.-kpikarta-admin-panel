@@ -81,7 +81,7 @@ export default function EditPlan() {
         (response) => {
           if (!response.error) {
             let variant = "success";
-            enqueueSnackbar('Plan has upadated successfully', { variant });
+            enqueueSnackbar('Plan has updated successfully', { variant });
             history.push('/subscription-plans');
             setPlanId();
             setUserID();
