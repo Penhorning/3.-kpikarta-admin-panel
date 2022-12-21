@@ -24,7 +24,6 @@ import Grid from '@mui/material/Grid';
 import ImgCrop from 'antd-img-crop';
 import 'react-phone-input-2/lib/material.css';
 import 'antd/dist/antd.css';
-// import 'intl-tel-input/build/css/intlTelInput.css';
 import './edit-user.scss';
 
 const initialValues = {
@@ -160,7 +159,7 @@ export default function EditUser() {
       UserService.updateUser(id, data, enqueueSnackbar).then((response) => {
         if (!response.error) {
           let variant = "success";
-          enqueueSnackbar('User details upadated successfully.', { variant });
+          enqueueSnackbar('User details updated successfully.', { variant });
           history.push('/users');
         }
       })
@@ -183,7 +182,7 @@ export default function EditUser() {
       UserService.upadateCompanyDetails(companyIds, data, enqueueSnackbar).then(response => {
         if (!response.error) {
           let variant = "success";
-          enqueueSnackbar('Company details upadated successfully.', { variant });
+          enqueueSnackbar('Company details updated successfully.', { variant });
           history.push('/users');
         }
       })

@@ -105,7 +105,7 @@ export default function EditProfile() {
       UserService.updateUser(userId, data, enqueueSnackbar).then((response) => {
         if (!response.error) {
             let variant = "success";
-            enqueueSnackbar('Admin details upadated successfully.', { variant });
+            enqueueSnackbar('Admin details updated successfully.', { variant });
             setIsOpenBtn(false)
             window.location.reload();
         }

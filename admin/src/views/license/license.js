@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import { UserService } from "../../shared/_services";
+import { visuallyHidden } from '@mui/utils';
+import { useSnackbar } from 'notistack';
+import { AuthenticationService } from "../../shared/_services/authentication.service"
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -14,17 +18,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
-import { visuallyHidden } from '@mui/utils';
 import Stack from '@mui/material/Stack';
 import EditIcon from '@mui/icons-material/Edit';
-import './license.scss';
 import Divider from '@mui/material/Divider';
 import moment from "moment";
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import { Link } from 'react-router-dom';
 import Spinner from '../spinner-loader/spinner-loader';
-import { AuthenticationService } from "../../shared/_services/authentication.service"
-import { useSnackbar } from 'notistack';
+import './license.scss';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 
 function createData(name, calories, fat, carbs, protein) {
