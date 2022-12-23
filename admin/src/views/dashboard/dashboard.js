@@ -27,6 +27,10 @@ const initialValue = {
 const Dashboard = () => {
   const [count, setCount] = useState('.');
   const { enqueueSnackbar } = useSnackbar();
+  const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
+  const [dateRange, setDateRange] = useState(initialValue);
+  const [isShown, setIsShown] = useState(false)
+
   function getUserCount() {
     UserService.getUserCount(enqueueSnackbar).then(response => {
       if (!response.error) {
@@ -60,9 +64,6 @@ const Dashboard = () => {
     getUserCount();
   }, [])
 
-  const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
-  const [dateRange, setDateRange] = useState(initialValue);
-  const [isShown, setIsShown] = useState(false)
 
   const handleDateChange = async (event) => {
     setIsShown(true)
@@ -122,7 +123,7 @@ const Dashboard = () => {
               </div>
             </Paper>
           </Grid>
-          {/* <Grid item xs={12} >
+          <Grid item xs={12} >
             <Paper
               sx={{
                 p: 2,
@@ -133,7 +134,7 @@ const Dashboard = () => {
             >
               <Chart />
             </Paper>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
     </Card>

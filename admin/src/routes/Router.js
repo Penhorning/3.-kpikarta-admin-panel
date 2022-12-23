@@ -20,10 +20,11 @@ const ChangePassword = lazy(() => import("../views/admin/change-password/change-
 const EditLicense = lazy(() => import("../views/license/edit-lisence/edit-license"));
 
 const Inventory = lazy(() => import("../views/inventory/inventory"));
+const Tab = lazy(() => import("../views/inventory/tab/tab"))
+
 
 // const AddPlan = lazy(() => import("../views/subscription-plan/add-plan/add-plan"));
 
-const Tab = lazy(() => import("../views/inventory/tab/tab"))
 
 
 

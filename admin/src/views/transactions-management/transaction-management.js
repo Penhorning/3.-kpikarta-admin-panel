@@ -1,4 +1,8 @@
 import * as React from 'react';
+import { Card } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { makeStyles } from '@mui/styles';
+import { confirm } from "react-confirm-box";
 import { useState, useEffect } from "react";
 import { UserService } from "../../shared/_services";
 import PropTypes from 'prop-types';
@@ -35,12 +39,8 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import DatePicker from "react-modern-calendar-datepicker";
-import { Card } from '@mui/material';
-import { Link } from 'react-router-dom';
 import MessageIcon from '@mui/icons-material/Message';
-import { makeStyles } from '@mui/styles';
 import Spinner from '../spinner-loader/spinner-loader';
-import { confirm } from "react-confirm-box";
 
 const useStyles = makeStyles({
   customTextField: {

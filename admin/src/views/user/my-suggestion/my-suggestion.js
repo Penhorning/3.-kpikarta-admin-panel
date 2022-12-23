@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect } from "react";
-import * as Yup from 'yup';
 import { SuggestionService } from '../../../shared/_services/suggestion.service';
+import { confirm } from "react-confirm-box";
 import { Formik, Form, Field, FieldArray } from 'formik';
 import { useParams } from 'react-router-dom';
 import { Grid, TextField } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useHistory } from 'react-router-dom';
+import * as Yup from 'yup';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -21,7 +22,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Spinner from "../../spinner-loader/spinner-loader";
-import { confirm } from "react-confirm-box";
 import './my-suggestion.scss';
 
 export default function MySuggestion() {

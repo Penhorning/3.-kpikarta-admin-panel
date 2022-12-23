@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend
 } from 'recharts';
+import { UserService } from "../../../shared/_services";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
@@ -21,62 +22,12 @@ import moment from "moment";
 import DatePicker from "react-modern-calendar-datepicker";
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import './chart.scss'
 
-// Generate Sales Data
-// function createData(time, amount) {
-//   return { time, amount };
-// }
-
-// const data = [
-//   createData('07/05/1996', 300),
-//   createData('07/05/1997', 300),
-//   createData('07/05/1998', 600),
-//   createData('07/05/1999', 200),
-//   createData('07/05/2000', 400),
-//   createData('07/05/2001', 800),
-//   createData('07/05/2002', 100),
-//   createData('07/05/2003', 600),
-//   createData('07/05/2004', 300),
-//   createData('07/05/2005', 600),
-//   createData('07/05/2006', 600),
-//   createData('07/05/2007', 700),
-//   createData('07/05/2008', 800),
-//   createData('07/05/2009', 200),
-//   createData('07/05/2010', 400),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-//   createData('07/05/1997', 600),
-
-//   createData('09:00', 800),
-//   createData('12:00', 1500),
-//   createData('15:00', 2000),
-//   createData('18:00', 2400),
-//   createData('21:00', 2400),
-//   createData('24:00', undefined),
-// ];
-
-// const data = [
-//   {time: '07/05/1996', amount: 800},
-//   {time: '07/05/1996', amount: 800},
-//   {time: '07/05/1996', amount: 800}
-// ]
 
 const initialValue = {
   from: "",
@@ -88,15 +39,8 @@ export default function Chart() {
   const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
   const [dateRange, setDateRange] = useState(initialValue);
   const [isShown, setIsShown] = useState(false)
-  const [data, setData] = useState([
-    {time: '07/05/1996', amount: 100},
-    {time: '07/05/1996', amount: 800},
-    {time: '07/05/1996', amount: 300},
-    {time: '07/05/1996', amount: 500},
-    {time: '07/05/1996', amount: 700},
-    {time: '07/05/1996', amount: 200},
+  const [data, setData] = useState([]);
 
-  ])
   const handleDateChange = async (event) => {
     setIsShown(true)
     setSelectedDayRange(event);
@@ -106,33 +50,50 @@ export default function Chart() {
         to: moment({ ...event.to, month: event.to.month - 1 }).endOf("day").toDate(),
       });
     }
-    
   };
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
-      let start
-    let end
-    let difference = 0;
-    let salesChartDataDates = [];
-    let salesChartDatDateObject = [];
-    start = moment(dateRange.from);
-    end = moment(dateRange.to);
-    difference = end.diff(start, 'days');
-    while (difference >=0 ) {
-      salesChartDataDates.push(moment(end).subtract(difference, "days").format("DD/MMM/YY"));
-      salesChartDatDateObject.push(moment(end).subtract(difference, "days").format());
-      difference--;
-    }
+    //   let start
+    // let end
+    // let difference = 0;
+    // let salesChartDataDates = [];
+    // let salesChartDatDateObject = [];
+    // start = moment(dateRange.from);
+    // end = moment(dateRange.to);
+    // difference = end.diff(start, 'days');
+    // while (difference >=0 ) {
+    //   salesChartDataDates.push(moment(end).subtract(difference, "days").format("DD/MMM/YY"));
+    //   salesChartDatDateObject.push(moment(end).subtract(difference, "days").format());
+    //   difference--;
+    // }
 
-    salesChartDataDates.map((item, idx)=>{
-      // setData(Object.assign({['time']: e}))
-      let floors = [];
-      floors.push({ time: item, amount: idx });
-      setData(floors)
-     return
-    })
+    // salesChartDataDates.map((item, idx)=>{
+    //   // setData(Object.assign({['time']: e}))
+    //   let floors = [];
+    //   floors.push({ time: item, amount: idx });
+    //   setData(floors)
+    //  return
+    // })
       
+    // let data = {
+    //   start: dateRange.from,
+    //   end: dateRange.to,
+    // }
+    // UserService.getAll(data, enqueueSnackbar).then((response) => {
+    //   if (!response.error) {
+    //     setUsers(response.users[0].data);
+    //     if (response.users[0].metadata.length > 0) {
+    //       setTotal(response.users[0].metadata[0].total);
+    //     } else {
+    //       setTotal(0);
+    //     }
+    //     setLoading(false)
+    //   } else if (response.error.statusCode === 400) {
+    //     let variant = 'error';
+    //     enqueueSnackbar("Something went worng", { variant });
+    //   }
+    // })
 
     }
   }, [dateRange.to]);

@@ -16,7 +16,7 @@ export default (props) => {
     const updateDimensions = () => {
       let element = document.getElementById("main-wrapper");
       setWidth(window.innerWidth);
-      switch (settings.activeSidebarType) {
+      switch (settings?.activeSidebarType) {
         case "full":
         case "iconbar":
           if (width < 1170) {
@@ -25,7 +25,7 @@ export default (props) => {
           } else {
             element.setAttribute(
               "data-sidebartype",
-              settings.activeSidebarType
+              settings?.activeSidebarType
             );
             element.classList.remove("mini-sidebar");
           }

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
 import { message, Upload } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { UserService } from '../../../shared/_services';
 import { confirm } from "react-confirm-box";
+import * as Yup from 'yup';
 import Constants from '../../../shared/_helpers/constants';
 import Spinner from '../../spinner-loader/spinner-loader';
 import Box from '@mui/material/Box';
@@ -117,7 +117,7 @@ export default function EditUser() {
         [
           {
             uid: response.company.id,
-            thumbUrl:  response.company.logo ? `${Constants.BASE_URL}/company/${response.company.logo}`:`${'https://i.ibb.co/9G3XdFq/comapny-logo.png'}` ,
+            thumbUrl:  response.company.logo ? `${Constants.BASE_URL}/company/${response.company.logo}`:`${'https://i.ibb.co/VD9C8w4/Capture-3.png'}` ,
             status: 'done',
             url: ''
           },
