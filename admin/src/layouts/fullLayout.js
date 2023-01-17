@@ -24,7 +24,7 @@ export default (props) => {
             element.classList.add("mini-sidebar");
           } else {
             element.setAttribute(
-              "data-sidebartype",
+              "data-sidebartype" ? "data-sidebartype" : "mini-sidebar" ,
               settings?.activeSidebarType
             );
             element.classList.remove("mini-sidebar");
@@ -113,11 +113,11 @@ export default (props) => {
                 } else {
                   return (
                     <Route
-                      path={prop.path}
-                      component={prop.component}
-                      key={key}
+                    path={prop.path}
+                    component={prop.component}
+                    key={key}
                     />
-                  );
+                    );
                 }
               })}
             </Switch>

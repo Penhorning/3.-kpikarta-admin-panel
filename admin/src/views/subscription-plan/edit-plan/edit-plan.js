@@ -20,9 +20,7 @@ import 'react-phone-input-2/lib/material.css';
 
 const initialValues = {
   name: '',
-  amount: '',
-  interval_count: '',
-  description: '',
+  price: ''
 }
 
 export default function EditPlan() {
@@ -38,20 +36,17 @@ export default function EditPlan() {
   const validationSchema = Yup.object().shape({
     name: Yup.string().trim().min(1, 'Plan name must be between 1 and 255 characters.')
     .max(255, 'Plan name must be between 1 and 255 characters.').required('Plan name is required!'),
-    description: Yup.string().required('Description is required!')
+    price: Yup.string().required('Description is required!')
   });
 
   useEffect(() => {
     // Get individula paln by passing user id
     UserService.getSubscriptionPlanById(id, enqueueSnackbar).then( response => {
       if(!response.error){
-        const { amount, description, name, plan_id, user_id, interval_count } = response;
+        const { price, name, priceId} = response.plan;
         initialValues.name = name;
-        initialValues.amount = amount;
-        initialValues.interval_count = interval_count;
-        initialValues.description = description;
-        setPlanId(plan_id);
-        setUserID(user_id)
+        initialValues.price = price;
+        setPlanId(priceId);
         setLoading(false)
       }
     });
@@ -61,7 +56,6 @@ export default function EditPlan() {
     labels: {
       confirmable: "Yes" ,
       cancellable: "No",
-      
     } 
   }
 
@@ -70,14 +64,13 @@ export default function EditPlan() {
     const result = await confirm("Are you sure, Do you want to update this plan?", options);
     if (result) {
       let data = {
-        plan_name: values.name,
-        description: values.description,
-        userId: userId,
-        planId: planId
+        name: values.name,
+        price: values.price,
+        priceId : id
       };
       setLoading(true)
       setIsOpenBtn(true)
-      UserService.updateSubscriptionPlan(id, data, enqueueSnackbar).then(
+      UserService.updateSubscriptionPlan(data, enqueueSnackbar).then(
         (response) => {
           if (!response.error) {
             let variant = "success";
@@ -140,53 +133,18 @@ export default function EditPlan() {
                           />
                         )}
                       </Field>
-                      <Field name="amount">
+                      <Field name="price">
                         {({ field }) => (
                           <TextField
-                            label="Amount"
+                            label="Price"
                             fullWidth
-                            disabled={true}
                             display='flex'
                             {...field}
                             style={{ margin: '20px', marginRight: '25px' }}
                           />
                         )}
                       </Field>
-                      <Field name="interval_count">
-                        {({ field }) => (
-                          <TextField
-                            label="Duration"
-                            fullWidth
-                            disabled={true}
-                            display='flex'
-                            {...field}
-                            style={{ margin: '20px', marginRight: '25px' }}
-                          />
-                        )}
-                      </Field>
-                    </Box>
-                    <Box sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      '& > :not(style)': {}
-                    }}
-                      style={{ alignSelf: 'center' }}>
                     
-                      <Field name="description">
-                        {({ field }) => (
-                          <TextField
-                            label="Description"
-                            fullWidth
-                            multiline
-                            rows={4}
-                            display='flex'
-                            {...field}
-                            style={{ margin: '20px', marginRight: '25px' }}
-                            error={errors.description && touched.description ? true : false}
-                            helperText={(errors.description && touched.description ? `${errors.description}` : '')}
-                          />
-                        )}
-                      </Field>
                     </Box>
                     <Button
                       style={{

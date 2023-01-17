@@ -93,7 +93,7 @@ export default function AddUser() {
             variant="h6"
             id="tableTitle"
             component="div">
-            Add User
+            Add Company
           </Typography>
           <Button variant="outlined" onClick={onBackClick}>Back</Button>
         </Toolbar>

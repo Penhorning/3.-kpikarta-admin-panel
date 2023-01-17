@@ -41,6 +41,7 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import DatePicker from "react-modern-calendar-datepicker";
 import MessageIcon from '@mui/icons-material/Message';
 import Spinner from '../spinner-loader/spinner-loader';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles({
   customTextField: {
@@ -90,41 +91,35 @@ function stableSort(array, comparator) {
 }
 const headCells = [
   {
-    id: 'fullName',
+    id: 'username',
     numeric: false,
     disablePadding: true,
     label: 'User Name',
   },
   {
-    id: 'email',
+    id: 'planName',
     numeric: false,
     disablePadding: false,
     label: 'Plan Name',
   },
   {
-    id: 'mobile',
+    id: 'price',
     numeric: false,
     disablePadding: false,
-    label: 'Price',
+    label: 'Price ($)',
   },
   {
-    id: 'createdAt',
+    id: 'paymentDate',
     numeric: false,
     disablePadding: false,
     label: 'Payment Date',
   },
   {
-    id: 'active',
+    id: 'status',
     numeric: false,
     disablePadding: false,
     label: 'Status',
-  },
-//   {
-//     id: 'action',
-//     numeric: false,
-//     disablePadding: false,
-//     label: 'Action',
-//   },
+  }
 ];
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } =
@@ -183,14 +178,15 @@ export default function TransactionTable() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [unBlocktost, setunBlocktost] = useState(false);
-  const [blocktost, setBlocktost] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(4);
   const [dateRange, setDateRange] = useState(initialValue);
   const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
   const [isShown, setIsShown] = useState(false)
   const [isSearchShown, setIsSearchShown] = useState(false)
   const [loading, setLoading] = useState(true);
+  const [previousId, setPreviousId] = useState();
+  const [nextId, setNextId] = useState();
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
 
   useEffect(() => {
@@ -203,45 +199,6 @@ export default function TransactionTable() {
     fetchData('paginationChange');
   }, [page, rowsPerPage]);
 
-  const unblockToast = () => {
-    setunBlocktost(true);
-  };
-
-  const blockToast = () => {
-    setBlocktost(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setBlocktost(false);
-    setunBlocktost(false);
-  };
-
-  const block = (userId, page, rowsPerPage) => {
-    const result = window.confirm("Are you sure, Do you want to Deactivate this user?");
-    if (result) {
-      UserService.blockUser(userId, page, rowsPerPage).then((res) => {
-        if (res.status === true) {
-          fetchData('paginationChange');
-          unblockToast(true)
-        }
-      })
-    }
-  }
-
-  const unblock = (userId, page, rowsPerPage) => {
-    const result = window.confirm("Are you sure, Do you want to Activate this user?");
-    if (result) {
-      UserService.unBlockUser(userId, page, rowsPerPage).then((res) => {
-        if (res.status === true) {
-          fetchData('paginationChange');
-          blockToast(true)
-        }
-      })
-    }
-  }
 
   const fetchData = (param) => {
     let searchData;
@@ -251,17 +208,23 @@ export default function TransactionTable() {
       page: page + 1,
       limit: rowsPerPage,
       search: searchData,
-      start: dateRange.from,
-      end: dateRange.to,
+      previousId: previousId,
+      nextId: nextId
     }
-    UserService.getAll(data).then((apiResponse) => {
-      setUsers(apiResponse.users[0].data);
-      if (apiResponse.users[0].metadata.length > 0) {
-        setTotal(apiResponse.users[0].metadata[0].total);
+    console.log("data", data)
+    UserService.getAllInvoices(data, enqueueSnackbar).then((response) => {
+      if (!response.error) {
+      setUsers( response.invoices[0].data);
+      if (response.invoices[0]?.metadata.length > 0) {
+        setTotal(response.invoices[0]?.metadata[0]?.total);
       } else {
         setTotal(0);
       }
       setLoading(false)
+    } else if(response.error.statusCode === 400){
+      let variant = 'error';
+      enqueueSnackbar("Something went worng", { variant });
+    }
     });
     if (param !== 'paginationChange') {
       setPage(0);
@@ -330,7 +293,7 @@ export default function TransactionTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.fullName);
+      const newSelecteds = users.map((n) => n.username);
       setSelected(newSelecteds);
       return;
     }
@@ -338,6 +301,14 @@ export default function TransactionTable() {
   };
 
   const handleChangePage = (event, newPage) => {
+    if(event.target.getAttribute("data-testid") == 'KeyboardArrowRightIcon'){
+      let nextId = users.slice(-1)
+      setNextId(nextId[0].id )
+      setPreviousId()
+    }else {
+      setPreviousId(users[0].id)
+      setNextId()
+    }
     setPage(newPage);
   };
 
@@ -347,7 +318,7 @@ export default function TransactionTable() {
   };
 
 
-  const isSelected = (fullName) => selected.indexOf(fullName) !== -1;
+  const isSelected = (username) => selected.indexOf(username) !== -1;
 
   const onInputChnage = (e) => {
     if (e.target.value === '') {
@@ -357,6 +328,10 @@ export default function TransactionTable() {
     }
     setSearch(e.target.value)
   }
+
+  const Capitalize = (str) => {
+    return str.replace(/^_*(.)|_+(.)/g, (s, c, d) => c ? c.toUpperCase() : ' ' + d.toUpperCase())
+}
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -369,7 +344,7 @@ export default function TransactionTable() {
             component="div">
             Transactions
           </Typography>
-          <Typography
+          {/* <Typography
             sx={{ flex: '1 1', zIndex: 1  }}
             component="div">
             <Box component="form"
@@ -442,13 +417,6 @@ export default function TransactionTable() {
                 }
               </Paper>
             </Box>
-          </Typography>
-          {/* <Typography component="div">
-            <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-              <Link to='/add-user'>
-                <Button className="text-nowrap" variant="contained">ADD USER</Button>
-              </Link>
-            </Stack>
           </Typography> */}
         </Toolbar>
         <Divider sx={{ m: 1.0 }} orientation="horizontal" />
@@ -470,14 +438,14 @@ export default function TransactionTable() {
               <TableBody>
                 {users && stableSort(users, getComparator(order, orderBy))
                   .map((user, index) => {
-                    const isItemSelected = isSelected(user._id);
+                    const isItemSelected = isSelected(user.index);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
                         hover
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={user._id}
+                        key={index}
                         selected={isItemSelected}
                       >
                         <TableCell
@@ -487,44 +455,25 @@ export default function TransactionTable() {
                           padding="none"
                           style={{ paddingLeft: '25px' }}
                         >
-                          {user.fullName}
+                          {user.username}
                         </TableCell>
                         <TableCell>
-                          <div style={{ display: 'flex' }}>
-                            {user.email}{user.emailVerified
-                              ? <span className="status_icon" style={{ color: 'green' }}>
-                                <Tooltip title="Verified">
-                                  <CheckCircleIcon />
-                                </Tooltip>
-                              </span>
-                              : <span className="status_icon text-danger" >
-                                <Tooltip title="Unverified">
-                                  <CancelIcon />
-                                </Tooltip>
-                              </span>}
+                          <div style={{ display: 'flex',  paddingLeft: '8px' }}>
+                            {user.planName}
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div style={{ display: 'flex' }}>
-                            {user?.mobile?.e164Number}
-                            {user?.mobile?.e164Number
-                              ? user.mobileVerified === true
-                                ? <span className="status_icon" style={{ color: 'green', textAlign: 'center' }}>
-                                  <Tooltip title="Verified">
-                                    <CheckCircleIcon />
-                                  </Tooltip>
-                                </span>
-                                : <span className="status_icon text-danger">
-                                  <Tooltip title="Unverified">
-                                    <CancelIcon />
-                                  </Tooltip>
-                                </span>
-                              : 'N/A'
-                            }
+                          <div style={{ display: 'flex',  paddingLeft: '15px' }}>
+                            {user?.price}
                           </div>
                         </TableCell>
                         <TableCell>
-                          {moment(user.createdAt).format("MM-DD-YYYY")}
+                          <div
+                          style={{ paddingLeft: '10px' }}
+                          >
+                          {moment(user.paymentDate).format("MM-DD-YYYY")}
+
+                          </div>
                         </TableCell>
                         <TableCell>
                           <Box
@@ -535,57 +484,11 @@ export default function TransactionTable() {
                                 height: 20,
                               },
                             }}
+                            style={{ paddingLeft: '15px' }}
                           >
-                            {
-                              user.active === false
-                                ? <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Inactive</span></Card>
-                                : <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Active</span></Card>
-
-                            }
+                            {Capitalize(user.status)}
                           </Box>
                         </TableCell>
-                        {/* <TableCell align="left" style={{
-                          paddingTop: '15px',
-                          paddingRight: '15px',
-                          paddingBottom: '15px',
-                          paddingLeft: '15px'
-                        }}
-                        >
-                          {<Tooltip title="User Suggestion" className='MuiIconButton-root'>
-                            <Link to={`/my-suggestion/${user._id}`}>
-                              <MessageIcon />
-                            </Link>
-                          </Tooltip>
-                          }
-
-                          {<Tooltip title="Edit" className='MuiIconButton-root'>
-                            <Link to={`/edit-user/${user._id}`}>
-                              <EditIcon style={{ color: '#0c85d0' }} />
-                            </Link>
-
-                          </Tooltip>
-                          }
-                          {
-                            <Tooltip title="View">
-                              <Link to={`/view-user/${user._id}`}>
-                              <VisibilityIcon style={{ color:"#243864", cursor:'pointer' }} />
-                              </Link>
-                            </Tooltip>
-                          }
-                          {user.active === true
-                            ? <Tooltip title="Deactivate" className='MuiIconButton-root'>
-                              <BlockIcon
-                                style={{ color: 'red' }}
-                                onClick={(e) => block(user._id)} />
-                            </Tooltip>
-                            :
-                            <Tooltip title="Activate" className='MuiIconButton-root'>
-                              <LockOpenIcon
-                                style={{ color: 'green' }}
-                                onClick={(e) => unblock(user._id)} />
-                            </Tooltip>
-                          }
-                        </TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -596,35 +499,15 @@ export default function TransactionTable() {
         <TablePagination
           className='p'
           component="div"
-          rowsPerPageOptions={[10, 25, 50, 100]}
+          rowsPerPageOptions={[2]}
           count={total}
           rowsPerPage={rowsPerPage}
           labelRowsPerPage="Rows per page"
-          page={page}
+          page={total <= 0 ? 0 : page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <Snackbar open={unBlocktost} autoHideDuration={3000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          User deactivated successfully
-        </Alert>
-      </Snackbar>
-      <Snackbar open={blocktost} autoHideDuration={3000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          User activated successfully
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

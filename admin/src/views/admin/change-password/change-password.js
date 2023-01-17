@@ -96,6 +96,12 @@ const ChangePassword = () => {
                                 <Field name="oldPassword">
                                     {({ field }) => (
                                         <TextField
+                                        inputProps={{
+                                            autocomplete: 'oldPassword',
+                                            form: {
+                                              autocomplete: 'off',
+                                            },
+                                          }}
                                             label="Old password"
                                             fullWidth
                                             type = "password"
@@ -110,6 +116,12 @@ const ChangePassword = () => {
                                 <Field name="newPassword">
                                     {({ field }) => (
                                         <TextField
+                                        inputProps={{
+                                            autocomplete: 'newPassword',
+                                            form: {
+                                              autocomplete: 'off',
+                                            },
+                                          }}
                                             label="New password"
                                             type = "password"
                                             fullWidth
@@ -126,6 +138,12 @@ const ChangePassword = () => {
                                 <Field name="confirmPassword">
                                     {({ field }) => (
                                         <TextField
+                                        inputProps={{
+                                            autocomplete: 'confirmPassword',
+                                            form: {
+                                              autocomplete: 'off',
+                                            },
+                                          }}
                                             label="Confirm password"
                                             fullWidth
                                             display='flex'

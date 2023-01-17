@@ -56,6 +56,7 @@ export default function Suggestion() {
       setDescDisArr(disableArray);
     }
   }
+
   const deleteDescription = (values, setValues, index) => {
     const descriptions = [...values.descriptions];
     descriptions.splice(index, 1);
@@ -72,7 +73,6 @@ export default function Suggestion() {
   }
 
  
-
   const options = {
     labels: {
       confirmable: "Yes" ,
@@ -110,14 +110,14 @@ export default function Suggestion() {
   const getSuggestion = (phaseId) => {
     // setLoading(true);
     SuggestionService.getSuggestion({phaseId}).then(response => {
-      initialValues.definition = response.definition;
+      initialValues.definition = response.suggestion.definition;
       let disableArray = [];
-      for (let i=0; i<response.descriptions.length; i++) {
-        initialValues.descriptions.push({ description: response.descriptions[i].description });
+      for (let i=0; i<response.suggestion.descriptions.length; i++) {
+        initialValues.descriptions.push({ description: response.suggestion.descriptions[i].description });
         disableArray.push(true);
         setDescDisArr(disableArray);
       }
-      setSuggestion(response);
+      setSuggestion(response.suggestion);
       setLoading(false);
     });
   }

@@ -19,8 +19,11 @@ const ChangePassword = lazy(() => import("../views/admin/change-password/change-
 
 const EditLicense = lazy(() => import("../views/license/edit-lisence/edit-license"));
 
+const Transaction = lazy(() => import("../views/transactions-management/transaction-management"));
 const Inventory = lazy(() => import("../views/inventory/inventory"));
 const Tab = lazy(() => import("../views/inventory/tab/tab"))
+
+const TrialPeriod = lazy(()=> import('../views/subscription-plan/trialPeriod/trialPeriod'))
 
 
 // const AddPlan = lazy(() => import("../views/subscription-plan/add-plan/add-plan"));
@@ -40,7 +43,7 @@ var ThemeRoutes = [
   },
   {
     path: "/users",
-    name: "Users",
+    name: "Companies",
     icon: "mdi mdi-account-multiple",
     component: Users,
     sideRoute: true
@@ -89,10 +92,10 @@ var ThemeRoutes = [
   },
   {
     path: "/subscription-plans",
-    name: "Subscription Plans",
+    name: "Subscription",
     icon: "mdi mdi-book-multiple",
     component: SubscriptionPlan,
-    sideRoute: false
+    sideRoute: true
   },
   {
     path: "/add-plan",
@@ -128,6 +131,13 @@ var ThemeRoutes = [
     icon: "mdi mdi-gauge",
     component: Tab,
     sideRoute: false
+  },
+  {
+    path: "/transaction",
+    name: "Transaction",
+    icon: "mdi mdi-gauge",
+    component: Transaction,
+    sideRoute: true
   },
   {
     path: "/",

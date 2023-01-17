@@ -139,7 +139,7 @@ export default function MySuggestion() {
       setPhases(response);
       setTabValue(response[0].id);
       getSuggestion(response[0].id);
-      setPhaseID(response[0].id)
+      // setPhaseID(response[0].id)
     });
   }
 
@@ -147,14 +147,14 @@ export default function MySuggestion() {
   const getSuggestion = (phaseId) => {
     const userId = id;
     SuggestionService.getMySuggestion(phaseId, userId).then(response => {
-      initialValues.definition = response.definition;
+      initialValues.definition = response.suggestion.definition;
       let disableArray = [];
-      for (let i = 0; i < response.descriptions.length; i++) {
-        initialValues.descriptions.push({ description: response.descriptions[i].description });
+      for (let i = 0; i < response.suggestion.descriptions.length; i++) {
+        initialValues.descriptions.push({ description: response.suggestion.descriptions[i].description });
         disableArray.push(true);
         setDescDisArr(disableArray);
       }
-      setSuggestion(response);
+      setSuggestion(response.suggestion);
       setLoading(false);
     });
   }
@@ -167,6 +167,7 @@ export default function MySuggestion() {
 
   // On tab change
   const onTabChange = (event, newValue) => {
+    setPhaseID(newValue)
     setTabValue(newValue);
     getSuggestion(newValue);
   };
@@ -195,7 +196,7 @@ export default function MySuggestion() {
               {
                 phases.map((item, index) => (
                   <Tab label={item.name} value={item.id} key={index} />
-                ))
+                  ))
               }
             </TabList>
           </Box>
