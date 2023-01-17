@@ -368,7 +368,7 @@ export default function UserTable() {
             variant="h6"
             id="tableTitle"
             component="div">
-            Users
+          Companies
           </Typography>
           <Typography
             sx={{ flex: '1 1', zIndex: 1 }}
@@ -447,7 +447,7 @@ export default function UserTable() {
           <Typography component="div">
             <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
               <Link to='/add-user'>
-                <Button className="text-nowrap" variant="contained">ADD USER</Button>
+                <Button className="text-nowrap" variant="contained">ADD COMPANY</Button>
               </Link>
             </Stack>
           </Typography>
@@ -481,6 +481,9 @@ export default function UserTable() {
                         key={user._id}
                         selected={isItemSelected}
                       >
+                         <TableCell>
+                          {user?.company.name}
+                        </TableCell>
                         <TableCell
                           component="td"
                           id={labelId}
@@ -512,9 +515,7 @@ export default function UserTable() {
                               </span>}
                           </div>
                         </TableCell>
-                        <TableCell>
-                          {user?.company.name}
-                        </TableCell>
+                       
                         <TableCell>
                           {user?.company?.employee_range?.range ? user?.company?.employee_range?.range : "N/A"}
                         </TableCell>
@@ -550,7 +551,7 @@ export default function UserTable() {
                               },
                             }}
                           >
-                            <div style={{ textAlign: 'center' }}>
+                            <div style={{ textAlign: 'center'}} >
                               {
                                 user.active === true
                                   ? <span className="user_status_icon" style={{ color: 'green', textAlign: 'center' }}>
@@ -588,21 +589,22 @@ export default function UserTable() {
                             open={user._id == currentUID && open}
                             onClose={handleDropDownClose}
                           >
+                             <Link as={Link} to={`/view-user/${user?._id}`}>
+                              <MenuItem onClick={handleDropDownClose} disableRipple >
+                                <VisibilityIcon style={style} /> <h5 style={titleStyle}>View </h5> 
+                              </MenuItem>
+                            </Link>
                             <Link as={Link} to={`/my-suggestion/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple>
                                 <MessageIcon style={style} /><h5 style={titleStyle}>Suggestions</h5> 
                               </MenuItem>
                             </Link>
-                            <Link as={Link} to={`/edit-user/${user._id}`}>
+                            <Link as={Link} to={`/trial-period/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple>
                                 <EditIcon style={style} /> <h5 style={titleStyle}>Edit</h5> 
                               </MenuItem>
                             </Link>
-                            <Link as={Link} to={`/view-user/${user?._id}`}>
-                              <MenuItem onClick={handleDropDownClose} disableRipple >
-                                <VisibilityIcon style={style} /> <h5 style={titleStyle}>View </h5> 
-                              </MenuItem>
-                            </Link>
+                           
                             <Link as={Link} to={`/inventory/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple >
                                 <InventoryIcon style={style} /> <h5 style={titleStyle}>Inventory </h5>

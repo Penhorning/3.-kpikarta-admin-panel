@@ -4,6 +4,7 @@ import { HandleResponse,Constants,AuthHeader } from "../_helpers";
 const currentUserSubject = new BehaviorSubject(
   JSON.parse(localStorage.getItem("currentUser"))
 );
+
 export const AuthenticationService = {
   login,
   logout,

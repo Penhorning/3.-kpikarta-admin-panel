@@ -11,7 +11,7 @@ const Blanklayout = () => {
             return <Redirect to='/dashboard' />
           }
           if (prop.redirect)
-            return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
+            return <Redirect from={prop.path} to={prop.path} key={key} />;
           return (
             <Route path={prop.path} component={prop.component} key={key} />
           );

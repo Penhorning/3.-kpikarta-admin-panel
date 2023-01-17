@@ -15,7 +15,7 @@ const getSuggestion = (data) => {
     headers: AuthHeader(),
     body: JSON.stringify(data)
   };
-  return fetch(Constants.BASE_URL+`/api/suggestion-by-phase`, requestOptions).then(HandleResponse);
+  return fetch(Constants.BASE_URL+`/api/suggestions/global`, requestOptions).then(HandleResponse);
 }
 
 const updateSuggestion = (suggestionId, data) => {
@@ -50,7 +50,7 @@ const getMySuggestion = (phaseId,userId) => {
      userId
     })
   };
-  return fetch(Constants.BASE_URL+`/api/suggestion-by-phase`, requestOptions).then(HandleResponse);
+  return fetch(Constants.BASE_URL+`/api/suggestions/by-user`, requestOptions).then(HandleResponse);
 }
 
 const deleteSuggestion = (data) => {

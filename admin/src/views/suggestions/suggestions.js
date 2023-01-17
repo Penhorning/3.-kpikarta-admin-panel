@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
-import './suggestion.scss';
+import { Grid, TextField } from '@mui/material';
+import { useSnackbar } from 'notistack';
+import { confirm } from "react-confirm-box";
 import { SuggestionService } from '../../shared/_services/suggestion.service';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
@@ -12,15 +14,13 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { Grid, TextField } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { useSnackbar } from 'notistack';
 import Spinner from '../spinner-loader/spinner-loader';
-import { confirm } from "react-confirm-box";
+import './suggestion.scss';
 
 
 export default function Suggestion() {
@@ -56,6 +56,7 @@ export default function Suggestion() {
       setDescDisArr(disableArray);
     }
   }
+
   const deleteDescription = (values, setValues, index) => {
     const descriptions = [...values.descriptions];
     descriptions.splice(index, 1);
@@ -72,7 +73,6 @@ export default function Suggestion() {
   }
 
  
-
   const options = {
     labels: {
       confirmable: "Yes" ,
@@ -110,14 +110,14 @@ export default function Suggestion() {
   const getSuggestion = (phaseId) => {
     // setLoading(true);
     SuggestionService.getSuggestion({phaseId}).then(response => {
-      initialValues.definition = response.definition;
+      initialValues.definition = response.suggestion.definition;
       let disableArray = [];
-      for (let i=0; i<response.descriptions.length; i++) {
-        initialValues.descriptions.push({ description: response.descriptions[i].description });
+      for (let i=0; i<response.suggestion.descriptions.length; i++) {
+        initialValues.descriptions.push({ description: response.suggestion.descriptions[i].description });
         disableArray.push(true);
         setDescDisArr(disableArray);
       }
-      setSuggestion(response);
+      setSuggestion(response.suggestion);
       setLoading(false);
     });
   }

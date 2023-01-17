@@ -1,8 +1,8 @@
 import React, { Suspense, lazy } from "react";
-import ReactDOM from "react-dom";
-import "./assets/scss/style.scss";
 import { SnackbarProvider } from 'notistack';
+import ReactDOM from "react-dom";
 import Spinner from "./views/spinner-loader/spinner-loader";
+import "./assets/scss/style.scss";
 
 const App = lazy(
   () =>
@@ -19,5 +19,3 @@ ReactDOM.render(
   </Suspense>,
   document.getElementById("root")
 );
-// API_URL = "https://dev-api.kpikarta.com"
-// API_URL = "https://qa-api.kpikarta.com"

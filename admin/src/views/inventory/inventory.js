@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
 import { useState, useEffect } from "react";
 import { makeStyles } from '@mui/styles';
 import { useSnackbar } from 'notistack';
@@ -30,7 +31,6 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Popper from '@mui/material/Popper';
-import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
 import Fade from '@mui/material/Fade';
 import Checkbox from '@mui/material/Checkbox';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
@@ -118,14 +118,15 @@ export default function Inventory() {
     const { id } = useParams();
     const classes = useStyles();
     const [currentUID, setCurrentUID] = useState('');
-    const handleCloseModal = () => setOpen(false);
     const [nodeTypeFilter, setNodeTypeFilter] = useState([]);
-
+    
     const handleOpenModal = (event, userId) => {
         setCurrentUID(userId)
         return setOpen(true);
     };
-
+    
+    const handleCloseModal = () => setOpen(false);
+    
     const [valueList, setValueList] = useState([
         { name: "Branches", value: "branch" },
         { name: "Measures", value: "measure" },
