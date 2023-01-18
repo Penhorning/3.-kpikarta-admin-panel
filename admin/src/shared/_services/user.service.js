@@ -122,7 +122,7 @@ const getAllCompanyMembers = async (data, enqueueSnackbar) => {
   }
 }
 
-const blockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
+const blockUser = async (userId, page, rowsPerPage) => {
   try {
     const response = await axios.put(Constants.BASE_URL + `/api/users/block`, {
       userId: userId,
@@ -135,14 +135,14 @@ const blockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
     const error = handleError(err);
     const errorResp = HandleErrorResponse(error)
     let variant = 'error';
-    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    if (error !== "Unauthorized")
     return error
   }
 }
 
 const cancelSubscription = async (userId, enqueueSnackbar) => {
   try {
-    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/cancel_subscription`, {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/cancel-subscription`, {
       userId: userId
     },
       { headers: AuthHeader() })
