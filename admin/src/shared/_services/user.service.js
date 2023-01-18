@@ -140,6 +140,22 @@ const blockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
   }
 }
 
+const cancelSubscription = async (userId, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/cancel_subscription`, {
+      userId: userId
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
 const unBlockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
   try {
     const response = await axios.put(Constants.BASE_URL + `/api/users/unblock`, {
@@ -492,5 +508,6 @@ export const UserService = {
   getAllInvoices,
   getAllInvoicesChart,
   getTrialPeriod,
-  updateTrialPeriodPlan
+  updateTrialPeriodPlan,
+  cancelSubscription
 };

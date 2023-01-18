@@ -108,18 +108,18 @@ export default function Chart() {
             var salesChartObject = {};
             // Setting keys
             for (let i = 0; i < salesChartData.dates.length; i++) {
-              salesChartObject[moment(salesChartData.dateObject[i]).format("YYYY-MM-DD")] = 0;
+              salesChartObject[moment(salesChartData.dateObject[i] ).format("YYYY-MM-DD")] = 0;
             }
             // Setting values
             for (let j = 0; j < response.data.length; j++) {
-              salesChartObject[moment(response.data[j].invoice_date).format("YYYY-MM-DD")] = response.data[j].amount;
+              salesChartObject[moment(response.data[j].invoice_date, "MM-DD-YYYY").format("YYYY-MM-DD")] = response.data[j].amount;
             }
             // Converting hash map to array
             let transactionData = Object.keys(salesChartObject).map((item) => {
-              return {
-                'invoice_date': moment(item).format('DD-MMM-YY'),
-                'amount': salesChartObject[item]
-              }
+                return {
+                  'invoice_date': moment(item).format('DD-MMM-YY'),
+                  'amount': salesChartObject[item]
+                }
             })
             setDefaultData()
             setTransactionData(transactionData)

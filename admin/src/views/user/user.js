@@ -218,11 +218,16 @@ export default function UserTable() {
     if (result) {
       UserService.blockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
         if (res.status === true) {
-          fetchData('paginationChange');
-          unblockToast(true)
+          UserService.cancelSubscription(userId, enqueueSnackbar).then((res) => {
+            console.log("res", res)
+              fetchData('paginationChange');
+              unblockToast(true)
+              return;
+          })
+
         }
       })
-      return;
+     
     }
   }
 
