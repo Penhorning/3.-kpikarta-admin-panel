@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
 import { message, Upload } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { UserService } from '../../../shared/_services';
 import { confirm } from "react-confirm-box";
+import * as Yup from 'yup';
 import Constants from '../../../shared/_helpers/constants';
 import Spinner from '../../spinner-loader/spinner-loader';
 import Box from '@mui/material/Box';
@@ -24,7 +24,6 @@ import Grid from '@mui/material/Grid';
 import ImgCrop from 'antd-img-crop';
 import 'react-phone-input-2/lib/material.css';
 import 'antd/dist/antd.css';
-// import 'intl-tel-input/build/css/intlTelInput.css';
 import './edit-user.scss';
 
 const initialValues = {
@@ -118,7 +117,7 @@ export default function EditUser() {
         [
           {
             uid: response.company.id,
-            thumbUrl:  response.company.logo ? `${Constants.BASE_URL}/company/${response.company.logo}`:`${'https://i.ibb.co/9G3XdFq/comapny-logo.png'}` ,
+            thumbUrl:  response.company.logo ? `${Constants.BASE_URL}/company/${response.company.logo}`:`${'https://i.ibb.co/VD9C8w4/Capture-3.png'}` ,
             status: 'done',
             url: ''
           },
@@ -160,7 +159,7 @@ export default function EditUser() {
       UserService.updateUser(id, data, enqueueSnackbar).then((response) => {
         if (!response.error) {
           let variant = "success";
-          enqueueSnackbar('User details upadated successfully.', { variant });
+          enqueueSnackbar('User details updated successfully.', { variant });
           history.push('/users');
         }
       })
@@ -183,7 +182,7 @@ export default function EditUser() {
       UserService.upadateCompanyDetails(companyIds, data, enqueueSnackbar).then(response => {
         if (!response.error) {
           let variant = "success";
-          enqueueSnackbar('Company details upadated successfully.', { variant });
+          enqueueSnackbar('Company details updated successfully.', { variant });
           history.push('/users');
         }
       })

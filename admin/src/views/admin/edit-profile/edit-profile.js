@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { AuthenticationService } from '../../../shared/_services';
+import { UserService } from '../../../shared/_services';
+import { confirm } from "react-confirm-box";
+import { Formik, Form, Field } from 'formik';
+import { message, Upload } from 'antd';
+import { useSnackbar } from 'notistack';
+import * as Yup from 'yup';
 import Box from '@mui/material/Box';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import './edit-profile.scss';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-// import 'intl-tel-input/build/css/intlTelInput.css';
-import { useSnackbar } from 'notistack';
 import Spinner from '../../spinner-loader/spinner-loader';
 import Grid from '@mui/material/Grid';
-import 'antd/dist/antd.css';
-import { message, Upload } from 'antd';
 import ImgCrop from 'antd-img-crop';
 import Constants from '../../../shared/_helpers/constants';
-import {useHistory } from 'react-router-dom';
-import { AuthenticationService } from '../../../shared/_services';
-import { UserService } from '../../../shared/_services';
-import { confirm } from "react-confirm-box";
+import './edit-profile.scss';
+import 'antd/dist/antd.css';
 
 
 
@@ -36,10 +35,10 @@ export default function EditProfile() {
   const [profilePic, setProfilePic] = useState('');
   const [loading, setLoading] = useState(true);
   const [userId, setUserIds] = useState(AuthenticationService.currentUser.source._value.userId);
-  const { enqueueSnackbar } = useSnackbar();
   const actionUrlUser = `${Constants.BASE_URL}/api/Containers/user/upload`;
   const [isOpenBtn, setIsOpenBtn] = useState(false);
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const [fileList, setFileList] = useState([
     {
       uid: '-1',
@@ -105,7 +104,7 @@ export default function EditProfile() {
       UserService.updateUser(userId, data, enqueueSnackbar).then((response) => {
         if (!response.error) {
             let variant = "success";
-            enqueueSnackbar('Admin details upadated successfully.', { variant });
+            enqueueSnackbar('Admin details updated successfully.', { variant });
             setIsOpenBtn(false)
             window.location.reload();
         }

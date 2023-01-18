@@ -1,7 +1,14 @@
 import * as React from 'react';
+import { Card } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { AuthenticationService } from "../../shared/_services/authentication.service"
+import { useSnackbar } from 'notistack';
+import { confirm } from "react-confirm-box";
 import { useState, useEffect } from "react";
+import { visuallyHidden } from '@mui/utils';
 import { UserService } from "../../shared/_services";
 import PropTypes from 'prop-types';
+import Spinner from '../spinner-loader/spinner-loader';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,24 +21,23 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
-import { visuallyHidden } from '@mui/utils';
 import Stack from '@mui/material/Stack';
 import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
 import Button from '@mui/material/Button';
-import './subscription-paln.scss';
 import Divider from '@mui/material/Divider';
 import moment from "moment";
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import TrialPeriod from './trialPeriod/trialPeriod';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import './subscription-paln.scss';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import { Card } from '@mui/material';
-import { Link } from 'react-router-dom';
-import Spinner from '../spinner-loader/spinner-loader';
-import { AuthenticationService } from "../../shared/_services/authentication.service"
-import { useSnackbar } from 'notistack';
-import { confirm } from "react-confirm-box";
 
 
 function createData(name, calories, fat, carbs, protein) {
@@ -79,16 +85,16 @@ const headCells = [
     label: 'Plan Name',
   },
   {
-    id: 'interval_count',
-    numeric: false,
-    disablePadding: false,
-    label: 'Duration',
-  },
-  {
     id: 'amount',
     numeric: false,
     disablePadding: false,
     label: 'Price ($)',
+  },
+  {
+    id: 'duration',
+    numeric: false,
+    disablePadding: false,
+    label: 'Duration',
   },
   {
     id: 'createdAt',
@@ -153,8 +159,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const initialValue = {
-  from: "",
-  to: "",
+  name: ""
 };
 export default function SubscriptionTable() {
   const [order, setOrder] = useState('asc');
@@ -164,20 +169,21 @@ export default function SubscriptionTable() {
   const [unBlocktost, setunBlocktost] = useState(false);
   const [blocktost, setBlocktost] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [show, setShow] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [adminUserId, setAdminUserIds] = useState(AuthenticationService.currentUser.source._value.userId)
 
- useEffect(() => {
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().trim().min(1, 'Plan name must be between 1 and 255 characters.')
+    .max(255, 'Plan name must be between 1 and 255 characters.').required('Plan name is required!')
+  }); 
+
+
+  useEffect(() => {
+    trialPeriod();
     fetchData();
   }, []);
 
-  // Block Un-block tostaer massage handel
-  const unblockToast = () => {
-    setunBlocktost(true);
-  };
-  const blockToast = () => {
-    setBlocktost(true);
-  };
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -186,56 +192,27 @@ export default function SubscriptionTable() {
     setunBlocktost(false);
   };
 
-  const options = {
-    labels: {
-      confirmable: "Yes" ,
-      cancellable: "No",
-      
-    } 
-  }
-
-  // Block the plan
-  const block = async (plan) => {
-    const result = await confirm("Are you sure, Do you want to Deactivate this Plan?", options);
-    if (result) {
-        let data = {
-            planId: plan.plan_id,
-            status: !plan.status
-        }
-      UserService.updateSubscriptionPlanStatus(data, enqueueSnackbar).then((res) => {
-        if (!res.error) {
-          fetchData();
-          unblockToast(true)
-        }
-      })
-    }
-  }
-
-  // Un-block the plan
-  const unblock = async (plan) => {
-    const result = await confirm("Are you sure, Do you want to Activate this Plan?", options);
-    if (result) {
-        let data = {
-            planId: plan.plan_id,
-            status: !plan.status
-        }
-      UserService.updateSubscriptionPlanStatus(data, enqueueSnackbar).then((res) => {
-        if (!res.error) {
-
-          fetchData();
-          blockToast(true)
-        }
-      })
-    }
-  }
-
   // Get all data 
   const fetchData = async () => {
-   await UserService.getSubscriptionPlans(adminUserId, enqueueSnackbar).then((apiResponse) => {
-        setSubscriptionPlan(apiResponse);
-        setLoading(false)
-      });
+    await UserService.getSubscriptionPlans(adminUserId, enqueueSnackbar).then((apiResponse) => {
+      setSubscriptionPlan(apiResponse.plans);
+      setLoading(false)
+    });
   }
+
+  // Get trial period
+  const trialPeriod = async () => {
+    await UserService.getTrialPeriod( enqueueSnackbar).then((apiResponse) => {
+      const { id, days} = apiResponse[0];
+      initialValue.name = days;
+     
+    });
+  }
+
+    // Plan data update button
+    const onUpdateSubmit = async (values) => {
+    
+    }
 
   // Handel sort
   const handleRequestSort = (event, property) => {
@@ -253,10 +230,14 @@ export default function SubscriptionTable() {
     setSelected([]);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const Capitalize = (str) => {
+    return str.replace(/^_*(.)|_+(.)/g, (s, c, d) => c ? c.toUpperCase() : ' ' + d.toUpperCase())
+}
 
+  const isSelected = (name) => selected.indexOf(name) !== -1;
   return (
     <Box sx={{ width: '100%' }}>
+    <TrialPeriod/>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <Toolbar>
           <Typography
@@ -265,13 +246,6 @@ export default function SubscriptionTable() {
             id="tableTitle"
             component="div">
             Subscription Plans
-          </Typography>
-          <Typography component="div">
-            <Stack sx={{ flex: '1 1 30%' }} spacing={2} direction="row">
-              <Link to='/add-plan'>
-                <Button className="text-nowrap" variant="contained">ADD PLAN</Button>
-              </Link>
-            </Stack>
           </Typography>
         </Toolbar>
         <Divider sx={{ m: 1.0 }} orientation="horizontal" />
@@ -293,14 +267,14 @@ export default function SubscriptionTable() {
               <TableBody>
                 {plans && stableSort(plans, getComparator(order, orderBy))
                   .map((plan, index) => {
-                    const isItemSelected = isSelected(plan.id);
+                    const isItemSelected = isSelected(plan.priceId);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
                         hover
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={plan.id}
+                        key={index}
                         selected={isItemSelected}
                       >
                         <TableCell
@@ -308,23 +282,28 @@ export default function SubscriptionTable() {
                           id={labelId}
                           scope="row"
                           padding="none"
-                          style={{ paddingLeft: '25px',
-                                    maxWidth: '100px',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden'
-                                 }}
+                          style={{
+                            paddingLeft: '25px',
+                            maxWidth: '100px',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden'
+                          }}
                         >
                           {plan.name}
                         </TableCell>
-                        <TableCell>
-                        {plan.interval_count}
+                        <TableCell
+                          style={{ paddingLeft: '35px' }}
+                        >
+                          {plan.price}
+                        </TableCell>
+                        <TableCell
+                          style={{ paddingLeft: '35px' }}
+                        >
+                          {Capitalize(plan.duration)}
                         </TableCell>
                         <TableCell>
-                       {plan.amount}
-                        </TableCell>
-                        <TableCell>
-                          {moment(plan.createdAt).format("MM-DD-YYYY")}
+                          {moment(plan.createdAt, "YYYY-MM-DD" ).format("MM-DD-YYYY")}
                         </TableCell>
                         <TableCell>
                           <Box
@@ -348,27 +327,14 @@ export default function SubscriptionTable() {
                           paddingTop: '15px',
                           paddingRight: '15px',
                           paddingBottom: '15px',
-                          paddingLeft: '15px'
+                          paddingLeft: '35px'
                         }}
                         >
                           {<Tooltip title="Edit-plan" className='MuiIconButton-root'>
-                            <Link to={`/edit-plan/${plan.id}`} >
+                            <Link to={`/edit-plan/${plan.priceId}`} >
                               <EditIcon style={{ color: '#0c85d0' }} />
                             </Link>
                           </Tooltip>
-                          }
-                          {plan.status === true
-                            ? <Tooltip title="Deactivate" className='MuiIconButton-root'>
-                              <BlockIcon
-                                style={{ color: 'red' }}
-                                onClick={(e) => block(plan)} />
-                            </Tooltip>
-                            :
-                            <Tooltip title="Activate" className='MuiIconButton-root'>
-                              <LockOpenIcon
-                                style={{ color: 'green' }}
-                                onClick={(e) => unblock(plan)} />
-                            </Tooltip>
                           }
                         </TableCell>
                       </TableRow>

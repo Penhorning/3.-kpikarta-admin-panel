@@ -14,11 +14,18 @@ export default function EnhancedTableHead(props) {
       onRequestSort(event, property);
     };
     const headCells = [
+      {
+        id: 'name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Company',
+        headerKey: 'company'
+      },
         {
           id: 'fullName',
           numeric: false,
           disablePadding: true,
-          label: 'Full Name',
+          label: 'Company Admin',
           headerKey: 'fullName'
         },
         {
@@ -27,13 +34,6 @@ export default function EnhancedTableHead(props) {
           disablePadding: false,
           label: 'Email',
           headerKey: 'email'
-        },
-        {
-          id: 'name',
-          numeric: false,
-          disablePadding: false,
-          label: 'Company',
-          headerKey: 'company'
         },
         {
           id: 'range',

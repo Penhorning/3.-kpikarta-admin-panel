@@ -1,124 +1,203 @@
-import React from "react";
-import logoImg from "../../assets/images/kpi-karta-logo.png";
-import loginCss from "../../assets/scss/login.css"
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import React, { useState } from "react";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthenticationService } from "../../shared/_services";
-import { Alert } from 'reactstrap';
 import { useSnackbar } from 'notistack';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import logoImg from "../../assets/images/kpi-karta-logo.png";
+import LoadingButton from '@mui/lab/LoadingButton';
 
+const theme = createTheme();
 
-const Login = (props) => {
+const initialValues = {
+  password: '',
+  email: ''
+}
+
+export default function Login(props) {
   const { enqueueSnackbar } = useSnackbar();
-  return (<section id="common_sec">
-    <link rel="stylesheet" href={loginCss} />
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-md-6">
-          <div className="logo"> <a href="#!"><img src={logoImg} width="280" height="65" alt="" /></a> </div>
-        </div>
-        <div className="col-md-6">
-          <div className="mng_col">
-            <div className="login_form">
-              <h2 className="text-white text-center pb-4">Login</h2>
-              <Formik
-                initialValues={{
-                  email: "",
-                  password: "",
-                }}
-                validationSchema={Yup.object().shape({
-                  email: Yup.string().required("Email is required"),
-                  password: Yup.string().required("Password is required"),
-                })}
-                onSubmit={(
-                  { email, password },
-                  { setStatus, setSubmitting }
-                ) => {
-                  setStatus();
-                  AuthenticationService.login(email, password).then(
-                    (user) => {
-                      if (user?.error?.statusCode == 400) {
-                        setSubmitting(false);
-                        let variant = "error";
-                        enqueueSnackbar(user.error.message, { variant });
-                      } else {
-                        const { from } = props.location.state || {
-                          from: { pathname: "/" },
-                        };
-                        props.history.push(from);
-                      }
-                    },
-                    (error) => {
-                      setSubmitting(false);
-                      setStatus('Entered email or password is incorrect, please try again with correct credentials.');
-                      window.alertTimeout(() => {
-                        setStatus('');
-                      })
-                    }
-                  );
-                }}
-                render={({ errors, status, touched, handleSubmit, isSubmitting }) => (
-                  <Form onSubmit={handleSubmit} id="loginform">
-                    <div className="form-group">
-                      <label htmlFor="email">Email</label>
-                      <Field
-                        name="email"
-                        type="email"
-                        id="email"
-                        className={
-                          "form-control form-control1" +
-                          (errors.email && touched.email
-                            ? " is-invalid"
-                            : "")
-                        }
-                      />
-                      <ErrorMessage
-                        name="email"
-                        component="div"
-                        className="invalid-feedback"
-                      />
-                      {/* <input type="email" className="form-control form-control1" id="email"/> */}
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="pwd">Password:</label>
-                      <Field
-                        name="password"
-                        type="password"
-                        id="pwd"
-                        className={
-                          "form-control form-control1" +
-                          (errors.password && touched.password
-                            ? " is-invalid"
-                            : "")
-                        }
-                      />
-                      <ErrorMessage
-                        name="password"
-                        component="div"
-                        className="invalid-feedback"
-                      />
-                    </div>
-                    <button type="submit" disabled={isSubmitting} className="btn btn-light btn_default">SUBMIT</button>
-                    <div />
-                    {status && (<>
-                      <br />
-                      <Alert color={"danger"}>{status}</Alert>
-                    </>
-                    )}
-                  </Form>
-                )}
-              ></Formik>
-              <div className="cre_fog"> <a href="/authentication/forgot-password" className="for_pass">Forgot Password</a> </div>
-              <div className="bot_link">
-                <p><a href="https://www.kpikarta.com/terms-of" target="_balnk">Terms & Conditions </a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://www.kpikarta.com/contact" target="_balnk">Contact Us</a></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  )
-};
+  const [loading, setLoading] = useState(false);
 
-export default Login;
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email().required('Emial is required!'),
+    password: Yup.string().required('Password is required!')
+  });
+
+  const handleSubmit = async (event) => {
+    setLoading(true);
+    const email = event.email;
+    const password = event.password;
+    AuthenticationService.login(email, password).then(
+      (user) => {
+        if (user?.error?.statusCode == 400) {
+          let variant = "error";
+          enqueueSnackbar(user?.error?.message, { variant });
+          setLoading(false);
+        } else {
+          const { from } = props.location.state || {
+            from: { pathname: "/" },
+          };
+          props.history.push(from);
+          setLoading(false);
+        }
+      },
+      (error) => {
+        let variant = "error";
+        enqueueSnackbar('Entered email or password is incorrect, please try again with correct credentials.', { variant });
+        setLoading(false);
+      }
+    );
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Grid container component="main" sx={{ height: '100vh' }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={6}
+
+        >
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              mt: 35,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+
+            <div className="col-md-6">
+              <div className="logo"> <a ><img src={logoImg} width="280" height="65" alt="" /></a> </div>
+            </div>
+
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={8} md={6} component={Paper} elevation={6} style={{ backgroundColor: '#243864' }} square>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Typography component="h1" variant="h5" style={{ marginTop: '60px', color: 'white' }}>
+              Login
+            </Typography>
+            <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} >
+              {({ errors, touched }) => (
+                <Form>
+                  <Box sx={{ mt: 1 }}>
+                    <Field name="email">
+                      {({ field }) => (
+                        <TextField
+                          sx={{
+                            input: { color: 'white', height: '18px' },
+                            fieldset: { borderColor: "#ffff" },
+                            "& label": {
+                              color: "white"
+                            }
+                          }}
+                          inputProps={{
+                            autoComplete: 'email',
+                            form: {
+                              autoComplete: 'off',
+                            },
+                          }}
+                          margin="normal"
+                          required
+                          fullWidth
+                          type="email"
+                          {...field}
+                          id="email"
+                          label="Email Address"
+                          name="email"
+                          style={{ color: 'white' }}
+                          error={errors.email && touched.email ? true : false}
+                          helperText={(errors.email && touched.email ? `${errors.email}` : '')}
+                          autoComplete = 'off'
+                        />
+                      )}
+                    </Field>
+                    <Field name="password">
+                      {({ field }) => (
+                        <TextField
+                        sx={{
+                          input: { color: 'white', height: '18px' },
+                          fieldset: { borderColor: "#ffff" },
+                          "& label": {
+                            color: "white"
+                          }
+                        }}
+                        inputProps={{
+                          autoComplete: 'password',
+                          form: {
+                            autoComplete: 'off',
+                          },
+                        }}
+                          margin="normal"
+                          required
+                          fullWidth
+                          type="password"
+                          {...field}
+                          id="password"
+                          label="Password"
+                          name="password"
+                          error={errors.password && touched.password ? true : false}
+                          helperText={(errors.password && touched.password ? `${errors.password}` : '')}
+                          autoComplete='new-password'
+                        />
+                      )}
+                    </Field>
+                  </Box>
+                  <LoadingButton
+                    variant="contained"
+                    type='submit'
+                    fullWidth
+                    sx={{ mt: 3, mb: 2 }}
+                    loading={loading}
+                  >
+                    submit
+                  </LoadingButton>
+                  <Grid container>
+                    <Grid item xs>
+                    </Grid>
+                    <Grid item>
+                      <Link href="/authentication/forgot-password" variant="body2" style={{ color: 'white', textDecoration: 'none' }}>
+                        Forgot password
+                      </Link>
+                    </Grid>
+                  </Grid>
+                  <Box textAlign="center" p={2} mt={10}>
+                    <Typography variant="body2" sx={{ color: "#ffff", textDecoration: 'none' }}>
+                      {" "}
+                      <Link target="_balnk" href="https://www.kpikarta.com/terms-of" variant="body2" style={{ color: 'white', textDecoration: 'none' }}>
+                        Terms & Conditions
+                      </Link> &nbsp;&nbsp;|&nbsp;&nbsp;<Link target="_balnk" href="https://www.kpikarta.com/contact" variant="body2" style={{ color: 'white', textDecoration: 'none' }}>
+                        Contact Us
+                      </Link>{" "}
+                    </Typography>
+                  </Box>
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
+  );
+}

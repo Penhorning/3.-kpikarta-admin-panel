@@ -1,13 +1,5 @@
-export default {
-  // BASE_URL: process.env.API_URL || 'http://localhost:3000'
-  // BASE_URL: 'https://dev-api.kpikarta.com'
-    //  BASE_URL: 'https://qa-api.kpikarta.com'
-    //  BASE_URL: 'http://localhost:3000'
-    BASE_URL: 'https://prod-api.kpikarta.com'
-}
 
-export const kpikartaUrl = {
-  // BASE_URL:'https://dev-app.kpikarta.com'
-  // BASE_URL:'https://dev-app.kpikarta.com'
-  BASE_URL: 'https://prod-app.kpikarta.com'
- }
+export default {
+  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:3000',
+  KARTA_URL: process.env.REACT_APP_KARTA_URL || 'http://localhost:4412'
+}

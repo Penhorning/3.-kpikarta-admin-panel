@@ -29,17 +29,13 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Button from '@mui/material/Button';
 import { useSnackbar } from 'notistack';
-// import { AuthenticationService } from "../../../shared/_services";
 import { AuthenticationService } from "../shared/_services";
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
 import { UserService } from "../shared/_services";
-import Constants from '../shared/_helpers/constants';
 import { mainListItems, secondaryListItems } from './layout-components/listItems';
-import Dashboard from "../views/dashboard/dashboard";
 const drawerWidth = 240;
 
 const Drawer = styled(MuiDrawer, {
