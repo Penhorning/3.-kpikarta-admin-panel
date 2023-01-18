@@ -187,6 +187,19 @@ const getUserCount = async (enqueueSnackbar) => {
   }
 }
 
+const getUserLicenseCount = async (enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/subscriptions/get-user-count`, {}, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
 const getUserDetails = async (id, enqueueSnackbar) => {
   try {
     const response = await axios.get(Constants.BASE_URL + `/api/users/${id}?filter[include]=company`, {}, { headers: AuthHeader() })
@@ -509,5 +522,6 @@ export const UserService = {
   getAllInvoicesChart,
   getTrialPeriod,
   updateTrialPeriodPlan,
-  cancelSubscription
+  cancelSubscription,
+  getUserLicenseCount
 };

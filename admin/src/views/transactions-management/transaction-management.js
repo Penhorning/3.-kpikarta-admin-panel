@@ -211,7 +211,6 @@ export default function TransactionTable() {
       previousId: previousId,
       nextId: nextId
     }
-    console.log("data", data)
     UserService.getAllInvoices(data, enqueueSnackbar).then((response) => {
       if (!response.error) {
       setUsers( response.invoices[0].data);
@@ -344,7 +343,7 @@ export default function TransactionTable() {
             component="div">
             Transactions
           </Typography>
-          <Typography
+          {/* <Typography
             sx={{ flex: '1 1', zIndex: 1  }}
             component="div">
             <Box component="form"
@@ -417,7 +416,7 @@ export default function TransactionTable() {
                 }
               </Paper>
             </Box>
-          </Typography>
+          </Typography> */}
         </Toolbar>
         <Divider sx={{ m: 1.0 }} orientation="horizontal" />
         <TableContainer>

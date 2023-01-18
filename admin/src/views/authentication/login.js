@@ -112,6 +112,12 @@ export default function Login(props) {
                               color: "white"
                             }
                           }}
+                          inputProps={{
+                            autoComplete: 'email',
+                            form: {
+                              autoComplete: 'off',
+                            },
+                          }}
                           margin="normal"
                           required
                           fullWidth
@@ -123,6 +129,7 @@ export default function Login(props) {
                           style={{ color: 'white' }}
                           error={errors.email && touched.email ? true : false}
                           helperText={(errors.email && touched.email ? `${errors.email}` : '')}
+                          autoComplete = 'off'
                         />
                       )}
                     </Field>
@@ -136,6 +143,12 @@ export default function Login(props) {
                             color: "white"
                           }
                         }}
+                        inputProps={{
+                          autoComplete: 'password',
+                          form: {
+                            autoComplete: 'off',
+                          },
+                        }}
                           margin="normal"
                           required
                           fullWidth
@@ -146,6 +159,7 @@ export default function Login(props) {
                           name="password"
                           error={errors.password && touched.password ? true : false}
                           helperText={(errors.password && touched.password ? `${errors.password}` : '')}
+                          autoComplete='new-password'
                         />
                       )}
                     </Field>

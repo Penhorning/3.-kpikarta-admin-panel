@@ -91,6 +91,12 @@ const headCells = [
     label: 'Price ($)',
   },
   {
+    id: 'duration',
+    numeric: false,
+    disablePadding: false,
+    label: 'Duration',
+  },
+  {
     id: 'createdAt',
     numeric: false,
     disablePadding: false,
@@ -224,6 +230,10 @@ export default function SubscriptionTable() {
     setSelected([]);
   };
 
+  const Capitalize = (str) => {
+    return str.replace(/^_*(.)|_+(.)/g, (s, c, d) => c ? c.toUpperCase() : ' ' + d.toUpperCase())
+}
+
   const isSelected = (name) => selected.indexOf(name) !== -1;
   return (
     <Box sx={{ width: '100%' }}>
@@ -287,8 +297,13 @@ export default function SubscriptionTable() {
                         >
                           {plan.price}
                         </TableCell>
+                        <TableCell
+                          style={{ paddingLeft: '35px' }}
+                        >
+                          {Capitalize(plan.duration)}
+                        </TableCell>
                         <TableCell>
-                          {moment(plan.createdAt).format("MM-DD-YYYY")}
+                          {moment(plan.createdAt, "YYYY-MM-DD" ).format("MM-DD-YYYY")}
                         </TableCell>
                         <TableCell>
                           <Box
