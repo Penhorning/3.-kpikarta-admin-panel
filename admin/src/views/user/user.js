@@ -219,12 +219,10 @@ export default function UserTable() {
       UserService.blockUser(userId, page, rowsPerPage).then((res) => {
         if (res.status === true) {
           UserService.cancelSubscription(userId, enqueueSnackbar).then((res) => {
-            console.log("res", res)
               fetchData('paginationChange');
               unblockToast(true)
               return;
           })
-
         }
       })
      
