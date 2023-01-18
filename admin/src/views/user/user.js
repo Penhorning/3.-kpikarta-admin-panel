@@ -216,13 +216,18 @@ export default function UserTable() {
   const block = async (userId, page, rowsPerPage) => {
     const result = await confirm("Are you sure, Do you want to Deactivate this user?", options);
     if (result) {
-      UserService.blockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
+      UserService.blockUser(userId, page, rowsPerPage).then((res) => {
         if (res.status === true) {
-          fetchData('paginationChange');
-          unblockToast(true)
+          UserService.cancelSubscription(userId, enqueueSnackbar).then((res) => {
+            console.log("res", res)
+              fetchData('paginationChange');
+              unblockToast(true)
+              return;
+          })
+
         }
       })
-      return;
+     
     }
   }
 
