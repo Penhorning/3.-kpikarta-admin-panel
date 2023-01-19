@@ -485,7 +485,13 @@ export default function TransactionTable() {
                             }}
                             style={{ paddingLeft: '15px' }}
                           >
-                            {Capitalize(user.status)}
+                             {
+                              user.status === "Paid"
+                                ? <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Unpaid</span></Card>
+                                : <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Paid</span></Card>
+
+                            }
+                            {/* {Capitalize(user.status)} */}
                           </Box>
                         </TableCell>
                       </TableRow>

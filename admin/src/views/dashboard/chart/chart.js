@@ -188,6 +188,20 @@ export default function Chart() {
     selectedDayRange.from = ''; selectedDayRange.to = ''
     setIsShown(false)
   };
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip" style={{border: '2px solid #bbb3b3' , borderRadius:"5px" }}>
+          <p className="label" style={{ paddingTop: '8px',  paddingLeft: '8px',  paddingRight: '8px' }}>{`${label}`}</p>
+          <p className="desc" style={{color:"rgb(25, 118, 210)", paddingLeft: '8px',  paddingRight: '8px'}}>{`Sales : $ ${payload[0].value}`}</p>
+        </div>
+      );
+    }
+  
+    return null;
+  };
+
   return (
     <React.Fragment>
       <Container>
@@ -242,7 +256,7 @@ export default function Chart() {
             layout="horizontal"
             verticalAlign="top"
             align="center" />
-          <Tooltip />
+           <Tooltip content={<CustomTooltip />}  />
           <XAxis
             dataKey="invoice_date"
             stroke={theme.palette.text.secondary}
