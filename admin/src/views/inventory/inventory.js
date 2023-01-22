@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
 import { useState, useEffect } from "react";
+import { Card } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
@@ -402,7 +403,7 @@ export default function Inventory() {
                                                         aria-describedby="modal-modal-description"
                                                     >
                                                         {
-                                                            <Box sx={style}>
+                                                            <Card  sx={style}>
                                                                 <Typography id="modal-modal-title" variant="h6" component="h2">
                                                                     <CardMedia
                                                                         component="img"
@@ -410,7 +411,7 @@ export default function Inventory() {
                                                                         image={`${inventory.thumbnail}`}
                                                                     />
                                                                 </Typography>
-                                                            </Box>
+                                                            </Card >
                                                         }
                                                     </Modal>
                                                 </TableCell>

@@ -27,7 +27,7 @@ export default function Login(props) {
   const [loading, setLoading] = useState(false);
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email().required('Emial is required!'),
+    email: Yup.string().email().required('Email is required!'),
     password: Yup.string().required('Password is required!')
   });
 
