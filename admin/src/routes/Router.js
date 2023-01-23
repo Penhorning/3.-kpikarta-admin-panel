@@ -134,8 +134,8 @@ var ThemeRoutes = [
   },
   {
     path: "/transaction",
-    name: "Transaction",
-    icon: "mdi mdi-gauge",
+    name: "Transactions",
+    icon: "mdi mdi-bank",
     component: Transaction,
     sideRoute: true
   },

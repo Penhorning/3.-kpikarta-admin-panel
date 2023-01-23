@@ -85,7 +85,6 @@ export default function TrialPeriod() {
     <Box sx={{}}>
       <Paper sx={{ mb: 2 }}>
         <TabContext value={value} >
-          {loading ? (<Spinner />) :
             <TabPanel value="1">
               <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onUpdateSubmit} >
                 {({ errors, touched }) => (
@@ -135,7 +134,6 @@ export default function TrialPeriod() {
                 )}
               </Formik>
             </TabPanel>
-          }
         </TabContext>
       </Paper>
     </Box>
