@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
+    "start:local": "set PORT=3001 && env-cmd -f envs/local.env react-scripts start",
     "start:dev": "env-cmd -f envs/dev.env react-scripts start",
     "start:qa": "env-cmd -f envs/qa.env react-scripts start",
     "start:prod": "env-cmd -f envs/prod.env react-scripts start",
