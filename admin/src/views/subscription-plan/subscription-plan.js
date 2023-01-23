@@ -194,6 +194,7 @@ export default function SubscriptionTable() {
 
   // Get all data 
   const fetchData = async () => {
+    setSubscriptionPlan()
     await UserService.getSubscriptionPlans(adminUserId, enqueueSnackbar).then((apiResponse) => {
       setSubscriptionPlan(apiResponse.plans);
       setLoading(false)
@@ -303,7 +304,7 @@ export default function SubscriptionTable() {
                           {Capitalize(plan.duration)}
                         </TableCell>
                         <TableCell>
-                          {moment(plan.createdAt, "YYYY-MM-DD" ).format("MM-DD-YYYY")}
+                          {moment(plan.createdAt, 'DD.MM.YYYY HH:mm:ss').format("MM/DD/YYYY")}
                         </TableCell>
                         <TableCell>
                           <Box

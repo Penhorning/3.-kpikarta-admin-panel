@@ -132,15 +132,14 @@ export default function ViewUser() {
 
     useEffect(() => {
         UserService.getUserDetails(id, enqueueSnackbar).then(response => {
-            const { name, job_title, departmentId, employeesRangeId, logo } = response.company;
-            
+            const { name, job_title, departmentId, employeeRangeId, logo } = response.company;
             setCompanyPhoto(logo ? `${Constants.BASE_URL}/company/${logo}` : `${'https://i.ibb.co/VD9C8w4/Capture-3.png'}`)
             setCompany(response.company)
             setCompanyID(response.id)
             initialCompanyValues.companyName = name;
             initialCompanyValues.companyJobTitle = job_title;
             initialCompanyValues.companyDepartment = departmentId;
-            initialCompanyValues.companyEmployeeRange = employeesRangeId;
+            initialCompanyValues.companyEmployeeRange = employeeRangeId;
             setProfilephoto(response.profilePic ? `${Constants.BASE_URL}/user/${response.profilePic}` : `${'https://i.ibb.co/wynJtDH/avatar.png'}`)
             setUsers(response)
         });

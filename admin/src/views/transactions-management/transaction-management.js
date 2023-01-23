@@ -343,7 +343,7 @@ export default function TransactionTable() {
             component="div">
             Transactions
           </Typography>
-          {/* <Typography
+          <Typography
             sx={{ flex: '1 1', zIndex: 1  }}
             component="div">
             <Box component="form"
@@ -416,7 +416,7 @@ export default function TransactionTable() {
                 }
               </Paper>
             </Box>
-          </Typography> */}
+          </Typography>
         </Toolbar>
         <Divider sx={{ m: 1.0 }} orientation="horizontal" />
         <TableContainer>
@@ -485,7 +485,13 @@ export default function TransactionTable() {
                             }}
                             style={{ paddingLeft: '15px' }}
                           >
-                            {Capitalize(user.status)}
+                             {
+                              user.status === "Paid"
+                                ? <Card align="center" style={{ backgroundColor: '#fc4b6c' }} ><span align="right" style={{ color: 'white' }}>Unpaid</span></Card>
+                                : <Card align="center" style={{ backgroundColor: 'green' }}><span align="right" style={{ color: 'white' }}>Paid</span></Card>
+
+                            }
+                            {/* {Capitalize(user.status)} */}
                           </Box>
                         </TableCell>
                       </TableRow>

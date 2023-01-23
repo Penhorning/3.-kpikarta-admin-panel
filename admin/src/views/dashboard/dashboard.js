@@ -124,7 +124,7 @@ const Dashboard = () => {
           <Grid item xs={3}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
               <div className="d-flex flex-row">
-                <div className="round round-lg align-self-center round-warning">
+                <div className="round round-lg align-self-center round">
                   <i className="mdi mdi-account-multiple" />
                 </div>
                 <div className="ml-2 align-self-center">
@@ -138,12 +138,12 @@ const Dashboard = () => {
           <Grid item xs={3}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
               <div className="d-flex flex-row">
-                <div className="round round-lg align-self-center round-warning">
+                <div className="round round-lg align-self-center" style={{backgroundColor:'#28a745'}}>
                   <i className="mdi mdi-account-multiple" />
                 </div>
                 <div className="ml-2 align-self-center">
                   <h3 className="mb-0 font-lgiht">{paid == '.' ? 0 : paid}</h3>
-                  <h5 className="text-muted mb-0">Total Paid Users</h5>
+                  <h5 className="text-muted mb-0">Paid Users</h5>
                 </div>
               </div>
             </Paper>
@@ -156,7 +156,7 @@ const Dashboard = () => {
                 </div>
                 <div className="ml-2 align-self-center">
                   <h3 className="mb-0 font-lgiht">{free == '.' ? 0 : free}</h3>
-                  <h5 className="text-muted mb-0">Total Free Users</h5>
+                  <h5 className="text-muted mb-0">Free Users</h5>
                 </div>
               </div>
             </Paper>
