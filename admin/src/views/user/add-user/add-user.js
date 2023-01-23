@@ -47,15 +47,15 @@ export default function AddUser() {
    if(state.value == undefined){
     return setValueState(true)
    }
-   const result = await confirm("Are you sure, Do you want to add new user?", options);
+   const result = await confirm("Are you sure, you want to add a new company?", options);
     if (result) {
       let mobile = {
         countryCode: state.country.countryCode.toUpperCase(),
         dialCode: `+${state.country.dialCode}`,
         internationalNumber: state.formattedValue,
-        nationalNumber:state.value,
-        number:state.value,
-        e164Number: state.value
+        nationalNumber: state.value.slice(2),
+        number: state.value.slice(2),
+        e164Number: `+${state.value}`
       }
       let data = {
         fullName: values.fullName,
@@ -66,7 +66,7 @@ export default function AddUser() {
       UserService.addUser(data, enqueueSnackbar).then(response => {
         if(!response.error){
           let variant = "success";
-          enqueueSnackbar('New user added successfully.', { variant });
+          enqueueSnackbar('New company added successfully!', { variant });
           history.replace('/users');
         }
       })
@@ -162,7 +162,7 @@ export default function AddUser() {
                       enableSearch={true}
                       country={'us'}
                       // onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
-                      onChange={(value, country,  e, formattedValue ) => setState({ value, country,  e, formattedValue })}
+                      onChange={(value, country, e, formattedValue ) => setState({ value, country, e, formattedValue })}
                       value={values.mobile.e164Number}
                       style={{ margin: '20px', marginRight: '25px' }}
                     />
