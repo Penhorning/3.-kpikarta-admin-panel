@@ -301,7 +301,7 @@ export default function SubscriptionTable() {
                         <TableCell
                           style={{ paddingLeft: '35px' }}
                         >
-                          {Capitalize(plan.duration)}
+                          {Capitalize(plan.duration) + 'ly'}
                         </TableCell>
                         <TableCell>
                           {moment(plan.createdAt, 'DD.MM.YYYY HH:mm:ss').format("MM/DD/YYYY")}
