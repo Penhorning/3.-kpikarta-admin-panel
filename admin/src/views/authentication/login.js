@@ -100,11 +100,23 @@ export default function Login(props) {
             </Typography>
             <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} >
               {({ errors, touched }) => (
-                <Form>
+                <Form autoComplete="off">
                   <Box sx={{ mt: 1 }}>
                     <Field name="email">
                       {({ field }) => (
                         <TextField
+                          inputProps={{
+                            autocomplete: 'email',
+                            form: {
+                              autocomplete: 'off',
+                            },
+                          }}
+                          label="Email Address"
+                          fullWidth
+                          margin="normal"
+                          type="email"
+                          display='flex'
+                          {...field}
                           sx={{
                             input: { color: 'white', height: '18px' },
                             fieldset: { borderColor: "#ffff" },
@@ -112,54 +124,29 @@ export default function Login(props) {
                               color: "white"
                             }
                           }}
-                          inputProps={{
-                            autoComplete: 'email',
-                            form: {
-                              autoComplete: 'off',
-                            },
-                          }}
-                          margin="normal"
-                          required
-                          fullWidth
-                          type="email"
-                          {...field}
-                          id="email"
-                          label="Email Address"
-                          name="email"
-                          style={{ color: 'white' }}
                           error={errors.email && touched.email ? true : false}
                           helperText={(errors.email && touched.email ? `${errors.email}` : '')}
-                          autoComplete = 'off'
                         />
                       )}
                     </Field>
                     <Field name="password">
                       {({ field }) => (
                         <TextField
-                        sx={{
-                          input: { color: 'white', height: '18px' },
-                          fieldset: { borderColor: "#ffff" },
-                          "& label": {
-                            color: "white"
-                          }
-                        }}
-                        inputProps={{
-                          autoComplete: 'password',
-                          form: {
-                            autoComplete: 'off',
-                          },
-                        }}
-                          margin="normal"
-                          required
-                          fullWidth
-                          type="password"
-                          {...field}
-                          id="password"
+                          inputProps={{ autoComplete: 'off' }}
                           label="Password"
-                          name="password"
+                          type="password"
+                          fullWidth
+                          margin="normal"
+                          {...field}
+                          sx={{
+                            input: { color: 'white', height: '18px' },
+                            fieldset: { borderColor: "#ffff" },
+                            "& label": {
+                              color: "white"
+                            }
+                          }}
                           error={errors.password && touched.password ? true : false}
                           helperText={(errors.password && touched.password ? `${errors.password}` : '')}
-                          autoComplete='new-password'
                         />
                       )}
                     </Field>
