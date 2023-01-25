@@ -106,7 +106,7 @@ export default function Login(props) {
                       {({ field }) => (
                         <TextField
                         inputProps={{
-                          autoComplete: 'off'}}
+                          autoComplete: 'off', shrink: true}}
                         key="Confirmation Code"
                           label="Email Address"
                           fullWidth
@@ -131,7 +131,7 @@ export default function Login(props) {
                       {({ field }) => (
                         <TextField
                         inputProps={{
-                          autoComplete: 'off'}}
+                          autoComplete: 'off', shrink: true}}
                         key="Confirmation Code"
                         
                           // inputProps={{ autoComplete: 'off', autocomplete: 'password'}}
