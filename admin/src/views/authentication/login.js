@@ -142,9 +142,9 @@ export default function Login(props) {
                             color: "white"
                           }
                         }}
-                          InputLabelProps={{
-                            shrink: true
-                          }}
+                        InputLabelProps={{
+                          shrink: true
+                        }}
                           margin="normal"
                           required
                           fullWidth
