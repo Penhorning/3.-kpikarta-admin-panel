@@ -105,12 +105,7 @@ export default function Login(props) {
                     <Field name="email">
                       {({ field }) => (
                         <TextField
-                          inputProps={{
-                            autocomplete: 'email',
-                            form: {
-                              autocomplete: 'off',
-                            },
-                          }}
+                          inputProps={{ autoComplete: 'off', autocomplete: 'email'}}
                           label="Email Address"
                           fullWidth
                           margin="normal"
@@ -132,7 +127,14 @@ export default function Login(props) {
                     <Field name="password">
                       {({ field }) => (
                         <TextField
-                          inputProps={{ autoComplete: 'off' }}
+                        // inputProps={{
+                        //   autocomplete: 'email',
+                        //   form: {
+                        //     autocomplete: 'off',
+                        //   },
+                        //   autoComplete: 'off' 
+                        // }}
+                          inputProps={{ autoComplete: 'off', autocomplete: 'password'}}
                           label="Password"
                           type="password"
                           fullWidth
