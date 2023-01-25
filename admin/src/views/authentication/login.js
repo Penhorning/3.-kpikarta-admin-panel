@@ -105,7 +105,13 @@ export default function Login(props) {
                     <Field name="email">
                       {({ field }) => (
                         <TextField
-                          inputProps={{ autoComplete: 'off', autocomplete: 'email'}}
+                        inputProps={{
+                          autocomplete: 'email',
+                          form: {
+                            autocomplete: 'off',
+                          },
+                          autoComplete: 'off' 
+                        }}
                           label="Email Address"
                           fullWidth
                           margin="normal"
@@ -121,20 +127,22 @@ export default function Login(props) {
                           }}
                           error={errors.email && touched.email ? true : false}
                           helperText={(errors.email && touched.email ? `${errors.email}` : '')}
+                          autoComplete = 'off'
                         />
                       )}
                     </Field>
                     <Field name="password">
                       {({ field }) => (
                         <TextField
-                        // inputProps={{
-                        //   autocomplete: 'email',
-                        //   form: {
-                        //     autocomplete: 'off',
-                        //   },
-                        //   autoComplete: 'off' 
-                        // }}
-                          inputProps={{ autoComplete: 'off', autocomplete: 'password'}}
+                        inputProps={{
+                          autocomplete: 'email',
+                          form: {
+                            autocomplete: 'off',
+                          },
+                          autoComplete: 'off' 
+                        }}
+                        
+                          // inputProps={{ autoComplete: 'off', autocomplete: 'password'}}
                           label="Password"
                           type="password"
                           fullWidth
@@ -149,6 +157,7 @@ export default function Login(props) {
                           }}
                           error={errors.password && touched.password ? true : false}
                           helperText={(errors.password && touched.password ? `${errors.password}` : '')}
+                          autoComplete = 'off'
                         />
                       )}
                     </Field>
