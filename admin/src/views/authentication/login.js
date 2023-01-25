@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import logoImg from "../../assets/images/kpi-karta-logo.png";
 import LoadingButton from '@mui/lab/LoadingButton';
+import './login.css';
 
 const theme = createTheme();
 
@@ -100,22 +101,13 @@ export default function Login(props) {
             </Typography>
             <Formik enableReinitialize={true} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} >
               {({ errors, touched }) => (
-                <Form autoComplete="off">
+                <Form>
                   <Box sx={{ mt: 1 }}>
-                    <Field name="email">
+                    <Field 
+                    name="email"
+                    getOptionLabel={(option) => option.title}>
                       {({ field }) => (
                         <TextField
-                          inputProps={{
-                            autoComplete: 'off'
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          key="Confirmation Code"
-                          label="Email Address"
-                          fullWidth
-                          margin="normal"
-                          type="email"
-                          display='flex'
-                          {...field}
                           sx={{
                             input: { color: 'white', height: '18px' },
                             fieldset: { borderColor: "#ffff" },
@@ -123,36 +115,46 @@ export default function Login(props) {
                               color: "white"
                             }
                           }}
+                          InputLabelProps={{
+                              shrink: true
+                          }}
+                          margin="normal"
+                          required
+                          fullWidth
+                          variant="outlined"
+                          type="email"
+                          {...field}
+                          id="email"
+                          label="Email Address"
+                          name="email"
                           error={errors.email && touched.email ? true : false}
                           helperText={(errors.email && touched.email ? `${errors.email}` : '')}
-                          autoComplete="confirmation code"
                         />
                       )}
                     </Field>
                     <Field name="password">
                       {({ field }) => (
                         <TextField
-                          inputProps={{
-                            autoComplete: 'off'
-                          }}
-                          key="Confirmation Code"
-                          InputLabelProps={{ shrink: true }}
-                          // inputProps={{ autoComplete: 'off', autocomplete: 'password'}}
-                          label="Password"
-                          type="password"
-                          fullWidth
+                        sx={{
+                          input: { color: 'white', height: '18px' },
+                          fieldset: { borderColor: "#ffff" },
+                          "& label": {
+                            color: "white"
+                          }
+                        }}
+                        InputLabelProps={{
+                          shrink: true
+                        }}
                           margin="normal"
+                          required
+                          fullWidth
+                          type="password"
                           {...field}
-                          sx={{
-                            input: { color: 'white', height: '18px' },
-                            fieldset: { borderColor: "#ffff" },
-                            "& label": {
-                              color: "white"
-                            }
-                          }}
+                          id="password"
+                          label="Password"
+                          name="password"
                           error={errors.password && touched.password ? true : false}
                           helperText={(errors.password && touched.password ? `${errors.password}` : '')}
-                          autoComplete="confirmation code"
                         />
                       )}
                     </Field>
