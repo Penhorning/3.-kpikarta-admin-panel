@@ -27,10 +27,25 @@ const initialValue = {
 const Dashboard = () => {
   const [count, setCount] = useState('.');
   const { enqueueSnackbar } = useSnackbar();
+  const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
+  const [dateRange, setDateRange] = useState(initialValue);
+  const [free, setFree] = useState('.');
+  const [paid, setPaid] = useState('.');
+  const [isShown, setIsShown] = useState(false)
+
   function getUserCount() {
     UserService.getUserCount(enqueueSnackbar).then(response => {
       if (!response.error) {
         setCount(response.count);
+      } else if (response.error.statusCode === 400) {
+        let variant = 'error';
+        enqueueSnackbar("Something went worng", { variant });
+      }
+    })
+    UserService.getUserLicenseCount(enqueueSnackbar).then(response => {
+      if (!response.error) {
+        setPaid(response.count.Paid);
+        setFree(response.count.Free);
       } else if (response.error.statusCode === 400) {
         let variant = 'error';
         enqueueSnackbar("Something went worng", { variant });
@@ -60,9 +75,6 @@ const Dashboard = () => {
     getUserCount();
   }, [])
 
-  const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
-  const [dateRange, setDateRange] = useState(initialValue);
-  const [isShown, setIsShown] = useState(false)
 
   const handleDateChange = async (event) => {
     setIsShown(true)
@@ -112,7 +124,7 @@ const Dashboard = () => {
           <Grid item xs={3}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
               <div className="d-flex flex-row">
-                <div className="round round-lg align-self-center round-warning">
+                <div className="round round-lg align-self-center round">
                   <i className="mdi mdi-account-multiple" />
                 </div>
                 <div className="ml-2 align-self-center">
@@ -122,7 +134,34 @@ const Dashboard = () => {
               </div>
             </Paper>
           </Grid>
-          {/* <Grid item xs={12} >
+
+          <Grid item xs={3}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+              <div className="d-flex flex-row">
+                <div className="round round-lg align-self-center" style={{backgroundColor:'#28a745'}}>
+                  <i className="mdi mdi-account-multiple" />
+                </div>
+                <div className="ml-2 align-self-center">
+                  <h3 className="mb-0 font-lgiht">{paid == '.' ? 0 : paid}</h3>
+                  <h5 className="text-muted mb-0">Paid Users</h5>
+                </div>
+              </div>
+            </Paper>
+          </Grid>
+          <Grid item xs={3}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+              <div className="d-flex flex-row">
+                <div className="round round-lg align-self-center round-warning">
+                  <i className="mdi mdi-account-multiple" />
+                </div>
+                <div className="ml-2 align-self-center">
+                  <h3 className="mb-0 font-lgiht">{free == '.' ? 0 : free}</h3>
+                  <h5 className="text-muted mb-0">Free Users</h5>
+                </div>
+              </div>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} >
             <Paper
               sx={{
                 p: 2,
@@ -133,7 +172,7 @@ const Dashboard = () => {
             >
               <Chart />
             </Paper>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
     </Card>

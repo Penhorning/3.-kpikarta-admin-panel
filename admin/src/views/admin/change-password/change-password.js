@@ -1,16 +1,16 @@
 import React, { useState} from "react";
+import { useSnackbar } from 'notistack';
+import { AuthenticationService } from "../../../shared/_services";
+import {useHistory } from 'react-router-dom';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import 'react-phone-input-2/lib/material.css';
-import { useSnackbar } from 'notistack';
-import { AuthenticationService } from "../../../shared/_services";
-import {useHistory } from 'react-router-dom';
 
 
 const initialValues = {
@@ -96,6 +96,12 @@ const ChangePassword = () => {
                                 <Field name="oldPassword">
                                     {({ field }) => (
                                         <TextField
+                                        inputProps={{
+                                            autocomplete: 'oldPassword',
+                                            form: {
+                                              autocomplete: 'off',
+                                            },
+                                          }}
                                             label="Old password"
                                             fullWidth
                                             type = "password"
@@ -110,6 +116,12 @@ const ChangePassword = () => {
                                 <Field name="newPassword">
                                     {({ field }) => (
                                         <TextField
+                                        inputProps={{
+                                            autocomplete: 'newPassword',
+                                            form: {
+                                              autocomplete: 'off',
+                                            },
+                                          }}
                                             label="New password"
                                             type = "password"
                                             fullWidth
@@ -126,6 +138,12 @@ const ChangePassword = () => {
                                 <Field name="confirmPassword">
                                     {({ field }) => (
                                         <TextField
+                                        inputProps={{
+                                            autocomplete: 'confirmPassword',
+                                            form: {
+                                              autocomplete: 'off',
+                                            },
+                                          }}
                                             label="Confirm password"
                                             fullWidth
                                             display='flex'

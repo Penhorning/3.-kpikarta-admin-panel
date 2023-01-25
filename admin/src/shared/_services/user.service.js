@@ -23,6 +23,45 @@ const getAll = async (data, enqueueSnackbar) => {
   }
 }
 
+const getAllInvoicesChart = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/get-admin-invoices-chart`, {
+      startDate: data.start,
+      endDate: data.end
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err, data);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const getAllInvoices = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/get-admin-invoices`, {
+      page: data.page,
+      limit: data.limit,
+      searchQuery: data.search,
+      previousId: data.previousId,
+      nextId: data.nextId,
+      startDate: data.start,
+      endDate: data.end,
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err, data);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
 const getAllKartas = async (data, enqueueSnackbar) => {
   try {
     const response = await axios.post(Constants.BASE_URL + `/api/karta/get-all`, {
@@ -83,12 +122,28 @@ const getAllCompanyMembers = async (data, enqueueSnackbar) => {
   }
 }
 
-const blockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
+const blockUser = async (userId, page, rowsPerPage) => {
   try {
     const response = await axios.put(Constants.BASE_URL + `/api/users/block`, {
       userId: userId,
       page: page,
       limit: rowsPerPage
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized")
+    return error
+  }
+}
+
+const cancelSubscription = async (userId, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/cancel-subscription`, {
+      userId: userId
     },
       { headers: AuthHeader() })
     return response.data;
@@ -122,6 +177,19 @@ const unBlockUser = async (userId, page, rowsPerPage, enqueueSnackbar) => {
 const getUserCount = async (enqueueSnackbar) => {
   try {
     const response = await axios.post(Constants.BASE_URL + `/api/users/count`, {}, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const getUserLicenseCount = async (enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/subscriptions/get-user-count`, {}, { headers: AuthHeader() })
     return response.data;
   } catch (err) {
     const error = handleError(err);
@@ -253,7 +321,7 @@ const addNewPlan = async (data, enqueueSnackbar) => {
 
 const getSubscriptionPlans = async (userId, enqueueSnackbar) => {
   try {
-    const response = await axios.get(Constants.BASE_URL + `/api/subscriptions?filter[order]=createdAt Desc`, {
+    const response = await axios.get(Constants.BASE_URL + `/api/subscriptions/get-admin-plans`, {
       where: {
         user_id: userId
       }
@@ -268,9 +336,9 @@ const getSubscriptionPlans = async (userId, enqueueSnackbar) => {
   }
 }
 
-const getSubscriptionPlanById = async (id, enqueueSnackbar) => {
+const getTrialPeriod = async (enqueueSnackbar) => {
   try {
-    const response = await axios.get(Constants.BASE_URL + `/api/subscriptions/${id}`, {}, { headers: AuthHeader() })
+    const response = await axios.get(Constants.BASE_URL + `/api/trial_periods`, {}, { headers: AuthHeader() })
     return response.data;
   } catch (err) {
     const error = handleError(err);
@@ -281,13 +349,40 @@ const getSubscriptionPlanById = async (id, enqueueSnackbar) => {
   }
 }
 
-const updateSubscriptionPlan = async (id, data, enqueueSnackbar) => {
+const updateTrialPeriodPlan = async ( id, data, enqueueSnackbar) => {
   try {
-    const response = await axios.patch(Constants.BASE_URL + `/api/subscriptions/${id}`, {
-      planName: data.plan_name,
-      description: data.description,
-      userId: data.userId,
-      planId: data.planId
+    const response = await axios.put(Constants.BASE_URL + `/api/trial_periods/${id}`, {days: data.days}, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const getSubscriptionPlanById = async (id, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/get-plan`, {
+      priceId : id
+    }, { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const updateSubscriptionPlan = async ( data, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/update-admin-plans`, {
+      name: data.name,
+      amount: data.price,
+      priceId: data.priceId
     }, { headers: AuthHeader() })
     return response.data;
   } catch (err) {
@@ -422,5 +517,11 @@ export const UserService = {
   getLicenseById,
   updateLicensePlan,
   getInventory,
-  getAllKartas
+  getAllKartas,
+  getAllInvoices,
+  getAllInvoicesChart,
+  getTrialPeriod,
+  updateTrialPeriodPlan,
+  cancelSubscription,
+  getUserLicenseCount
 };

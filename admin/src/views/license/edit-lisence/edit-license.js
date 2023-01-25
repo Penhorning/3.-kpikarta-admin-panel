@@ -18,7 +18,6 @@ import './edit-license.scss';
 import 'react-phone-input-2/lib/material.css';
 
 
-
 const initialValues = {
   name: '',
 }
@@ -83,6 +82,7 @@ export default function EditLisence() {
   const onBackClick = () => {
     history.push('/license');
   }
+  
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>

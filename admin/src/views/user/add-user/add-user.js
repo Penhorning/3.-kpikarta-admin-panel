@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import {useHistory } from 'react-router-dom';
+import { UserService } from '../../../shared/_services';
+import { useSnackbar } from 'notistack';
+import { confirm } from "react-confirm-box";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import PhoneInput from 'react-phone-input-2';
-// import 'intl-tel-input/build/css/intlTelInput.css';
-import 'react-phone-input-2/lib/material.css';
-import {useHistory } from 'react-router-dom';
 import './add-user.scss';
-import { UserService } from '../../../shared/_services';
-import { useSnackbar } from 'notistack';
-import { confirm } from "react-confirm-box";
+import 'react-phone-input-2/lib/material.css';
 
 const initialValues = {
   fullName: '',
@@ -25,6 +24,8 @@ const initialValues = {
 export default function AddUser() {
   const history = useHistory();
   const [valueState, setValueState] = useState(false);
+  const [state, setState] = useState(false);
+
   const { enqueueSnackbar } = useSnackbar();
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().trim().min(1, 'Full name must be between 1 and 255 characters.')
@@ -43,15 +44,23 @@ export default function AddUser() {
   }
 
   const onSubmit = async (values) => {
-   if(values.mobile.e164Number == undefined){
+   if(state.value == undefined){
     return setValueState(true)
    }
    const result = await confirm("Are you sure, Do you want to add new user?", options);
     if (result) {
+      let mobile = {
+        countryCode: state.country.countryCode.toUpperCase(),
+        dialCode: `+${state.country.dialCode}`,
+        internationalNumber: state.formattedValue,
+        nationalNumber:state.value,
+        number:state.value,
+        e164Number: state.value
+      }
       let data = {
         fullName: values.fullName,
         email: values.email,
-        mobile: values.mobile,
+        mobile: mobile,
         companyName: values.companyName,
       };
       UserService.addUser(data, enqueueSnackbar).then(response => {
@@ -94,7 +103,7 @@ export default function AddUser() {
             variant="h6"
             id="tableTitle"
             component="div">
-            Add User
+            Add Company
           </Typography>
           <Button variant="outlined" onClick={onBackClick}>Back</Button>
         </Toolbar>
@@ -152,7 +161,8 @@ export default function AddUser() {
                       isValid={isValid}
                       enableSearch={true}
                       country={'us'}
-                      onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
+                      // onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
+                      onChange={(value, country,  e, formattedValue ) => setState({ value, country,  e, formattedValue })}
                       value={values.mobile.e164Number}
                       style={{ margin: '20px', marginRight: '25px' }}
                     />
