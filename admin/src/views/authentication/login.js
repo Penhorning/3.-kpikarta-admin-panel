@@ -106,12 +106,8 @@ export default function Login(props) {
                       {({ field }) => (
                         <TextField
                         inputProps={{
-                          autocomplete: 'email',
-                          form: {
-                            autocomplete: 'off',
-                          },
-                          autoComplete: 'off' 
-                        }}
+                          autoComplete: 'off'}}
+                        key="Confirmation Code"
                           label="Email Address"
                           fullWidth
                           margin="normal"
@@ -127,7 +123,7 @@ export default function Login(props) {
                           }}
                           error={errors.email && touched.email ? true : false}
                           helperText={(errors.email && touched.email ? `${errors.email}` : '')}
-                          autoComplete = 'off'
+                          autoComplete="confirmation code"
                         />
                       )}
                     </Field>
@@ -135,12 +131,8 @@ export default function Login(props) {
                       {({ field }) => (
                         <TextField
                         inputProps={{
-                          autocomplete: 'email',
-                          form: {
-                            autocomplete: 'off',
-                          },
-                          autoComplete: 'off' 
-                        }}
+                          autoComplete: 'off'}}
+                        key="Confirmation Code"
                         
                           // inputProps={{ autoComplete: 'off', autocomplete: 'password'}}
                           label="Password"
@@ -157,7 +149,7 @@ export default function Login(props) {
                           }}
                           error={errors.password && touched.password ? true : false}
                           helperText={(errors.password && touched.password ? `${errors.password}` : '')}
-                          autoComplete = 'off'
+                          autoComplete="confirmation code"
                         />
                       )}
                     </Field>
