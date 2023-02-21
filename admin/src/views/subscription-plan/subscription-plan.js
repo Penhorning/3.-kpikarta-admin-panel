@@ -262,8 +262,8 @@ export default function SubscriptionTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={plans.length}
-                key={plans.id}
+                rowCount={plans && plans.length > 0 ? plans.length : 0}
+                key={ plans ? plans && plans.id : ""}
               />
               <TableBody>
                 {plans && stableSort(plans, getComparator(order, orderBy))
@@ -301,7 +301,7 @@ export default function SubscriptionTable() {
                         <TableCell
                           style={{ paddingLeft: '35px' }}
                         >
-                          {Capitalize(plan.duration)}
+                          {Capitalize(plan.duration) + 'ly'}
                         </TableCell>
                         <TableCell>
                           {moment(plan.createdAt, 'DD.MM.YYYY HH:mm:ss').format("MM/DD/YYYY")}

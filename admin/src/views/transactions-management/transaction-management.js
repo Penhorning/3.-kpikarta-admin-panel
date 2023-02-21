@@ -209,7 +209,9 @@ export default function TransactionTable() {
       limit: rowsPerPage,
       search: searchData,
       previousId: previousId,
-      nextId: nextId
+      nextId: nextId,
+      startDate: dateRange.from ? dateRange.from : "",
+      endDate: dateRange.to ? dateRange.to : "",
     }
     UserService.getAllInvoices(data, enqueueSnackbar).then((response) => {
       if (!response.error) {
@@ -355,7 +357,7 @@ export default function TransactionTable() {
                 <DatePicker
                   value={selectedDayRange}
                   onChange={handleDateChange}
-                  inputPlaceholder="Select created date range"
+                  inputPlaceholder="Select date range"
                   shouldHighlightWeekends
                   colorPrimary={'#296BB5'}
                   maximumDate={maximumDate}
@@ -376,7 +378,7 @@ export default function TransactionTable() {
               </Paper>
             </Box>
           </Typography>
-          <Typography
+          {/* <Typography
             sx={{ flex: '1 1 5%' }}
             component="div">
             <Box component="form"
@@ -416,7 +418,7 @@ export default function TransactionTable() {
                 }
               </Paper>
             </Box>
-          </Typography>
+          </Typography> */}
         </Toolbar>
         <Divider sx={{ m: 1.0 }} orientation="horizontal" />
         <TableContainer>
