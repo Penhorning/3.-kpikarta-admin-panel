@@ -48,8 +48,8 @@ const getAllInvoices = async (data, enqueueSnackbar) => {
       searchQuery: data.search,
       previousId: data.previousId,
       nextId: data.nextId,
-      startDate: data.start,
-      endDate: data.end,
+      startDate: data.startDate,
+      endDate: data.endDate,
     },
       { headers: AuthHeader() })
     return response.data;
@@ -140,9 +140,25 @@ const blockUser = async (userId, page, rowsPerPage) => {
   }
 }
 
-const cancelSubscription = async (userId, enqueueSnackbar) => {
+const blockSubscription = async (userId, enqueueSnackbar) => {
   try {
-    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/cancel-subscription`, {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/block-subscription`, {
+      userId: userId
+    },
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
+const unblockSubscription = async (userId, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/unblock-subscription`, {
       userId: userId
     },
       { headers: AuthHeader() })
@@ -522,6 +538,7 @@ export const UserService = {
   getAllInvoicesChart,
   getTrialPeriod,
   updateTrialPeriodPlan,
-  cancelSubscription,
+  blockSubscription,
+  unblockSubscription,
   getUserLicenseCount
 };

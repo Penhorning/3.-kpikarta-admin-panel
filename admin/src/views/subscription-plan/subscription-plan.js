@@ -262,8 +262,8 @@ export default function SubscriptionTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={plans.length}
-                key={plans.id}
+                rowCount={plans && plans.length > 0 ? plans.length : 0}
+                key={ plans ? plans && plans.id : ""}
               />
               <TableBody>
                 {plans && stableSort(plans, getComparator(order, orderBy))
