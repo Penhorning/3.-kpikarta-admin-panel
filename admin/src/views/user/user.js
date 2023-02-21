@@ -603,7 +603,7 @@ export default function UserTable() {
                                 <MessageIcon style={style} /><h5 style={titleStyle}>Suggestions</h5> 
                               </MenuItem>
                             </Link>
-                            <Link as={Link} to={`/trial-period/${user._id}`}>
+                            <Link as={Link} to={`/edit-user/${user._id}`}>
                               <MenuItem onClick={handleDropDownClose} disableRipple>
                                 <EditIcon style={style} /> <h5 style={titleStyle}>Edit</h5> 
                               </MenuItem>
