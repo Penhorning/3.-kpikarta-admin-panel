@@ -139,6 +139,9 @@ export default function EditPlan() {
                             label="Price"
                             fullWidth
                             display='flex'
+                            inputProps={{
+                              maxLength: 5
+                            }}
                             {...field}
                             style={{ margin: '20px', marginRight: '25px' }}
                           />
