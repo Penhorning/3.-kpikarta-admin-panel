@@ -102,7 +102,7 @@ export default function EditPlan() {
             variant="h6"
             id="tableTitle"
             component="div">
-            Update Subscribtion Plan
+            Update Subscription Plan
           </Typography>
           <Button variant="outlined" onClick={onBackClick}>Back</Button>
         </Toolbar>
@@ -139,6 +139,9 @@ export default function EditPlan() {
                             label="Price"
                             fullWidth
                             display='flex'
+                            inputProps={{
+                              maxLength: 5
+                            }}
                             {...field}
                             style={{ margin: '20px', marginRight: '25px' }}
                           />

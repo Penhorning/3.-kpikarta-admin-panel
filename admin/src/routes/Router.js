@@ -92,7 +92,7 @@ var ThemeRoutes = [
   },
   {
     path: "/subscription-plans",
-    name: "Subscription",
+    name: "Subscriptions",
     icon: "mdi mdi-book-multiple",
     component: SubscriptionPlan,
     sideRoute: true
