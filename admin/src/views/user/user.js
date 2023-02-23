@@ -210,7 +210,6 @@ export default function UserTable() {
     labels: {
       confirmable: "Yes",
       cancellable: "No",
-
     }
   }
   const block = async (userId, page, rowsPerPage) => {
@@ -218,14 +217,13 @@ export default function UserTable() {
     if (result) {
       UserService.blockUser(userId, page, rowsPerPage).then((res) => {
         if (res.status === true) {
-          UserService.cancelSubscription(userId, enqueueSnackbar).then((res) => {
+          UserService.blockSubscription(userId, enqueueSnackbar).then((res) => {
               fetchData('paginationChange');
               unblockToast(true)
               return;
           })
         }
-      })
-     
+      });
     }
   }
 
@@ -234,8 +232,11 @@ export default function UserTable() {
     if (result) {
       UserService.unBlockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
         if (res.status === true) {
-          fetchData('paginationChange');
-          blockToast(true)
+          UserService.unblockSubscription(userId, enqueueSnackbar).then((res) => {
+            fetchData('paginationChange');
+            unblockToast(true)
+            return;
+          })
         }
       })
     }
