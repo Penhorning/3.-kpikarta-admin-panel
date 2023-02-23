@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import { UserService } from '../../../shared/_services';
 import { useSnackbar } from 'notistack';
 import { confirm } from "react-confirm-box";
@@ -67,7 +67,9 @@ export default function AddUser() {
         if(!response.error){
           let variant = "success";
           enqueueSnackbar('New company added successfully!', { variant });
-          history.replace('/users');
+          setTimeout(() => {
+            history.push('/users')
+          }, 1000);
         }
       })
     }

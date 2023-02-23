@@ -292,7 +292,9 @@ const upadateCompanyDetails = async (companyIds, data, enqueueSnackbar) => {
 
 const getDepartment = async (enqueueSnackbar) => {
   try {
-    const response = await axios.get(Constants.BASE_URL + `/api/departments`, {}, { headers: AuthHeader() })
+    const response = await axios.get(Constants.BASE_URL + `/api/departments`,
+   
+     { headers: AuthHeader() })
     return response.data;
   } catch (err) {
     const error = handleError(err);
@@ -305,7 +307,9 @@ const getDepartment = async (enqueueSnackbar) => {
 
 const getEmployeeRange = async (enqueueSnackbar) => {
   try {
-    const response = await axios.get(Constants.BASE_URL + `/api/employee_ranges`, {}, { headers: AuthHeader() })
+    const response = await axios.get(Constants.BASE_URL + `/api/employee_ranges`,
+    
+     { headers: AuthHeader() })
     return response.data;
   } catch (err) {
     const error = handleError(err);

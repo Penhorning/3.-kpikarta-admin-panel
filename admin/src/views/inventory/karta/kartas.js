@@ -293,7 +293,7 @@ export default function KartasTable() {
                                                     {user?.sharedTo?.length ? user?.sharedTo?.length : "0"}
                                                 </TableCell>
                                                 <TableCell style={{ verticalAlign: 'top', paddingLeft: 26 }}>
-                                                    <a target="_blank" href={`${Constants.KARTA_URL}/karta/edit/${user._id}`}>
+                                                    <a target="_blank" href={`${Constants.KARTA_URL}/karta/view/${user._id}`}>
 
                                                     <Tooltip title="View Karta"  >
                                                         <VisibilityIcon style={{ color: "#243864", cursor: 'pointer' }} />
