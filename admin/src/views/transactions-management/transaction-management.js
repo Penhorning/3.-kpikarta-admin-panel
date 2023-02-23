@@ -186,8 +186,9 @@ export default function TransactionTable() {
   const [loading, setLoading] = useState(true);
   const [previousId, setPreviousId] = useState();
   const [nextId, setNextId] = useState();
+  const [nextButton, setNextButton] = useState(false);
+
   const { enqueueSnackbar } = useSnackbar();
-  const classes = useStyles();
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
@@ -213,14 +214,24 @@ export default function TransactionTable() {
       startDate: dateRange.from ? dateRange.from : "",
       endDate: dateRange.to ? dateRange.to : "",
     }
+    setNextButton(true)
     UserService.getAllInvoices(data, enqueueSnackbar).then((response) => {
       if (!response.error) {
-      setUsers( response.invoices[0].data);
-      if (response.invoices[0]?.metadata.length > 0) {
-        setTotal(response.invoices[0]?.metadata[0]?.total);
-      } else {
-        setTotal(0);
-      }
+
+        if(response.invoices[0].data.length > 0){
+          setTimeout(() => {
+            setNextButton(false)
+          }, 1000);
+        } else{
+          setNextButton(true)
+        }
+        setUsers( response.invoices[0].data);
+        if (response.invoices[0]?.metadata.length > 0) {
+          setTotal(response.invoices[0]?.metadata[0]?.total);
+        } else {
+          setTotal(0);
+        }
+    
       setLoading(false)
     } else if(response.error.statusCode === 400){
       let variant = 'error';
@@ -303,13 +314,12 @@ export default function TransactionTable() {
 
   const handleChangePage = (event, newPage) => {
     if(event.target.getAttribute("data-testid") == 'KeyboardArrowRightIcon'){
-      let nextId = users.slice(-1)
-      setNextId(nextId[0].id )
+      setNextId(users[users.length - 1].id)
       setPreviousId()
-    }else {
+    }else if(event.target.getAttribute("data-testid") == 'KeyboardArrowLeftIcon'){
       setPreviousId(users[0].id)
       setNextId()
-    }
+    } 
     setPage(newPage);
   };
 
@@ -503,17 +513,18 @@ export default function TransactionTable() {
             </Table>
           }
         </TableContainer>
-        <TablePagination
-          className='p'
-          component="div"
-          rowsPerPageOptions={[2]}
-          count={total}
-          rowsPerPage={rowsPerPage}
-          labelRowsPerPage="Rows per page"
-          page={total <= 0 ? 0 : page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        { nextButton ? "" :  <TablePagination
+        className='p'
+        component="div"
+        rowsPerPageOptions={[2]}
+        count={total}
+        rowsPerPage={rowsPerPage}
+        labelRowsPerPage="Rows per page"
+        page={total <= 0 ? 0 : page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />}
+     
       </Paper>
     </Box>
   );
