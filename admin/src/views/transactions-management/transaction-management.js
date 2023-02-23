@@ -313,14 +313,17 @@ export default function TransactionTable() {
   };
 
   const handleChangePage = (event, newPage) => {
-    if(event.target.getAttribute("data-testid") == 'KeyboardArrowRightIcon'){
-      setNextId(users[users.length - 1].id)
-      setPreviousId()
-    }else if(event.target.getAttribute("data-testid") == 'KeyboardArrowLeftIcon'){
-      setPreviousId(users[0].id)
-      setNextId()
-    } 
-    setPage(newPage);
+    console.log("event", event.target.getAttribute("data-testid"))
+    if(event.target.getAttribute("data-testid")){
+      if(event.target.getAttribute("data-testid") == 'KeyboardArrowRightIcon'){
+        setNextId(users[users.length - 1].id)
+        setPreviousId()
+      }else if(event.target.getAttribute("data-testid") == 'KeyboardArrowLeftIcon'){
+        setPreviousId(users[0].id)
+        setNextId()
+      } 
+      setPage(newPage);
+    }
   };
 
   const handleChangeRowsPerPage = (event) => {
