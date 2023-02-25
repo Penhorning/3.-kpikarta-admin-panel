@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthenticationService } from "../../shared/_services";
 import { useSnackbar } from 'notistack';
 import { Formik, Form, Field } from 'formik';
+import { makeStyles } from '@material-ui/core/styles';
 import * as Yup from 'yup';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -15,6 +16,27 @@ import logoImg from "../../assets/images/kpi-karta-logo.png";
 import LoadingButton from '@mui/lab/LoadingButton';
 
 const theme = createTheme();
+const useStyles = makeStyles({
+  root: {
+    '& input:-webkit-autofill': {
+      transition: 'background-color 5000s ease-in-out 0s',
+      WebkitTextFillColor: '#fff',
+      '&:hover': {
+        transition: 'none',
+      },
+      '&:focus': {
+        transition: 'none',
+      },
+      '&:active': {
+        transition: 'none',
+      },
+    },
+    '& input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active': {
+      filter: 'none',
+      boxShadow: '0 0 0 100px rgb(36, 56, 100) inset',
+    },
+  },
+});
 
 const initialValues = {
   email: ''
@@ -23,6 +45,7 @@ const initialValues = {
 export default function ForgotPassword(props) {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
+  const classes = useStyles();
   const validationSchema = Yup.object().shape({
     email: Yup.string().email().required('Emial is required!')
   });
@@ -117,6 +140,7 @@ export default function ForgotPassword(props) {
                           label="Email Address"
                           name="email"
                           autoComplete="email"
+                          className={classes.root}
                           style={{ color: 'white' }}
                           error={errors.email && touched.email ? true : false}
                           helperText={(errors.email && touched.email ? `${errors.email}` : '')}
