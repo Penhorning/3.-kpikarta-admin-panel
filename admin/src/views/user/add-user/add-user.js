@@ -25,7 +25,7 @@ export default function AddUser() {
   const history = useHistory();
   const [valueState, setValueState] = useState(false);
   const [state, setState] = useState(false);
-
+  const [phoneError, setPhoneError] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().trim().min(1, 'Full name must be between 1 and 255 characters.')
