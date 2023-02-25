@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import { UserService } from '../../../shared/_services';
 import { useSnackbar } from 'notistack';
 import { confirm } from "react-confirm-box";
@@ -12,8 +12,19 @@ import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import PhoneInput from 'react-phone-input-2';
+import {makeStyles} from '@material-ui/core/styles';
 import './add-user.scss';
 import 'react-phone-input-2/lib/material.css';
+
+
+const useStyles = makeStyles({
+  fullNameLabel: {
+    root: {
+      color: 'red',
+      // Add any other styles you need here
+    },
+  },
+});
 
 const initialValues = {
   fullName: '',
@@ -25,8 +36,10 @@ export default function AddUser() {
   const history = useHistory();
   const [valueState, setValueState] = useState(false);
   const [state, setState] = useState(false);
-
+  const [phoneError, setPhoneError] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const [fullNameLabel, setFullNameLabel] = useState('*');
+  const classes = useStyles();
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().trim().min(1, 'Full name must be between 1 and 255 characters.')
     .max(255, 'Full name must be between 1 and 255 characters.').required('Full Name is required!'),
@@ -44,9 +57,12 @@ export default function AddUser() {
   }
 
   const onSubmit = async (values) => {
-   if(state.value == undefined){
-    return setValueState(true)
-   }
+    if(state?.value == undefined){
+      return setValueState(true)
+     }
+     if(state?.value?.length < 5){
+      return setValueState(true)
+     }
    const result = await confirm("Are you sure, you want to add a new company?", options);
     if (result) {
       let mobile = {
@@ -67,7 +83,9 @@ export default function AddUser() {
         if(!response.error){
           let variant = "success";
           enqueueSnackbar('New company added successfully!', { variant });
-          history.replace('/users');
+          setTimeout(() => {
+            history.push('/users')
+          }, 1000);
         }
       })
     }
@@ -121,7 +139,7 @@ export default function AddUser() {
                 <Field name="fullName">
                   {({ field }) => (
                     <TextField
-                      label="Full Name"
+                      label={`First Name ${fullNameLabel}`}
                       fullWidth
                       display='flex'
                       {...field}
@@ -134,7 +152,7 @@ export default function AddUser() {
                 <Field name="email">
                   {({ field }) => (
                     <TextField
-                      label="Email"
+                      label={`Email ${fullNameLabel}`}
                       fullWidth
                       display='flex'
                       {...field}
@@ -161,7 +179,6 @@ export default function AddUser() {
                       isValid={isValid}
                       enableSearch={true}
                       country={'us'}
-                      // onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
                       onChange={(value, country, e, formattedValue ) => setState({ value, country, e, formattedValue })}
                       value={values.mobile.e164Number}
                       style={{ margin: '20px', marginRight: '25px' }}
@@ -171,7 +188,7 @@ export default function AddUser() {
                 <Field name="companyName">
                   {({ field }) => (
                     <TextField
-                      label="Organization"
+                      label={`Organization ${fullNameLabel}`}
                       fullWidth
                       display='flex'
                       {...field}
