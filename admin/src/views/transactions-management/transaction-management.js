@@ -410,9 +410,9 @@ export default function TransactionTable() {
                   value={search}
                   onInput={onInputChnage}
                   sx={{ ml: 1, flex: 1 }}
-                  placeholder="Search"
+                  placeholder="Search by Company"
                   inputProps={{ 'aria-label': 'search' }}
-                  classes={{ root: classes.customTextField }}
+                  // classes={{ root: classes.customTextField }}
                 />
                 <>
                   <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
