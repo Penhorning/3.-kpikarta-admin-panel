@@ -29,8 +29,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 import moment from "moment";
 import EnhancedTableHead from '../TableHead/memberTableHead/EnhancedTableHead'
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import 'core-js/actual';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import './view-user.scss';
 
 
