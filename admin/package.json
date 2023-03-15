@@ -57,6 +57,7 @@
     "firebase": "^5.7.2",
     "formik": "^1.5.8",
     "framer-motion": "^4.1.17",
+    "globalthis": "^1.0.3",
     "handlebars": "^4.7.6",
     "history": "4.7.2",
     "immutability-helper": "2.7.1",
