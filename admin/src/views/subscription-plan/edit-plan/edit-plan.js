@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import 'core-js/actual';
 import './edit-plan.scss';
 import 'react-phone-input-2/lib/material.css';
 
