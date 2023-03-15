@@ -3,8 +3,8 @@ import { SnackbarProvider } from 'notistack';
 import ReactDOM from "react-dom";
 import Spinner from "./views/spinner-loader/spinner-loader";
 import 'core-js/actual';
-import "./assets/scss/style.scss";
 import 'globalthis/auto';
+import "./assets/scss/style.scss";
 if (typeof globalThis === 'undefined') {
   Object.defineProperty(Object.prototype, '__magic__', {
     get: function() {
