@@ -37,6 +37,7 @@ import TrialPeriod from './trialPeriod/trialPeriod';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import './subscription-paln.scss';
+import 'core-js/actual';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 

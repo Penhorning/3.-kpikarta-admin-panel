@@ -22,6 +22,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Spinner from "../../spinner-loader/spinner-loader";
+import 'core-js/actual';
 import './my-suggestion.scss';
 
 export default function MySuggestion() {
