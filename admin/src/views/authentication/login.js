@@ -14,9 +14,31 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import logoImg from "../../assets/images/kpi-karta-logo.png";
 import LoadingButton from '@mui/lab/LoadingButton';
+import { makeStyles } from '@material-ui/core/styles';
 import './login.css';
 
 const theme = createTheme();
+const useStyles = makeStyles({
+  root: {
+    '& input:-webkit-autofill': {
+      transition: 'background-color 5000s ease-in-out 0s',
+      WebkitTextFillColor: '#fff',
+      '&:hover': {
+        transition: 'none',
+      },
+      '&:focus': {
+        transition: 'none',
+      },
+      '&:active': {
+        transition: 'none',
+      },
+    },
+    '& input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active': {
+      filter: 'none',
+      boxShadow: '0 0 0 100px rgb(36, 56, 100) inset',
+    },
+  },
+});
 
 const initialValues = {
   password: '',
@@ -26,7 +48,8 @@ const initialValues = {
 export default function Login(props) {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-
+  const classes = useStyles();
+  
   const validationSchema = Yup.object().shape({
     email: Yup.string().email().required('Email is required!'),
     password: Yup.string().required('Password is required!')
@@ -127,6 +150,7 @@ export default function Login(props) {
                           id="email"
                           label="Email Address"
                           name="email"
+                          className={classes.root}
                           error={errors.email && touched.email ? true : false}
                           helperText={(errors.email && touched.email ? `${errors.email}` : '')}
                         />
@@ -151,6 +175,7 @@ export default function Login(props) {
                           type="password"
                           {...field}
                           id="password"
+                          className={classes.root}
                           label="Password"
                           name="password"
                           error={errors.password && touched.password ? true : false}

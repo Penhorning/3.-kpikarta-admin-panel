@@ -102,7 +102,7 @@ export default function EditPlan() {
             variant="h6"
             id="tableTitle"
             component="div">
-            Update Subscribtion Plan
+            Update Subscription Plan
           </Typography>
           <Button variant="outlined" onClick={onBackClick}>Back</Button>
         </Toolbar>
