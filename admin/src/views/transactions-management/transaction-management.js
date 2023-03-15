@@ -97,6 +97,12 @@ const headCells = [
     label: 'User Name',
   },
   {
+    id: 'companyName',
+    numeric: false,
+    disablePadding: true,
+    label: 'Company Name',
+  },
+  {
     id: 'planName',
     numeric: false,
     disablePadding: false,
@@ -178,7 +184,7 @@ export default function TransactionTable() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(4);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [dateRange, setDateRange] = useState(initialValue);
   const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
   const [isShown, setIsShown] = useState(false)
@@ -391,7 +397,7 @@ export default function TransactionTable() {
               </Paper>
             </Box>
           </Typography>
-          {/* <Typography
+          <Typography
             sx={{ flex: '1 1 5%' }}
             component="div">
             <Box component="form"
@@ -431,7 +437,7 @@ export default function TransactionTable() {
                 }
               </Paper>
             </Box>
-          </Typography> */}
+          </Typography>
         </Toolbar>
         <Divider sx={{ m: 1.0 }} orientation="horizontal" />
         <TableContainer>
@@ -470,6 +476,15 @@ export default function TransactionTable() {
                           style={{ paddingLeft: '25px' }}
                         >
                           {user.username}
+                        </TableCell>
+                        <TableCell
+                          component="td"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          style={{ paddingLeft: '25px' }}
+                        >
+                          {user.companyName}
                         </TableCell>
                         <TableCell>
                           <div style={{ display: 'flex',  paddingLeft: '8px' }}>
