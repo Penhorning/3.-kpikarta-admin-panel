@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import Spinner from '../../spinner-loader/spinner-loader';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import 'core-js/actual';
 import * as Yup from 'yup';
 
 const initialValues = {

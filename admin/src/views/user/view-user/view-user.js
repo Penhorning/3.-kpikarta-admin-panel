@@ -30,6 +30,7 @@ import Divider from '@mui/material/Divider';
 import moment from "moment";
 import EnhancedTableHead from '../TableHead/memberTableHead/EnhancedTableHead'
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import 'core-js/actual';
 import './view-user.scss';
 
 
