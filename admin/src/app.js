@@ -7,7 +7,6 @@ import { History } from "./shared/_helpers";
 import { PrivateRoute } from "./routes/PrivateRoutes";
 import BlankLayout from "./layouts/blankLayout";
 import indexRoutes from "./routes/";
-import "@babel/polyfill";
 
 const App = () => {
   useEffect(() => {
