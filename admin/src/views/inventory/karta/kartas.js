@@ -25,6 +25,7 @@ import moment from "moment";
 import Spinner from '../../spinner-loader/spinner-loader';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EnhancedTableHead from '../../user/TableHead/kartasTableHead/EnhancedTableHead'
+import 'globalthis/auto';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import './kartas.scss';
 

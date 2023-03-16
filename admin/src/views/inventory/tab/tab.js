@@ -6,8 +6,9 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Inventory from '../inventory';
-import NodeTab from '../karta/kartas'
-import './tab.scss'
+import NodeTab from '../karta/kartas';
+import 'globalthis/auto';
+import './tab.scss';
 
 export default function LabTabs() {
   const [value, setValue] = React.useState('1');
