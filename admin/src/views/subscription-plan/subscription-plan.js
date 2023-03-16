@@ -7,6 +7,7 @@ import { confirm } from "react-confirm-box";
 import { useState, useEffect } from "react";
 import { visuallyHidden } from '@mui/utils';
 import { UserService } from "../../shared/_services";
+import 'globalthis/auto';
 import 'core-js/actual';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import './subscription-paln.scss';
