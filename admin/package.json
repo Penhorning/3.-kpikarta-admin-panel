@@ -44,6 +44,7 @@
     "@mui/system": "^5.9.1",
     "@mui/utils": "^5.9.0",
     "@mui/x-date-pickers": "^5.0.0-beta.2",
+    "@types/globalthis": "^1.0.1",
     "antd": "^4.22.7",
     "antd-img-crop": "^4.2.4",
     "apexcharts": "^3.18.1",

@@ -2,13 +2,16 @@ import React, { Suspense, lazy } from "react";
 import { SnackbarProvider } from 'notistack';
 import ReactDOM from "react-dom";
 import Spinner from "./views/spinner-loader/spinner-loader";
+import globalThis from 'globalthis/auto';
+
+// Use the globalThis object
 import 'core-js/actual';
 import "./assets/scss/style.scss";
 // import 'globalthis/auto';
 // if (typeof globalThis === 'undefined') {
-//   Object.defineProperty(Object.prototype, '__magic__', {
-//     get: function() {
-//       return this;
+  //   Object.defineProperty(Object.prototype, '__magic__', {
+    //     get: function() {
+      //       return this;
 //     },
 //     configurable: true,
 //   });
@@ -18,6 +21,7 @@ import "./assets/scss/style.scss";
 // }
 
 
+console.log(globalThis.document);
 const App = lazy(
   () =>
     new Promise((resolve) => {

@@ -7,7 +7,10 @@ import { History } from "./shared/_helpers";
 import { PrivateRoute } from "./routes/PrivateRoutes";
 import BlankLayout from "./layouts/blankLayout";
 import indexRoutes from "./routes/";
-import 'globalthis/auto';
+import globalThis from 'globalthis/auto';
+
+// Use the globalThis object
+console.log(globalThis.document);
 import 'core-js/actual';
 
 const App = () => {
