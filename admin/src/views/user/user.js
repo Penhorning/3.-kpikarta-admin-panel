@@ -42,6 +42,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EnhancedTableHead from './TableHead/uesrTableHead/EnhancedTableHead'
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import 'globalthis/auto';
 import 'core-js/actual';
 import './user.scss';
 
