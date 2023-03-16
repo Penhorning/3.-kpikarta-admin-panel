@@ -13,6 +13,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import PhoneInput from 'react-phone-input-2';
 import {makeStyles} from '@material-ui/core/styles';
+import 'globalthis/auto';
 import 'core-js/actual';
 import './add-user.scss';
 import 'react-phone-input-2/lib/material.css';

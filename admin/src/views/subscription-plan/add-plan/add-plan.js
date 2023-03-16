@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
+import 'globalthis/auto';
 import 'core-js/actual';
 import './add-plan.scss';
 

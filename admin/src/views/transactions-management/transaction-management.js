@@ -42,6 +42,7 @@ import DatePicker from "react-modern-calendar-datepicker";
 import MessageIcon from '@mui/icons-material/Message';
 import Spinner from '../spinner-loader/spinner-loader';
 import { useSnackbar } from 'notistack';
+import 'globalthis/auto';
 import 'core-js/actual';
 
 const useStyles = makeStyles({

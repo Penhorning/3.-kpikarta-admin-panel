@@ -23,6 +23,7 @@ import DatePicker from "react-modern-calendar-datepicker";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import 'globalthis/auto';
 import './chart.scss'
 
 const initialValue = {

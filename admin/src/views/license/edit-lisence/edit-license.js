@@ -14,6 +14,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Spinner from '../../spinner-loader/spinner-loader';
+import 'globalthis/auto';
 import './edit-license.scss';
 import 'react-phone-input-2/lib/material.css';
 

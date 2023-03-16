@@ -1,4 +1,5 @@
 import React from "react";
+import 'globalthis/auto';
 import "./spinner-loader.scss";
 
 
