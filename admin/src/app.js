@@ -5,13 +5,13 @@ import { Provider } from "react-redux";
 import { configureStore } from "./redux/Store";
 import { History } from "./shared/_helpers";
 import { PrivateRoute } from "./routes/PrivateRoutes";
+import globalThis from 'globalthis/auto';
 import BlankLayout from "./layouts/blankLayout";
 import indexRoutes from "./routes/";
-import globalThis from 'globalthis/auto';
 
 // Use the globalThis object
-console.log(globalThis.document);
 import 'core-js/actual';
+console.log(globalThis.document);
 
 const App = () => {
   useEffect(() => {
