@@ -19,6 +19,7 @@ import Spinner from '../../spinner-loader/spinner-loader';
 import Grid from '@mui/material/Grid';
 import ImgCrop from 'antd-img-crop';
 import Constants from '../../../shared/_helpers/constants';
+import 'globalthis/auto';
 import './edit-profile.scss';
 import 'antd/dist/antd.css';
 
