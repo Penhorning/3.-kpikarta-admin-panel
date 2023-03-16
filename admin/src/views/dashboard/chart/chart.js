@@ -152,12 +152,16 @@ export default function Chart() {
       from: selected.startDate._d,
       to: selected.endDate._d
     })
+    return () => {
+    };
   }, []);
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
       fetchData(dateRange)
     }
+    return () => {
+    };
   }, [dateRange.to]);
 
   const maximumDate = {
