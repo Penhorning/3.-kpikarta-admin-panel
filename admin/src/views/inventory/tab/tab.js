@@ -9,7 +9,7 @@ import Inventory from '../inventory';
 import NodeTab from '../karta/kartas';
 import 'globalthis/auto';
 import './tab.scss';
-
+//test
 export default function LabTabs() {
   const [value, setValue] = React.useState('1');
   const { id } = useParams();

@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Spinner from '../spinner-loader/spinner-loader';
+import 'globalthis/auto';
 import 'core-js/actual';
 import './suggestion.scss';
 
