@@ -23,6 +23,7 @@ import DatePicker from "react-modern-calendar-datepicker";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import 'globalthis/auto';
 import './chart.scss'
 
 const initialValue = {
@@ -152,12 +153,16 @@ export default function Chart() {
       from: selected.startDate._d,
       to: selected.endDate._d
     })
+    return () => {
+    };
   }, []);
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
       fetchData(dateRange)
     }
+    return () => {
+    };
   }, [dateRange.to]);
 
   const maximumDate = {

@@ -7,6 +7,10 @@ import { confirm } from "react-confirm-box";
 import { useState, useEffect } from "react";
 import { visuallyHidden } from '@mui/utils';
 import { UserService } from "../../shared/_services";
+import 'globalthis/auto';
+import 'core-js/actual';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import './subscription-paln.scss';
 import PropTypes from 'prop-types';
 import Spinner from '../spinner-loader/spinner-loader';
 import Box from '@mui/material/Box';
@@ -36,8 +40,7 @@ import TextField from '@mui/material/TextField';
 import TrialPeriod from './trialPeriod/trialPeriod';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import './subscription-paln.scss';
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
+
 
 
 function createData(name, calories, fat, carbs, protein) {

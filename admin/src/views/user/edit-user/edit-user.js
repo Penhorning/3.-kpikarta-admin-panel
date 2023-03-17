@@ -23,6 +23,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid';
 import ImgCrop from 'antd-img-crop';
 import 'react-phone-input-2/lib/material.css';
+import 'globalthis/auto';
+import 'core-js/actual';
 import 'antd/dist/antd.css';
 import './edit-user.scss';
 

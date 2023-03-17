@@ -54,6 +54,9 @@ export default (props) => {
       window.removeEventListener("load", updateDimensions.bind(null));
       window.removeEventListener("resize", updateDimensions.bind(null));
     };
+    return () => {
+      // cancel the subscription or task here
+    };
   }, [settings.activeSidebarType, width]);
 
   return (

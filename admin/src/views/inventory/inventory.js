@@ -34,6 +34,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Popper from '@mui/material/Popper';
 import Fade from '@mui/material/Fade';
 import Checkbox from '@mui/material/Checkbox';
+import 'globalthis/auto';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import './inventory.scss';
 

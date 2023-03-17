@@ -1,4 +1,6 @@
 import * as React from 'react';
+import 'core-js/actual';
+import 'globalthis/auto';
 import { useState, useEffect } from "react";
 import { UserService } from "../../../shared/_services";
 import { useSnackbar } from 'notistack';
@@ -24,7 +26,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import moment from "moment";
 import Spinner from '../../spinner-loader/spinner-loader';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import EnhancedTableHead from '../../user/TableHead/kartasTableHead/EnhancedTableHead'
+import EnhancedTableHead from '../../user/TableHead/kartasTableHead/EnhancedTableHead';
+
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import './kartas.scss';
 

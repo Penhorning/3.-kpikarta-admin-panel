@@ -23,6 +23,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
 import moment from "moment";
 import Spinner from '../spinner-loader/spinner-loader';
+import 'globalthis/auto';
 import './license.scss';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 

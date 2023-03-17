@@ -7,6 +7,10 @@ import { History } from "./shared/_helpers";
 import { PrivateRoute } from "./routes/PrivateRoutes";
 import BlankLayout from "./layouts/blankLayout";
 import indexRoutes from "./routes/";
+import 'globalthis/auto';
+import './app.scss';
+// Use the globalThis object
+import 'core-js/actual';
 
 const App = () => {
   useEffect(() => {
