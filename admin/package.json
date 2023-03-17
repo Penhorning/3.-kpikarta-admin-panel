@@ -62,6 +62,7 @@
     "handlebars": "^4.7.6",
     "history": "4.7.2",
     "immutability-helper": "2.7.1",
+    "jest-environment-jsdom": "^29.5.0",
     "joi": "^13.7.0",
     "joi-validation-strategy": "^0.3.3",
     "lodash.startswith": "^4.2.1",
