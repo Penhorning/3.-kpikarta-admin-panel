@@ -23,8 +23,10 @@
   "devDependencies": {
     "axios-mock-adapter": "^1.18.1",
     "lodash": "^4.17.19",
-    "mixin-deep": "^2.0.1",
-    "node": "^8.15.0"
+    "mixin-deep": "^2.0.1"
+  },
+  "engines":{
+    "node":"~v16"
   },
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",
@@ -55,7 +57,7 @@
     "date-fns": "^2.29.1",
     "dotenv-expand": "^10.0.0",
     "env-cmd": "^10.1.0",
-    "firebase": "^5.7.2",
+    "firebase": "^9.18.0",
     "formik": "^1.5.8",
     "framer-motion": "^4.1.17",
     "globalthis": "^1.0.3",
