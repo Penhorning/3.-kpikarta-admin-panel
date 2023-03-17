@@ -113,7 +113,7 @@ export default function Chart() {
             }
             // Setting values
             for (let j = 0; j < response.data.length; j++) {
-              salesChartObject[moment(response.data[j].invoice_date, "MM-DD-YYYY").format("YYYY-MM-DD")] = response.data[j].amount / 100;
+              salesChartObject[moment(response.data[j].invoice_date, "MM-DD-YYYY").format("YYYY-MM-DD")] = response.data[j].amount;
             }
             // Converting hash map to array
             let transactionData = Object.keys(salesChartObject).map((item) => {
