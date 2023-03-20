@@ -348,7 +348,7 @@ export default function EditUser() {
                             }}
                             enableSearch={true}
                             country={'us'}
-                            onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
+                            onChange={(e) => { values.mobile = { ...values.mobile,e164Number: `+${e}` } }}
                             value={values.mobile.e164Number}
                             style={{ margin: '20px', marginRight: '25px' }}
                           />

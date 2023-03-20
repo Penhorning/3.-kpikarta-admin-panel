@@ -102,6 +102,20 @@ const getInventory = async (data, enqueueSnackbar) => {
   }
 }
 
+const getInventoryImage = async (data, enqueueSnackbar) => {
+  try {
+    const response = await axios.get(Constants.BASE_URL + `/api/karta_catalogs/${data}`, {},
+      { headers: AuthHeader() })
+    return response.data;
+  } catch (err) {
+    const error = handleError(err, data);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
 const getAllCompanyMembers = async (data, enqueueSnackbar) => {
   try {
     const response = await axios.post(Constants.BASE_URL + `/api/users/get-all-members`, {
@@ -537,6 +551,7 @@ export const UserService = {
   getLicenseById,
   updateLicensePlan,
   getInventory,
+  getInventoryImage,
   getAllKartas,
   getAllInvoices,
   getAllInvoicesChart,
