@@ -156,13 +156,14 @@ export default function EditUser() {
         telephone: values.telephone,
         profilePic: profilePic == '' ? initialValues.profilePic : profilePic,
       };
-      UserService.updateUser(id, data, enqueueSnackbar).then((response) => {
-        if (!response.error) {
-          let variant = "success";
-          enqueueSnackbar('User details updated successfully.', { variant });
-          history.push('/users');
-        }
-      })
+      console.log(data, 'data');
+      // UserService.updateUser(id, data, enqueueSnackbar).then((response) => {
+      //   if (!response.error) {
+      //     let variant = "success";
+      //     enqueueSnackbar('User details updated successfully.', { variant });
+      //     history.push('/users');
+      //   }
+      // })
     }
   }
 
@@ -225,6 +226,19 @@ export default function EditUser() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const handleMobileValue = (value, fullValue) => {
+    let firstHalf = value.slice(0,5);
+    let secondHalf = value.slice(5,value.length);
+    let mobile = {
+      ...fullValue,
+      "e164Number": `+${value}`,
+      "internationalNumber": `+91 ${firstHalf} ${secondHalf}`,
+      "nationalNumber": `0${firstHalf} ${secondHalf}`,
+      "number": `0${firstHalf} ${secondHalf}`
+    }
+    return mobile;
+  }
 
   const onBackClick = () => {
     history.push('/users');
@@ -343,10 +357,13 @@ export default function EditUser() {
                             inputProps={{
                               name: 'phone',
                               required: true,
+                              maxLength: 15,
+                              minLength: 15
                             }}
                             enableSearch={true}
                             country={'us'}
-                            onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
+                            // onChange={(e) => { values.mobile = { ...values.mobile, e164Number: `+${e}` } }}
+                            onChange={(e) => { values.mobile = handleMobileValue(e, values.mobile) }}
                             value={values.mobile.e164Number}
                             style={{ margin: '20px', marginRight: '25px' }}
                           />
