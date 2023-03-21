@@ -95,7 +95,7 @@ export default function EditUser() {
     // get individula user data by passing user id
     UserService.getUserDetails(id, enqueueSnackbar).then(response => {
       if(!response.error){
-      const { fullName, email, mobile, telephone, profilePic } = response;
+      const { fullName, email, mobile, telephone } = response;
       const { name, job_title, departmentId, employeeRangeId } = response.company;
       initialValues.fullName = fullName;
       initialValues.email = email;
@@ -107,9 +107,10 @@ export default function EditUser() {
       initialCompanyValues.companyJobTitle = job_title;
       initialCompanyValues.companyDepartment = departmentId;
       initialCompanyValues.companyEmployeeRange = employeeRangeId;
-      setOldProfilePic(profilePic)
+      setOldProfilePic(response.profilePic)
       setOldCompanyLogo(response.logo);
       setCompanyID(response.companyId)
+      console.log()
       // set user profile picture
       setFileList(
         [

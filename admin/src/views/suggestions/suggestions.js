@@ -34,9 +34,9 @@ export default function Suggestion() {
   const [submitting, setSubmitting] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [definitionData, setDefinitionData] = useState("");
-  const [value, setValue] = useState("");
+  const [definitionValue, setDefinitionValue] = useState("");
   const [isValid, setIsValid] = useState(false);
-
+  console.log("definitionValue",definitionValue)
 
 
   // Suggestion form
@@ -118,7 +118,8 @@ export default function Suggestion() {
     // setLoading(true);
     SuggestionService.getSuggestion({ phaseId }).then((response) => {
       initialValues.definition = response.suggestion.definition;
-      setValue(initialValues.definition);
+      console.log("initialValues.definition", initialValues.definition)
+      setDefinitionValue(response.suggestion.definition);
       let disableArray = [];
       for (let i = 0; i < response.suggestion.descriptions.length; i++) {
         initialValues.descriptions.push({
@@ -204,7 +205,7 @@ export default function Suggestion() {
                           apiKey={
                             "azqt4vmow77bdh7mzzwm60rxbt26j893pjd86wik5qa1069g"
                           }
-                          initialValue={value}
+                          initialValue={definitionValue ? definitionValue : "Reload..."}
                           init={{
                             height: 200,
                             menubar: false,
@@ -215,7 +216,7 @@ export default function Suggestion() {
                             ],
                             toolbar: " bold italic underline | bullist numlist",
                           }}
-                          value={definitionData}
+                          value={definitionData ? definitionData : definitionValue}
                           onEditorChange={handleEditorChange}
                         />
                         { isValid ? <h5 className="red">Definition is required!</h5> : ''}
