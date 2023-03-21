@@ -156,14 +156,14 @@ export default function EditUser() {
 
   // user data update button
   const onUpdateSubmit = async (values) => {
-     if(state){
-      if(state?.value == undefined){
-        return setValueState(true)
-       }
-       if(state?.value?.length < 12){
-        return setValueState(true)
-       }
-     }
+    //  if(state){
+    //   if(state?.value == undefined){
+    //     return setValueState(true)
+    //    }
+    //    if(state?.value?.length < 12){
+    //     return setValueState(true)
+    //    }
+    //  }
     const result = await confirm("Are you sure, Do you want to update profile?", options);
     if (result) {
       let mobile = {
@@ -254,6 +254,7 @@ export default function EditUser() {
 
     // Phone number validation
     const isValid = (value, country) => {
+      console.log("value, country", value, country)
       if (!value) {
         return true; // no value entered yet, so allow it
       }
@@ -387,26 +388,8 @@ export default function EditUser() {
                               required: true
                             }}
                             isValid={isValid}
-                            // isValid={(value, country) => {
-                            //   if (country.iso2 === 'US' && !value.match(/^\+1\d{10}$/)) {
-                            //     return 'Invalid US phone number';
-                            //   } else if (country.iso2 === 'CA' && !value.match(/^\+1\d{10}$/)) {
-                            //     return 'Invalid Canada phone number';
-                            //   } else if (country.iso2 === 'IN' && !value.match(/^\+91\d{10}$/)) {
-                            //     return 'Invalid India phone number';
-                            //   } else if (value.match(/12345/)) {
-                            //     return 'Invalid value: ' + value + ', ' + country.name;
-                            //   } else if (value.match(/1234/)) {
-                            //     return false;
-                            //   } else {
-                            //     return true;
-                            //   }
-                            // }}
                             enableSearch={true}
                             country={'us'}
-                            // onChange={(e) => { values.mobile = { ...values.mobile, e164Number: `+${e}` } }}
-                            
-                            // onChange={(e, value, country) => { values.mobile = handleMobileValue(e, values.mobile, value, country) }}
                             onChange={(value, country, e) => setState({ value, country, e })}
                             value={values.mobile.e164Number}
                             style={{ margin: '20px', marginRight: '25px' }}

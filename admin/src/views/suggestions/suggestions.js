@@ -205,7 +205,7 @@ export default function Suggestion() {
                           apiKey={
                             "azqt4vmow77bdh7mzzwm60rxbt26j893pjd86wik5qa1069g"
                           }
-                          initialValue={definitionValue ? definitionValue : "Reload..."}
+                          initialValue={definitionValue}
                           init={{
                             height: 200,
                             menubar: false,
@@ -216,7 +216,7 @@ export default function Suggestion() {
                             ],
                             toolbar: " bold italic underline | bullist numlist",
                           }}
-                          value={definitionData ? definitionData : definitionValue}
+                          // value={definitionData}
                           onEditorChange={handleEditorChange}
                         />
                         { isValid ? <h5 className="red">Definition is required!</h5> : ''}
