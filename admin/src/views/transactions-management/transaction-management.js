@@ -321,7 +321,6 @@ export default function TransactionTable() {
   };
 
   const handleChangePage = (event, newPage) => {
-    console.log("event", React.MouseEvent<HTMLButtonElement>  null)
     if(event.target.getAttribute("data-testid")){
       if(event.target.getAttribute("data-testid") == 'KeyboardArrowRightIcon'){
         setNextId(users[users.length - 1].id)

@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { Grid, TextField } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useHistory } from 'react-router-dom';
+import { Editor } from "@tinymce/tinymce-react";
 import * as Yup from 'yup';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -37,6 +38,9 @@ export default function MySuggestion() {
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
+  const [definitionData, setDefinitionData] = useState("");
+  const [value, setValue] = useState("");
+  const [isValid, setIsValid] = useState(false);
   // Suggestion form
   const initialValues = {
     definition: "",
@@ -90,7 +94,7 @@ export default function MySuggestion() {
       setSubmitting(true);
 
       let data = {
-        definition: values.definition,
+        definition: definitionData,
         descriptions: values.descriptions
       };
       if (suggestion.hasOwnProperty("userId")) {
@@ -150,6 +154,7 @@ export default function MySuggestion() {
     const userId = id;
     SuggestionService.getMySuggestion(phaseId, userId).then(response => {
       initialValues.definition = response.suggestion.definition;
+      setValue(initialValues.definition);
       let disableArray = [];
       for (let i = 0; i < response.suggestion.descriptions.length; i++) {
         initialValues.descriptions.push({ description: response.suggestion.descriptions[i].description });
@@ -177,6 +182,17 @@ export default function MySuggestion() {
   const onBackClick = () => {
     history.push('/users');
   }
+
+  const handleEditorChange = (content) => {
+    if (content == "") {
+      setSubmitting(true);
+      setIsValid(true)
+    } else {
+      setSubmitting(false);
+      setIsValid(false)
+    }
+    setDefinitionData(content);
+  };
 
   return loading ? (<Spinner />) : (
     <Box sx={{ width: '100%' }}>
@@ -218,15 +234,27 @@ export default function MySuggestion() {
                   <div className="mt-3">
                     <Field name="definition">
                       {({ field }) => (
-                        <TextField
-                          fullWidth
-                          label="Definition"
-                          multiline
-                          maxRows={4}
-                          {...field}
-                          error={errors.definition && touched.definition ? true : false}
-                          helperText={(errors.definition && touched.definition ? 'Definition is required!' : '')}
+                        <>
+                        <Editor
+                          apiKey={
+                            "azqt4vmow77bdh7mzzwm60rxbt26j893pjd86wik5qa1069g"
+                          }
+                          initialValue={value}
+                          init={{
+                            height: 200,
+                            menubar: false,
+                            branding: false,
+                            plugins: [
+                              "advlist autolink lists link image charmap print preview anchor",
+                              "searchreplace visualblocks code fullscreen",
+                            ],
+                            toolbar: " bold italic underline | bullist numlist",
+                          }}
+                          value={definitionData}
+                          onEditorChange={handleEditorChange}
                         />
+                        { isValid ? <h5 className="red">Definition is required!</h5> : ''}
+                    </>
                       )}
                     </Field>
                   </div>
