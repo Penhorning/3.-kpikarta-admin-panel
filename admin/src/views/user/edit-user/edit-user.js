@@ -5,6 +5,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { UserService } from '../../../shared/_services';
 import { confirm } from "react-confirm-box";
+import { isValidNumber } from 'libphonenumber-js';
 import * as Yup from 'yup';
 import Constants from '../../../shared/_helpers/constants';
 import Spinner from '../../spinner-loader/spinner-loader';
@@ -50,10 +51,14 @@ export default function EditUser() {
   const [profilePic, setProfilePic] = useState('');
   const [oldCompanyLogo, setOldCompanyLogo] = useState('');
   const [newCompanyLogo, setNewCompanyLogo] = useState('');
+  const [oldProfilePic, setOldProfilePic] = useState('');
+
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const [state, setState] = useState(false);
+  const [valueState, setValueState] = useState(false);
   const actionUrlCompany = `${Constants.BASE_URL}/api/Containers/company/upload`;
   const actionUrlUser = `${Constants.BASE_URL}/api/Containers/user/upload`;
   const [fileList, setFileList] = useState([
@@ -90,8 +95,9 @@ export default function EditUser() {
     // get individula user data by passing user id
     UserService.getUserDetails(id, enqueueSnackbar).then(response => {
       if(!response.error){
-      const { fullName, email, mobile, telephone } = response;
-      const { name, job_title, departmentId, employeesRangeId } = response.company;
+        console.log("resp", response)
+      const { fullName, email, mobile, telephone, profilePic } = response;
+      const { name, job_title, departmentId, employeeRangeId } = response.company;
       initialValues.fullName = fullName;
       initialValues.email = email;
       initialValues.mobile = response.mobile ? mobile : "";
@@ -101,7 +107,8 @@ export default function EditUser() {
       initialCompanyValues.companyName = name;
       initialCompanyValues.companyJobTitle = job_title;
       initialCompanyValues.companyDepartment = departmentId;
-      initialCompanyValues.companyEmployeeRange = employeesRangeId;
+      initialCompanyValues.companyEmployeeRange = employeeRangeId;
+      setOldProfilePic(profilePic)
       setOldCompanyLogo(response.logo);
       setCompanyID(response.companyId)
       // set user profile picture
@@ -149,14 +156,32 @@ export default function EditUser() {
 
   // user data update button
   const onUpdateSubmit = async (values) => {
+     if(state){
+      if(state?.value == undefined){
+        return setValueState(true)
+       }
+       console.log("state?.value?.length", state?.value?.length)
+       if(state?.value?.length < 12){
+        return setValueState(true)
+       }
+     }
     const result = await confirm("Are you sure, Do you want to update profile?", options);
     if (result) {
+      let mobile = {
+        countryCode: state.country?.countryCode.toUpperCase(),
+        dialCode: `+${state.country?.dialCode}`,
+        internationalNumber: state.formattedValue,
+        nationalNumber: state.value?.slice(2),
+        number: state.value?.slice(2),
+        e164Number: `+${state.value}`
+      }
+
       let data = {
         fullName: values.fullName,
         email: values.email,
-        mobile: values.mobile,
+        mobile: !state ?  initialValues.mobile : mobile,
         telephone: values.telephone,
-        profilePic: profilePic == '' ? initialValues.profilePic : profilePic,
+        profilePic: profilePic == '' ? oldProfilePic : profilePic,
       };
       UserService.updateUser(id, data, enqueueSnackbar).then((response) => {
         if (!response.error) {
@@ -177,7 +202,7 @@ export default function EditUser() {
         name: values.companyName,
         job_title: values.companyJobTitle,
         departmentId: values.companyDepartment,
-        employeesRangeId: values.companyEmployeeRange,
+        employeeRangeId: values.companyEmployeeRange,
         logo: newCompanyLogo == '' ? oldCompanyLogo : newCompanyLogo,
         oldCompanyLogo: newCompanyLogo == '' ? newCompanyLogo : oldCompanyLogo,
       };
@@ -227,6 +252,22 @@ export default function EditUser() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+    // Phone number validation
+    const isValid = (value, country) => {
+      if (!value) {
+        return true; // no value entered yet, so allow it
+      }
+      if (!country) {
+        return 'Please select a country'; // no country selected, so show an error message
+      }
+      const phoneNumber = `+${value.replace(/\D/g,'')}`; // format phone number with dial code
+      const isValidPhone = isValidNumber(phoneNumber);
+      if (!isValidPhone) {
+        return `Invalid ${country.name} phone number`; // show an error message if phone number is invalid
+      }
+      return true;
+    }
 
   const onBackClick = () => {
     history.push('/users');
@@ -279,7 +320,7 @@ export default function EditUser() {
                     </ImgCrop>
                   </Grid>
                   <Grid item xs={6} >
-                    <ImgCrop grid rotate shape={'round'}>
+                    <ImgCrop minZoom={0.1} aspectSlider aspect grid rotate shape={'rect'}>
                       <Upload
                         action={actionUrlUser}
                         name={'photo'}
@@ -344,11 +385,30 @@ export default function EditUser() {
                           <PhoneInput
                             inputProps={{
                               name: 'phone',
-                              required: true,
+                              required: true
                             }}
+                            isValid={isValid}
+                            // isValid={(value, country) => {
+                            //   if (country.iso2 === 'US' && !value.match(/^\+1\d{10}$/)) {
+                            //     return 'Invalid US phone number';
+                            //   } else if (country.iso2 === 'CA' && !value.match(/^\+1\d{10}$/)) {
+                            //     return 'Invalid Canada phone number';
+                            //   } else if (country.iso2 === 'IN' && !value.match(/^\+91\d{10}$/)) {
+                            //     return 'Invalid India phone number';
+                            //   } else if (value.match(/12345/)) {
+                            //     return 'Invalid value: ' + value + ', ' + country.name;
+                            //   } else if (value.match(/1234/)) {
+                            //     return false;
+                            //   } else {
+                            //     return true;
+                            //   }
+                            // }}
                             enableSearch={true}
                             country={'us'}
-                            onChange={(e) => { values.mobile = { e164Number: `+${e}` } }}
+                            // onChange={(e) => { values.mobile = { ...values.mobile, e164Number: `+${e}` } }}
+                            
+                            // onChange={(e, value, country) => { values.mobile = handleMobileValue(e, values.mobile, value, country) }}
+                            onChange={(value, country, e) => setState({ value, country, e })}
                             value={values.mobile.e164Number}
                             style={{ margin: '20px', marginRight: '25px' }}
                           />

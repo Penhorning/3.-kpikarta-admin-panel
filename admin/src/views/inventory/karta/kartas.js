@@ -72,6 +72,7 @@ function getComparator(order, orderBy) {
 }
 
 function stableSort(array, comparator) {
+    console.log("arra", array);
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
@@ -102,7 +103,7 @@ export default function KartasTable() {
     useEffect(() => {
         fetchData('paginationChange');
         return () => {
-            setKartas({}); 
+            setKartas([]); 
           };
     }, [page, rowsPerPage]);
 
@@ -254,7 +255,7 @@ export default function KartasTable() {
                                 orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
                                 onRequestSort={handleRequestSort}
-                                rowCount={kartas.length}
+                                rowCount={kartas.length > 0 ? kartas.length : 0}
                                 key={kartas._id}
                             />
                             <TableBody>
