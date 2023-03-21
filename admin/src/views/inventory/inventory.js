@@ -121,9 +121,14 @@ export default function Inventory() {
     const classes = useStyles();
     const [currentUID, setCurrentUID] = useState('');
     const [nodeTypeFilter, setNodeTypeFilter] = useState([]);
+    const [thumbnail, setThumbnail] = useState('');
+
     
     const handleOpenModal = (event, userId) => {
         setCurrentUID(userId)
+        UserService.getInventoryImage(userId, enqueueSnackbar).then((response) => {
+            setThumbnail(response.thumbnail)
+        })
         return setOpen(true);
     };
     
@@ -409,7 +414,7 @@ export default function Inventory() {
                                                                     <CardMedia
                                                                         component="img"
                                                                         height="400"
-                                                                        image={`${inventory.thumbnail}`}
+                                                                        image={`${thumbnail}`}
                                                                     />
                                                                 </Typography>
                                                             </Card >

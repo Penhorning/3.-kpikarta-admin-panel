@@ -102,7 +102,7 @@ export default function KartasTable() {
     useEffect(() => {
         fetchData('paginationChange');
         return () => {
-            setKartas({}); 
+            setKartas([]); 
           };
     }, [page, rowsPerPage]);
 
@@ -254,7 +254,7 @@ export default function KartasTable() {
                                 orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
                                 onRequestSort={handleRequestSort}
-                                rowCount={kartas.length}
+                                rowCount={kartas.length > 0 ? kartas.length : 0}
                                 key={kartas._id}
                             />
                             <TableBody>
