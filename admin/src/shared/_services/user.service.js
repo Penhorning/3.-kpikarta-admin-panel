@@ -289,7 +289,7 @@ const upadateCompanyDetails = async (companyIds, data, enqueueSnackbar) => {
       name: data.name,
       job_title: data.job_title,
       departmentId: data.departmentId,
-      employeesRangeId: data.employeesRangeId,
+      employeeRangeId: data.employeeRangeId,
       oldCompanyLogo: data.oldCompanyLogo,
       logo: data.logo
     },

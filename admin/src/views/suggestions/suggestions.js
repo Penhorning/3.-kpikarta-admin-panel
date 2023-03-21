@@ -206,7 +206,7 @@ export default function Suggestion() {
                           }
                           initialValue={value}
                           init={{
-                            height: 300,
+                            height: 200,
                             menubar: false,
                             branding: false,
                             plugins: [
