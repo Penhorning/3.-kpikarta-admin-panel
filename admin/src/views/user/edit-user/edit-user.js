@@ -95,7 +95,6 @@ export default function EditUser() {
     // get individula user data by passing user id
     UserService.getUserDetails(id, enqueueSnackbar).then(response => {
       if(!response.error){
-        console.log("resp", response)
       const { fullName, email, mobile, telephone, profilePic } = response;
       const { name, job_title, departmentId, employeeRangeId } = response.company;
       initialValues.fullName = fullName;
@@ -160,7 +159,6 @@ export default function EditUser() {
       if(state?.value == undefined){
         return setValueState(true)
        }
-       console.log("state?.value?.length", state?.value?.length)
        if(state?.value?.length < 12){
         return setValueState(true)
        }
