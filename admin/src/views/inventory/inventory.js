@@ -371,7 +371,6 @@ export default function Inventory() {
                             <TableBody>
                                 {users && stableSort(users, getComparator(order, orderBy))
                                     .map((inventory, index) => {
-                                        console.log("test inventory", inventory)
                                         const isItemSelected = isSelected(inventory._id);
                                         const labelId = `enhanced-table-checkbox-${index}`;
                                         return (
