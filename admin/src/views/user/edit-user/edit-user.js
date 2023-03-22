@@ -110,7 +110,6 @@ export default function EditUser() {
       setOldProfilePic(response.profilePic)
       setOldCompanyLogo(response.logo);
       setCompanyID(response.companyId)
-      console.log()
       // set user profile picture
       setFileList(
         [
@@ -156,14 +155,11 @@ export default function EditUser() {
 
   // user data update button
   const onUpdateSubmit = async (values) => {
-    //  if(state){
-    //   if(state?.value == undefined){
-    //     return setValueState(true)
-    //    }
-    //    if(state?.value?.length < 12){
-    //     return setValueState(true)
-    //    }
-    //  }
+    const phoneNumber = `+${state.value  }`; // format phone number with dial code
+    const isValidPhone = isValidNumber(phoneNumber=='+undefined' ? values.mobile['e164Number'] : phoneNumber );
+    if (!isValidPhone) {
+      return setValueState(true)// show an error message if phone number is invalid
+    }
     const result = await confirm("Are you sure, Do you want to update profile?", options);
     if (result) {
       let mobile = {
@@ -254,7 +250,6 @@ export default function EditUser() {
 
     // Phone number validation
     const isValid = (value, country) => {
-      console.log("value, country", value, country)
       if (!value) {
         return true; // no value entered yet, so allow it
       }
@@ -320,7 +315,7 @@ export default function EditUser() {
                     </ImgCrop>
                   </Grid>
                   <Grid item xs={6} >
-                    <ImgCrop minZoom={0.1} aspectSlider aspect grid rotate shape={'rect'}>
+                    <ImgCrop minZoom={0.1} aspectSlider showGrid rotationSlider cropShape>
                       <Upload
                         action={actionUrlUser}
                         name={'photo'}
@@ -442,7 +437,7 @@ export default function EditUser() {
                   <Grid item xs={2}>
                   </Grid>
                   <Grid item xs={4}>
-                    <ImgCrop >
+                    <ImgCrop minZoom={0.1} aspectSlider showGrid rotationSlider cropShape >
                       <Upload
                         listType="picture-card"
                         fileList={compFileList}
@@ -454,7 +449,7 @@ export default function EditUser() {
                     </ImgCrop>
                   </Grid>
                   <Grid item xs={6}>
-                    <ImgCrop grid rotate aspect={5}>
+                    <ImgCrop minZoom={0.1} aspectSlider showGrid rotationSlider cropShape>
                       <Upload
                        beforeUpload={beforeUpload}
                         onChange={onCompanyPhotoChange}
