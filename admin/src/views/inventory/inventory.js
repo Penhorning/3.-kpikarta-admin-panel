@@ -150,6 +150,10 @@ export default function Inventory() {
   }, [page]);
 
   useEffect(() => {
+    fetchData(rowsPerPage);
+  }, [rowsPerPage]);
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -160,7 +164,6 @@ export default function Inventory() {
   }, [dateRange.to]);
 
   const fetchData = (param) => {
-    console.log("page", page);
     let searchData;
     if (param === "cancel") searchData = "";
     else searchData = search;
@@ -496,7 +499,7 @@ export default function Inventory() {
                                       >
                                         <img
                                           src={`${thumbnail}`}
-                                          alt="thumbnail"
+                                        //   alt="thumbnail"
                                           style={{
                                             width: "100%",
                                             height: "auto",

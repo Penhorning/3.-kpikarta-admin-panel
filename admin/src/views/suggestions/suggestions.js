@@ -36,7 +36,6 @@ export default function Suggestion() {
   const [definitionData, setDefinitionData] = useState("");
   const [definitionValue, setDefinitionValue] = useState("");
   const [isValid, setIsValid] = useState(false);
-  console.log("definitionValue",definitionValue)
 
 
   // Suggestion form
@@ -118,7 +117,6 @@ export default function Suggestion() {
     // setLoading(true);
     SuggestionService.getSuggestion({ phaseId }).then((response) => {
       initialValues.definition = response.suggestion.definition;
-      console.log("initialValues.definition", initialValues.definition)
       setDefinitionValue(response.suggestion.definition);
       let disableArray = [];
       for (let i = 0; i < response.suggestion.descriptions.length; i++) {

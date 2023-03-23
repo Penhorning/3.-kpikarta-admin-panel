@@ -100,7 +100,7 @@ export default function EditUser() {
       initialValues.fullName = fullName;
       initialValues.email = email;
       initialValues.mobile = response.mobile ? mobile : "";
-      initialValues.telephone = response.telephone ? telephone : " ";
+      initialValues.telephone = response.telephone ? telephone : "";
 
       // Company details initial values
       initialCompanyValues.companyName = name;
@@ -177,6 +177,7 @@ export default function EditUser() {
         mobile: !state ?  initialValues.mobile : mobile,
         telephone: values.telephone,
         profilePic: profilePic == '' ? oldProfilePic : profilePic,
+        updatedBy: "admin"
       };
       UserService.updateUser(id, data, enqueueSnackbar).then((response) => {
         if (!response.error) {
@@ -315,7 +316,7 @@ export default function EditUser() {
                     </ImgCrop>
                   </Grid>
                   <Grid item xs={6} >
-                    <ImgCrop minZoom={0.1} aspectSlider showGrid rotationSlider cropShape>
+                    <ImgCrop minZoom={0.1} aspectSlider cropperProps={{ restrictPosition: false }} showGrid rotationSlider cropShape>
                       <Upload
                         action={actionUrlUser}
                         name={'photo'}
@@ -437,7 +438,7 @@ export default function EditUser() {
                   <Grid item xs={2}>
                   </Grid>
                   <Grid item xs={4}>
-                    <ImgCrop minZoom={0.1} aspectSlider showGrid rotationSlider cropShape >
+                    <ImgCrop minZoom={0.1} aspectSlider cropperProps={{ restrictPosition: false }} showGrid rotationSlider cropShape >
                       <Upload
                         listType="picture-card"
                         fileList={compFileList}
@@ -449,7 +450,7 @@ export default function EditUser() {
                     </ImgCrop>
                   </Grid>
                   <Grid item xs={6}>
-                    <ImgCrop minZoom={0.1} aspectSlider showGrid rotationSlider cropShape>
+                    <ImgCrop minZoom={0.1} aspectSlider aspect={4.33/1} cropperProps={{ restrictPosition: false }} showGrid rotationSlider cropShape>
                       <Upload
                        beforeUpload={beforeUpload}
                         onChange={onCompanyPhotoChange}
