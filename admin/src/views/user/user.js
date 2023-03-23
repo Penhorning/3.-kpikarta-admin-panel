@@ -236,7 +236,7 @@ export default function UserTable() {
         if (res.status === true) {
           UserService.unblockSubscription(userId, enqueueSnackbar).then((res) => {
             fetchData('paginationChange');
-            unblockToast(true)
+            blockToast(true)
             return;
           })
         }
