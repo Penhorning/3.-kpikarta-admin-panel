@@ -249,8 +249,7 @@ const addUser = async (data, enqueueSnackbar) => {
       fullName: data.fullName,
       email: data.email,
       mobile: data.mobile,
-      companyName: data.companyName,
-      addedBy: "admin"
+      companyName: data.companyName
     },
       { headers: AuthHeader() })
     return response.data;
@@ -270,7 +269,8 @@ const updateUser = async (id, data, enqueueSnackbar) => {
       email: data.email,
       mobile: data.mobile,
       telephone: data.telephone,
-      profilePic: data.profilePic
+      profilePic: data.profilePic,
+      updatedBy: "admin"
     },
       { headers: AuthHeader() })
     return response.data;

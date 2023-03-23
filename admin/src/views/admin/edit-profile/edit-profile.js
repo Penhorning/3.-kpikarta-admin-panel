@@ -99,7 +99,7 @@ export default function EditProfile() {
         email: values.email,
         mobile: values.mobile,
         telephone: values.telephone,
-        profilePic: profilePic == '' ? initialValues.profilePic : profilePic,
+        profilePic: profilePic == '' ? initialValues.profilePic : profilePic
       };
       setIsOpenBtn(true)
       UserService.updateUser(userId, data, enqueueSnackbar).then((response) => {
