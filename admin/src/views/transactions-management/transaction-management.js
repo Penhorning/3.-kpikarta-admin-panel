@@ -192,8 +192,8 @@ export default function TransactionTable() {
   const [isShown, setIsShown] = useState(false)
   const [isSearchShown, setIsSearchShown] = useState(false)
   const [loading, setLoading] = useState(true);
-  const [previousId, setPreviousId] = useState();
-  const [nextId, setNextId] = useState();
+  const [previousId, setPreviousId] = useState("");
+  const [nextId, setNextId] = useState("");
   const [nextButton, setNextButton] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -253,6 +253,8 @@ export default function TransactionTable() {
 
   // SEARCH CODES    
   const handleSearch = (event) => {
+    setPreviousId("");
+    setNextId("");
     fetchData();
     event.preventDefault();
   };
@@ -260,6 +262,8 @@ export default function TransactionTable() {
   const handleCancel = (event) => {
     setSearch("");
     fetchData("cancel");
+    setPreviousId("");
+    setNextId("");
     event.preventDefault();
     setIsSearchShown(false)
   };
@@ -321,11 +325,12 @@ export default function TransactionTable() {
   };
 
   const handleChangePage = (event, newPage) => {
-    if(event.target.getAttribute("data-testid")){
-      if(event.target.getAttribute("data-testid") == 'KeyboardArrowRightIcon'){
+    let getAttribute = event.target.getAttribute("data-testid") || event.target.parentElement.getAttribute("data-testid");
+    if(getAttribute){
+      if(getAttribute == 'KeyboardArrowRightIcon'){
         setNextId(users[users.length - 1].id)
         setPreviousId()
-      }else if(event.target.getAttribute("data-testid") == 'KeyboardArrowLeftIcon'){
+      }else if(getAttribute == 'KeyboardArrowLeftIcon'){
         setPreviousId(users[0].id)
         setNextId()
       } 
@@ -341,7 +346,7 @@ export default function TransactionTable() {
 
   const isSelected = (username) => selected.indexOf(username) !== -1;
 
-  const onInputChnage = (e) => {
+  const onInputChange = (e) => {
     if (e.target.value === '') {
       setIsSearchShown(false)
     } else {
@@ -409,7 +414,7 @@ export default function TransactionTable() {
                 sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 250 }}>
                 <InputBase
                   value={search}
-                  onInput={onInputChnage}
+                  onInput={onInputChange}
                   sx={{ ml: 1, flex: 1 }}
                   placeholder="Search by Company"
                   inputProps={{ 'aria-label': 'search' }}
