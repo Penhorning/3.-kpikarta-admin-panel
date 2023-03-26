@@ -176,8 +176,7 @@ export default function EditUser() {
         email: values.email,
         mobile: !state ?  initialValues.mobile : mobile,
         telephone: values.telephone,
-        profilePic: profilePic == '' ? oldProfilePic : profilePic,
-        updatedBy: "admin"
+        profilePic: profilePic == '' ? oldProfilePic : profilePic
       };
       UserService.updateUser(id, data, enqueueSnackbar).then((response) => {
         if (!response.error) {
@@ -200,7 +199,7 @@ export default function EditUser() {
         departmentId: values.companyDepartment,
         employeeRangeId: values.companyEmployeeRange,
         logo: newCompanyLogo == '' ? oldCompanyLogo : newCompanyLogo,
-        oldCompanyLogo: newCompanyLogo == '' ? newCompanyLogo : oldCompanyLogo,
+        oldCompanyLogo: newCompanyLogo == '' ? newCompanyLogo : oldCompanyLogo
       };
       UserService.upadateCompanyDetails(companyIds, data, enqueueSnackbar).then(response => {
         if (!response.error) {
