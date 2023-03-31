@@ -110,6 +110,7 @@ export default function EditUser() {
       setOldProfilePic(response.profilePic)
       setOldCompanyLogo(response.logo);
       setCompanyID(response.companyId)
+      
       // set user profile picture
       setFileList(
         [
