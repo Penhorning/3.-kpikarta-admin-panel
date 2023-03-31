@@ -200,6 +200,9 @@ export default function TransactionTable() {
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
+      setPage(0);
+      setNextId("");
+      setPreviousId("");
       fetchData();
     }
   }, [dateRange.to]);
