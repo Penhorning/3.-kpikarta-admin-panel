@@ -36,8 +36,7 @@ export default function Suggestion() {
   const [definitionData, setDefinitionData] = useState("");
   const [definitionValue, setDefinitionValue] = useState("");
   const [isValid, setIsValid] = useState(false);
-
-
+  
   // Suggestion form
   const initialValues = {
     definition: "",
@@ -49,7 +48,9 @@ export default function Suggestion() {
     definition: Yup.string().required("Definition is required!"),
     descriptions: Yup.array().of(
       Yup.object().shape({
-        description: Yup.string().required("Description is required"),
+        description: Yup.string()
+        .required("Description is required")
+        .matches(/^(\s+\S+\s*)*(?!\s).*$/, "Blank space is not allowed!")
       })
     ),
   });
@@ -93,7 +94,7 @@ export default function Suggestion() {
       setSubmitting(true);
     let suggestionId = values.id;
     let data = {
-      definition: definitionData,
+      definition: definitionData ? definitionData : definitionValue,
       descriptions: values.descriptions,
     };
       SuggestionService.updateSuggestion(suggestionId, data).then(response => {
