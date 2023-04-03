@@ -39,6 +39,7 @@ export default function MySuggestion() {
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
   const [definitionData, setDefinitionData] = useState("");
+  const [definitionValue, setDefinitionValue] = useState("");
   const [value, setValue] = useState("");
   const [isValid, setIsValid] = useState(false);
   // Suggestion form
@@ -94,7 +95,7 @@ export default function MySuggestion() {
       setSubmitting(true);
 
       let data = {
-        definition: definitionData,
+        definition: definitionData ? definitionData : definitionValue,
         descriptions: values.descriptions
       };
       if (suggestion.hasOwnProperty("userId")) {
@@ -154,7 +155,8 @@ export default function MySuggestion() {
     const userId = id;
     SuggestionService.getMySuggestion(phaseId, userId).then(response => {
       initialValues.definition = response.suggestion.definition;
-      setValue(initialValues.definition);
+      setDefinitionValue(response.suggestion.definition);
+      // setValue(initialValues.definition);
       let disableArray = [];
       for (let i = 0; i < response.suggestion.descriptions.length; i++) {
         initialValues.descriptions.push({ description: response.suggestion.descriptions[i].description });
@@ -184,7 +186,7 @@ export default function MySuggestion() {
   }
 
   const handleEditorChange = (content) => {
-    if (content == "") {
+    if (content.trim() == "") {
       setSubmitting(true);
       setIsValid(true)
     } else {
@@ -239,7 +241,7 @@ export default function MySuggestion() {
                           apiKey={
                             "azqt4vmow77bdh7mzzwm60rxbt26j893pjd86wik5qa1069g"
                           }
-                          initialValue={value}
+                          initialValue={definitionValue}
                           init={{
                             height: 200,
                             menubar: false,
@@ -250,7 +252,7 @@ export default function MySuggestion() {
                             ],
                             toolbar: " bold italic underline | bullist numlist",
                           }}
-                          value={definitionData}
+                          // value={definitionData}
                           onEditorChange={handleEditorChange}
                         />
                         { isValid ? <h5 className="red">Definition is required!</h5> : ''}
