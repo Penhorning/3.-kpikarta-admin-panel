@@ -48,7 +48,9 @@ export default function Suggestion() {
     definition: Yup.string().required("Definition is required!"),
     descriptions: Yup.array().of(
       Yup.object().shape({
-        description: Yup.string().required("Description is required"),
+        description: Yup.string()
+        .required("Description is required")
+        .matches(/^(\s+\S+\s*)*(?!\s).*$/, "Blank space is not allowed!")
       })
     ),
   });
