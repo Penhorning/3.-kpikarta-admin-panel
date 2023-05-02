@@ -262,6 +262,20 @@ const addUser = async (data, enqueueSnackbar) => {
   }
 }
 
+const deleteUser = async (userId, enqueueSnackbar) => {
+  try {
+    const response = await axios.post(Constants.BASE_URL + `/api/users/delete-user`, {userId},
+    { headers: AuthHeader() });
+    return response.data;
+  } catch (err) {
+    const error = handleError(err);
+    const errorResp = HandleErrorResponse(error)
+    let variant = 'error';
+    if (error !== "Unauthorized") enqueueSnackbar(errorResp, { variant })
+    return error
+  }
+}
+
 const updateUser = async (id, data, enqueueSnackbar) => {
   try {
     const response = await axios.patch(Constants.BASE_URL + `/api/users/${id}`, {
@@ -537,6 +551,7 @@ export const UserService = {
   blockUser,
   unBlockUser,
   addUser,
+  deleteUser,
   getUserDetails,
   updateUser,
   getDepartment,
