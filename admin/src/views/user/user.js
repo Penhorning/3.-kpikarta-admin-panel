@@ -38,6 +38,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import Spinner from '../spinner-loader/spinner-loader';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EnhancedTableHead from './TableHead/uesrTableHead/EnhancedTableHead'
@@ -241,6 +242,20 @@ export default function UserTable() {
           })
         }
       })
+    }
+  }
+
+  const handleUserDelete = async (userId) => {
+    const result = await confirm("Are you sure you want to Delete this user?");
+    if (result) {
+      UserService.deleteUser(userId, enqueueSnackbar).then((response) => {
+        if (response.status === true) {
+          fetchData('paginationChange');
+          enqueueSnackbar("User deleted successfully.!");
+        }
+      }).catch(err => {
+        console.log(err);
+      });
     }
   }
 
@@ -616,7 +631,7 @@ export default function UserTable() {
                                 <InventoryIcon style={style} /> <h5 style={titleStyle}>Inventory </h5>
                               </MenuItem>
                             </Link>
-                            <Divider sx={{ my: 0.5 }} />
+
                             {user.active === true
                               ?
                               <div onClick={(e) => block(user._id)}>
@@ -631,6 +646,14 @@ export default function UserTable() {
                                 </MenuItem>
                               </div>
                             }
+                            <Divider sx={{ my: 0.5 }} />
+
+                            <div onClick={(e) => handleUserDelete(user._id)}>
+                              <MenuItem onClick={handleDropDownClose} disableRipple>
+                                <DeleteForeverIcon style={{ color: 'red' }} /> <h5 style={{...titleStyle, color: "red"}}>Delete</h5>
+                              </MenuItem>
+                            </div>
+                            
                           </StyledMenu>
                         </TableCell>
                       </TableRow>
