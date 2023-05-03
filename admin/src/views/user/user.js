@@ -156,6 +156,7 @@ export default function UserTable() {
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [unBlocktost, setunBlocktost] = useState(false);
+  const [deleteToast, setdeleteToast] = useState(false);
   const [blocktost, setBlocktost] = useState(false);
   const [dateRange, setDateRange] = useState(initialValue);
   const [selectedDayRange, setSelectedDayRange] = useState(initialValue);
@@ -251,7 +252,7 @@ export default function UserTable() {
       UserService.deleteUser(userId, enqueueSnackbar).then((response) => {
         if (response.status === true) {
           fetchData('paginationChange');
-          enqueueSnackbar("User deleted successfully.!");
+          setdeleteToast(true);
         }
       }).catch(err => {
         console.log(err);
@@ -693,6 +694,16 @@ export default function UserTable() {
           sx={{ width: '100%' }}
         >
           User activated successfully
+        </Alert>
+      </Snackbar>
+      <Snackbar open={deleteToast} autoHideDuration={3000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          User deleted successfully
         </Alert>
       </Snackbar>
     </Box>
