@@ -228,17 +228,16 @@ export default function TransactionTable() {
     setNextButton(true)
     UserService.getAllInvoices(data, enqueueSnackbar).then((response) => {
       if (!response.error) {
-
-        if(response.invoices[0].data.length > 0){
+        if(response.transactions.next_offet){
           setTimeout(() => {
             setNextButton(false)
           }, 1000);
-        } else{
+        } else {
           setNextButton(true)
         }
-        setUsers( response.invoices[0].data);
-        if (response.invoices[0]?.metadata.length > 0) {
-          setTotal(response.invoices[0]?.metadata[0]?.total);
+        setUsers( response.transactions.list );
+        if ( response.transactions.list.length > 0 ) {
+          setTotal( response.transactions.list.length );
         } else {
           setTotal(0);
         }
@@ -360,7 +359,7 @@ export default function TransactionTable() {
 
   const Capitalize = (str) => {
     return str.replace(/^_*(.)|_+(.)/g, (s, c, d) => c ? c.toUpperCase() : ' ' + d.toUpperCase())
-}
+  }
 
   return (
     <Box sx={{ width: '100%' }}>

@@ -132,13 +132,13 @@ var ThemeRoutes = [
     component: Tab,
     sideRoute: false
   },
-  {
-    path: "/transaction",
-    name: "Transactions",
-    icon: "mdi mdi-bank",
-    component: Transaction,
-    sideRoute: true
-  },
+  // {
+  //   path: "/transaction",
+  //   name: "Transactions",
+  //   icon: "mdi mdi-bank",
+  //   component: Transaction,
+  //   sideRoute: true
+  // },
   {
     path: "/",
     pathTo: "/dashboard",
