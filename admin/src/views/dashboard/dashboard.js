@@ -162,7 +162,7 @@ const Dashboard = () => {
               </div>
             </Paper>
           </Grid>
-          <Grid item xs={12} >
+          {/* <Grid item xs={12} >
             <Paper
               sx={{
                 p: 2,
@@ -173,7 +173,7 @@ const Dashboard = () => {
             >
               <Chart />
             </Paper>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Card>
