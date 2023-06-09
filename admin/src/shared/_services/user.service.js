@@ -25,11 +25,12 @@ const getAll = async (data, enqueueSnackbar) => {
 
 const getAllInvoicesChart = async (data, enqueueSnackbar) => {
   try {
-    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/get-admin-invoices-chart`, {
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/get-transactions`, {
+      limit: 1,
+      offset: 1,
       startDate: data.start,
       endDate: data.end
-    },
-      { headers: AuthHeader() })
+    }, { headers: AuthHeader() });
     return response.data;
   } catch (err) {
     const error = handleError(err, data);
@@ -42,12 +43,13 @@ const getAllInvoicesChart = async (data, enqueueSnackbar) => {
 
 const getAllInvoices = async (data, enqueueSnackbar) => {
   try {
-    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/get-admin-invoices`, {
-      page: data.page,
-      limit: data.limit,
-      searchQuery: data.search,
-      previousId: data.previousId,
-      nextId: data.nextId,
+    const response = await axios.post(Constants.BASE_URL + `/api/subscriptions/get-transactions`, {
+      // page: data.page,
+      limit: 3,
+      offset: 1,
+      // searchQuery: data.search,
+      // previousId: data.previousId,
+      // nextId: data.nextId,
       startDate: data.startDate,
       endDate: data.endDate,
     },
