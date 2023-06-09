@@ -159,7 +159,7 @@ export default function Chart() {
 
   useEffect(() => {
     if (dateRange.from && dateRange.to) {
-      fetchData(dateRange)
+      // fetchData(dateRange)
     }
     return () => {
     };
