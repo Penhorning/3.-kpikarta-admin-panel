@@ -90,13 +90,13 @@ var ThemeRoutes = [
     component: ChangePassword,
     sideRoute: false
   },
-  {
-    path: "/subscription-plans",
-    name: "Subscriptions",
-    icon: "mdi mdi-book-multiple",
-    component: SubscriptionPlan,
-    sideRoute: true
-  },
+  // {
+  //   path: "/subscription-plans",
+  //   name: "Subscriptions",
+  //   icon: "mdi mdi-book-multiple",
+  //   component: SubscriptionPlan,
+  //   sideRoute: true
+  // },
   {
     path: "/add-plan",
     name: "Add plan",
