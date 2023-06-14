@@ -80,6 +80,7 @@ export default function AddUser() {
         email: values.email,
         mobile: mobile,
         companyName: values.companyName,
+        addedBy: "admin"
       };
       UserService.addUser(data, enqueueSnackbar).then(response => {
         if(!response.error){
