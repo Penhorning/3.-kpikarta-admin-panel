@@ -251,7 +251,8 @@ const addUser = async (data, enqueueSnackbar) => {
       fullName: data.fullName,
       email: data.email,
       mobile: data.mobile,
-      companyName: data.companyName
+      companyName: data.companyName,
+      addedBy: "admin"
     },
       { headers: AuthHeader() })
     return response.data;
