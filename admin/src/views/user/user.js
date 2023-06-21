@@ -208,6 +208,7 @@ export default function UserTable() {
     }
     setBlocktost(false);
     setunBlocktost(false);
+    setdeleteToast(false);
   };
 
   const options = {
