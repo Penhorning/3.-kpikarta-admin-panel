@@ -208,6 +208,7 @@ export default function UserTable() {
     }
     setBlocktost(false);
     setunBlocktost(false);
+    setdeleteToast(false);
   };
 
   const options = {
@@ -221,11 +222,9 @@ export default function UserTable() {
     if (result) {
       UserService.blockUser(userId, page, rowsPerPage).then((res) => {
         if (res.status === true) {
-          UserService.blockSubscription(userId, enqueueSnackbar).then((res) => {
-              fetchData('paginationChange');
-              unblockToast(true)
-              return;
-          })
+          fetchData('paginationChange');
+          unblockToast(true)
+          return;
         }
       });
     }
@@ -236,11 +235,9 @@ export default function UserTable() {
     if (result) {
       UserService.unBlockUser(userId, page, rowsPerPage, enqueueSnackbar).then((res) => {
         if (res.status === true) {
-          UserService.unblockSubscription(userId, enqueueSnackbar).then((res) => {
-            fetchData('paginationChange');
-            blockToast(true)
-            return;
-          })
+          fetchData('paginationChange');
+          blockToast(true)
+          return;
         }
       })
     }
